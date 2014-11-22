@@ -10,8 +10,7 @@ class samoplayer:public QMediaPlayer
 {
     QString name;
 public:
-   // Ui::MainWindow* ui;
-    samoplayer(Ui::MainWindow *ui=0);
+    samoplayer();
     QString getCurrentTrack();
     void setCurrentTrack(QString name);
     void playMusic();

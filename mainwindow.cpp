@@ -4,6 +4,7 @@
 #include <QMediaPlayer>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QTimer>
 #include "samoplayer.h"
 
 samoplayer *player= new samoplayer;
@@ -35,10 +36,13 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_button_play_clicked()
+void MainWindow::on_button_play_clicked() //костыли будут тут
 {
-    //connect(player->positionChanged(),ui->currentTrack_progressBar->setValue(player->position()*100/player->duration()));
-    if(pls.count() == 0) {
+    QTimer *timer = new QTimer(this);
+         connect(timer, SIGNAL(timeout()), this, SLOT(updateCaption()));
+         timer->start(1000);
+
+   if(pls.count() == 0) {
         pls = QFileDialog::getOpenFileNames( this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)"));
         if(pls.count() != 0) {
         ui->listWidget->addItems(pls);
@@ -49,6 +53,7 @@ void MainWindow::on_button_play_clicked()
     }
             else {
                 player->playMusic();
+                while(timer->isActive()) { // new
                 ui->listWidget->item(nextTrack)->setSelected(true);
                 int pos_secs = (player->position()-player->position()/1000)/1000-60*(player->position()/60000);
                 int dur_secs = (player->duration()-player->duration()/1000)/1000-60*(player->duration()/60000);
@@ -56,6 +61,7 @@ void MainWindow::on_button_play_clicked()
                 ui -> label_test->setText(QString::number(player->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(player->duration()/60000) +":"+ QString::number(dur_secs));
                 ui -> currentTrack_progressBar->setValue(player->position()*100/player->duration());
                // ui -> horizontalSlider->setValue(player->position()*100/player->duration());//}
+                }
             }
 }
 
@@ -196,3 +202,4 @@ void MainWindow::on_horizontalSlider_valueChanged(int value)
 {
     player->setPosition(player->duration()/100*value);
 }
+

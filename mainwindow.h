@@ -6,6 +6,7 @@
 
 namespace Ui {
     class MainWindow;
+    class samoplayer;
 }
 
 class MainWindow : public QMainWindow
@@ -47,7 +48,7 @@ private slots:
 
     void on_horizontalSlider_valueChanged(int value);
 
-private:
+protected:
     Ui::MainWindow *ui;
 };
 
