@@ -179,7 +179,7 @@ void MainWindow::on_button_play_next_clicked()
         if (pls.at(nextTrack) != pls.last() && !single) {
             nextTrack++;
             player -> setCurrentTrack(pls.at(nextTrack));
-            if(player->isAudioAvailable() == 1) player->playMusic();
+            player->playMusic();
         }
         else {
             if(repeat) {
@@ -201,8 +201,8 @@ void MainWindow::on_button_clearPlaylist_clicked()
 void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     player->stopMusic();
-    player->setCurrentTrack(item->text());
     nextTrack = ui->listWidget->currentRow();
+    player->setCurrentTrack(pls.at(nextTrack));
     player->playMusic();
 }
 

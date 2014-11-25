@@ -6,12 +6,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>765</width>
-    <height>313</height>
+    <width>769</width>
+    <height>304</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Samowar Music player v.1.3.19a</string>
+   <string>Samowar Music player v.1.2.19a</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -272,10 +272,10 @@
     <widget class="Line" name="line">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>90</y>
-       <width>141</width>
-       <height>16</height>
+       <x>0</x>
+       <y>80</y>
+       <width>151</width>
+       <height>20</height>
       </rect>
      </property>
      <property name="orientation">
@@ -285,10 +285,10 @@
     <widget class="QPushButton" name="button_clearPlaylist">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>140</y>
-       <width>121</width>
-       <height>51</height>
+       <x>10</x>
+       <y>150</y>
+       <width>131</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="cursor">
@@ -306,28 +306,80 @@
      </property>
      <property name="iconSize">
       <size>
-       <width>64</width>
-       <height>64</height>
+       <width>32</width>
+       <height>32</height>
       </size>
      </property>
      <property name="flat">
-      <bool>true</bool>
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_random">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>130</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle shuffle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Random</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_repeat">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>71</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle playlist repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Repeat</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="checkBox_single">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>71</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle single song repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Single</string>
      </property>
     </widget>
     <widget class="QPushButton" name="deleteCurrentTrack">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>90</x>
        <y>100</y>
-       <width>121</width>
-       <height>31</height>
+       <width>51</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete selected items&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete selected item&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../build-kurs-Desktop-Release/brush-big.png</normaloff>../build-kurs-Desktop-Release/brush-big.png</iconset>
      </property>
     </widget>
    </widget>
@@ -540,45 +592,6 @@
      <number>5</number>
     </property>
    </widget>
-   <widget class="QCheckBox" name="checkBox_random">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>85</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Random</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_repeat">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>85</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Repeat</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="checkBox_single">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>85</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Single</string>
-    </property>
-   </widget>
    <zorder>currentTrack_progressBar</zorder>
    <zorder>button_play</zorder>
    <zorder>button_stop</zorder>
@@ -589,16 +602,13 @@
    <zorder>label_test</zorder>
    <zorder>listWidget</zorder>
    <zorder>horizontalSlider</zorder>
-   <zorder>checkBox_random</zorder>
-   <zorder>checkBox_repeat</zorder>
-   <zorder>checkBox_single</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>765</width>
+     <width>769</width>
      <height>17</height>
     </rect>
    </property>
