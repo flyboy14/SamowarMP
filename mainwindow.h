@@ -18,11 +18,24 @@ public:
     ~MainWindow();
 
 private slots:
+
+    void atTrackEnd();
+
+    void setSliderPosition();
+
+    void watchSelectedTrack();
+
+    void watchNextTrack();
+
+    void watchStatus();
+
+    void watchPlaying();
+
     void on_button_play_clicked();
 
     void on_button_stop_clicked();
 
-    void on_button_pause_clicked();
+    //void on_button_pause_clicked();
 
     void on_action_200_triggered();
 
@@ -32,7 +45,7 @@ private slots:
 
     void on_volumeSlider_valueChanged(int value);
 
-    void on_button_mute_toggled(bool checked);
+    void on_radio_mute_toggled(bool checked);
 
     void on_button_play_prev_clicked();
 
@@ -46,7 +59,15 @@ private slots:
 
     void on_deleteCurrentTrack_clicked();
 
-    void on_horizontalSlider_valueChanged(int value);
+    void on_horizontalSlider_sliderPressed();
+
+    void on_horizontalSlider_sliderReleased();
+
+    void on_checkBox_repeat_toggled(bool checked);
+
+    void on_checkBox_random_toggled(bool checked);
+
+    void on_checkBox_single_toggled(bool checked);
 
 protected:
     Ui::MainWindow *ui;

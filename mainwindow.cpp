@@ -6,80 +6,80 @@
 #include <QFileDialog>
 #include <QTimer>
 #include "samoplayer.h"
-
 samoplayer *player= new samoplayer;
 QString dir = "/home/master-p/Music";
 QStringList pls;
 int currentVolume = 50;
 int nextTrack = 0;
+QIcon *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls;
+bool repeat, randome, single, tmp_pause, playstate = false;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QIcon *iconPlay = new QIcon("media-play.png");
+    iconPlay = new QIcon("media-play.png");
     ui->button_play->setIcon(*iconPlay);
-    QIcon *iconPause = new QIcon("media-pause.png");
-    ui->button_pause->setIcon(*iconPause);
-    QIcon *iconStop = new QIcon("media-stop.png");
+    iconPause = new QIcon("media-pause.png");
+    //ui->button_pause->setIcon(*iconPause);
+    iconStop = new QIcon("media-stop.png");
     ui->button_stop->setIcon(*iconStop);
-    QIcon *iconPlayPrev = new QIcon("media-previous.png");
+    iconPlayPrev = new QIcon("media-previous.png");
     ui->button_play_prev->setIcon(*iconPlayPrev);
-    QIcon *iconPlayNext = new QIcon("media-next.png");
+    iconPlayNext = new QIcon("media-next.png");
     ui->button_play_next->setIcon(*iconPlayNext);
-    QIcon *iconClearPls = new QIcon("desktop-brush-big.png");
+    iconClearPls = new QIcon("desktop-brush-big.png");
     ui->button_clearPlaylist->setIcon(*iconClearPls);
+        QObject::connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
+        QObject::connect(player,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(watchStatus()));
+        QObject::connect(player,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
+        QObject::connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(watchSelectedTrack()));
+        QObject::connect(ui->currentTrack_progressBar,SIGNAL(valueChanged(int)),this,SLOT(setSliderPosition()));
+        QObject::connect(player,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
 }
+
 
 MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-void MainWindow::on_button_play_clicked() //костыли будут тут
+void MainWindow::on_button_play_clicked()
 {
-    QTimer *timer = new QTimer(this);
-         connect(timer, SIGNAL(timeout()), this, SLOT(updateCaption()));
-         timer->start(1000);
-
+    if(!playstate) {
    if(pls.count() == 0) {
         pls = QFileDialog::getOpenFileNames( this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)"));
         if(pls.count() != 0) {
         ui->listWidget->addItems(pls);
             player -> setCurrentTrack(pls.first());
             player -> playMusic();
-            ui->listWidget->item(0)->setSelected(true);
         }
     }
             else {
+                if(player->state() != 2)player -> setCurrentTrack(pls.at(nextTrack)); //0 - stopped 1 - playing 2 - paused
                 player->playMusic();
-                while(timer->isActive()) { // new
-                ui->listWidget->item(nextTrack)->setSelected(true);
-                int pos_secs = (player->position()-player->position()/1000)/1000-60*(player->position()/60000);
-                int dur_secs = (player->duration()-player->duration()/1000)/1000-60*(player->duration()/60000);
-                QMainWindow::setWindowTitle("Samowar - Playing... " + player->getCurrentTrack());
-                ui -> label_test->setText(QString::number(player->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(player->duration()/60000) +":"+ QString::number(dur_secs));
-                ui -> currentTrack_progressBar->setValue(player->position()*100/player->duration());
-               // ui -> horizontalSlider->setValue(player->position()*100/player->duration());//}
-                }
             }
+    }
+    else {
+        if(player -> getCurrentTrack() != "") {
+            player->pauseMusic();
+            }
+    }
 }
 
 void MainWindow::on_button_stop_clicked()
 {
     if(player -> getCurrentTrack() != "") {
     player->stopMusic();
-    QMainWindow::setWindowTitle("Samowar Music player v.0.7.50");
     }
 }
 
-void MainWindow::on_button_pause_clicked()
+/*void MainWindow::on_button_pause_clicked()
 {
     if(player -> getCurrentTrack() != "") {
-    player->pauseMusic();
-    QMainWindow::setWindowTitle("Samowar - " + player->getCurrentTrack() + " [paused]");
-    }
-}
+        player->pauseMusic();
+        }
+}*/
 
 void MainWindow::on_action_200_triggered()
 {
@@ -121,13 +121,8 @@ void MainWindow::on_action_add_files_triggered()
     ui->listWidget->clear();
     ui->listWidget->addItems(pls);
     if(pls.count() != 0) {
-    //int i = 0;
-    //ui->listWidget->clear();
-   // do {ui->listWidget->addItem(pls.at(i)); i++;}
-    //while(i != pls.count());
     if(player->getCurrentTrack() == "")
         player->setCurrentTrack(pls.first());
-        //ui->listWidget->item(0)->setSelected(true);
     }
 }
 
@@ -137,20 +132,33 @@ void MainWindow::on_volumeSlider_valueChanged(int value)
     player -> setVolume(value);
 }
 
-void MainWindow::on_button_mute_toggled(bool checked)
+void MainWindow::on_radio_mute_toggled(bool checked)
 {
-            player -> toggleMute();
+     player -> toggleMute();
 }
 
 void MainWindow::on_button_play_prev_clicked()
 {
-    if (nextTrack != 0) {
+    if(single) {
+        player -> setCurrentTrack(pls.at(nextTrack));
+        player->playMusic();
+    }
+    if(randome) {
+        nextTrack = rand();
+        nextTrack %= pls.count();
+        player -> setCurrentTrack(pls.at(nextTrack));
+        player->playMusic();
+    }
+    if (nextTrack != 0 && !single) {
         nextTrack--;
         player -> setCurrentTrack(pls.at(nextTrack));
-        QMainWindow::setWindowTitle("Samowar - Playing... " + player->getCurrentTrack());
-        if(player->isAudioAvailable() == 1) {
+        player->playMusic();
+    }
+    else {
+        if(repeat) {
+            nextTrack = pls.count()-1;
+            player -> setCurrentTrack(pls.at(nextTrack));
             player->playMusic();
-            ui->listWidget->item(nextTrack)->setSelected(true);
         }
     }
 }
@@ -158,16 +166,28 @@ void MainWindow::on_button_play_prev_clicked()
 void MainWindow::on_button_play_next_clicked()
 {
     if(pls.count() != 0) {
-   // if(player->mediaStatus() != 'NoMedia') { //no Media
-    if (pls.at(nextTrack) != pls.last()) {
-        nextTrack++;
-        player -> setCurrentTrack(pls.at(nextTrack));
-        QMainWindow::setWindowTitle("Samowar - Playing... " + player->getCurrentTrack());
-        if(player->isAudioAvailable() == 1) {
+        if(single) {
+            player -> setCurrentTrack(pls.at(nextTrack));
             player->playMusic();
-            ui->listWidget->item(nextTrack)->setSelected(true);
         }
-    }
+        if(randome) {
+            nextTrack = rand();
+            nextTrack %= pls.count();
+            player -> setCurrentTrack(pls.at(nextTrack));
+            player->playMusic();
+        }
+        if (pls.at(nextTrack) != pls.last() && !single) {
+            nextTrack++;
+            player -> setCurrentTrack(pls.at(nextTrack));
+            if(player->isAudioAvailable() == 1) player->playMusic();
+        }
+        else {
+            if(repeat) {
+                nextTrack = 0;
+                player->setCurrentTrack(pls.at(nextTrack));
+                player->playMusic();
+            }
+        }
     }
 }
 
@@ -175,6 +195,7 @@ void MainWindow::on_button_clearPlaylist_clicked()
 {
     pls.clear();
     ui->listWidget->clear();
+    nextTrack = 0;
 }
 
 void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
@@ -185,21 +206,145 @@ void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
     player->playMusic();
 }
 
-void MainWindow::on_horizontalSlider_sliderMoved(int position)
-{
-    player->setPosition(player->duration()/100*position);
-}
-
-
 void MainWindow::on_deleteCurrentTrack_clicked()
 {
     pls.removeAt(ui->listWidget->currentRow());
     ui->listWidget->clear();
     ui->listWidget->addItems(pls);
+    ui->listWidget->setCurrentRow(nextTrack);
 }
 
-void MainWindow::on_horizontalSlider_valueChanged(int value)
+void MainWindow::on_horizontalSlider_sliderMoved(int position)
 {
-    player->setPosition(player->duration()/100*value);
+    player->setPosition(player->duration()/100*position);
 }
 
+void MainWindow::watchPlaying() {
+    if(player->isMuted())QMainWindow::setWindowTitle("[muted] Samowar - Playing... " + player->getCurrentTrack());
+    else watchStatus();
+        int pos_secs = (player->position()-player->position()/1000)/1000-60*(player->position()/60000);
+        int dur_secs = (player->duration()-player->duration()/1000)/1000-60*(player->duration()/60000);
+        if(pos_secs < 10) ui -> label_test->setText(QString::number(player->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(player->duration()/60000) +":"+ QString::number(dur_secs));
+        if(dur_secs < 10) ui -> label_test->setText(QString::number(player->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(player->duration()/60000) +":0"+ QString::number(dur_secs));
+        if(pos_secs < 10 && dur_secs < 10) ui -> label_test->setText(QString::number(player->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(player->duration()/60000) +":0"+ QString::number(dur_secs));
+        if(dur_secs > 10 && pos_secs > 10) ui -> label_test->setText(QString::number(player->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(player->duration()/60000) +":"+ QString::number(dur_secs));
+        ui -> currentTrack_progressBar->setValue(player->position()*100/player->duration());
+}
+
+void MainWindow::watchNextTrack() {
+    for(int row=0; row != pls.count();row++)
+    ui->listWidget->item(row)->setSelected(false);
+    ui->listWidget->item(nextTrack)->setSelected(true);
+}
+
+void MainWindow::watchSelectedTrack() {
+    nextTrack = ui -> listWidget->currentRow();
+}
+
+void MainWindow::setSliderPosition(){
+    ui -> horizontalSlider->setValue(player->position()*100/player->duration());
+}
+
+void MainWindow::on_horizontalSlider_sliderPressed()
+{
+    if(player->state() == 2) tmp_pause = true;
+    player->pauseMusic();
+    player->disconnect(ui->currentTrack_progressBar,SIGNAL(valueChanged(int)),this,SLOT(setSliderPosition()));
+}
+
+
+void MainWindow::on_horizontalSlider_sliderReleased()
+{
+    player->connect(ui->currentTrack_progressBar,SIGNAL(valueChanged(int)),this,SLOT(setSliderPosition()));
+    if(!tmp_pause)player->playMusic();//0 - stopped 1 - playing 2 - paused
+}
+
+void MainWindow::atTrackEnd(){
+    if(player->mediaStatus() == 7) { //last song ended
+        if(single) {
+            player->setCurrentTrack(pls.at(nextTrack));
+            player->playMusic();
+        }
+        else {
+            if(randome) {
+                nextTrack = rand();
+                nextTrack %= pls.count();
+                player -> setCurrentTrack(pls.at(nextTrack));
+                player->playMusic();
+            }
+            if(pls.at(nextTrack) != pls.last()) {
+                nextTrack++;
+                player->setCurrentTrack(pls.at(nextTrack));
+                player->playMusic();
+                }
+            else {
+                if(repeat) {
+                    nextTrack = 0;
+                    player->setCurrentTrack(pls.at(nextTrack));
+                    player->playMusic();
+                }
+            }
+        }
+    }
+}
+
+void MainWindow::watchStatus() {
+    if(player->state() == 0) {
+        ui->button_stop->setFlat(0);
+        ui->button_play->setFlat(1);
+        //ui->button_pause->setFlat(1);
+        QMainWindow::setWindowTitle("Samowar Music Player v.1.3.19a" );
+        ui->currentTrack_progressBar->setValue(1);
+    }
+    if(player->state() == 2) {
+        QMainWindow::setWindowTitle("[paused] Samowar - " + player->getCurrentTrack());
+        //ui->button_pause->setFlat(0);
+        ui->button_play->setFlat(0);
+        ui->button_stop->setFlat(1);
+        ui->button_play->setIcon(*iconPlay);
+        playstate = false;
+    }
+    if(player->state() == 1) {
+        QMainWindow::setWindowTitle("Samowar - Playing... " + player->getCurrentTrack());
+        ui->button_play->setFlat(0);
+        ui->button_stop->setFlat(1);
+        //ui->button_pause->setFlat(1);
+        ui->button_play->setIcon(*iconPause);
+        playstate = true;
+    }
+}
+
+void MainWindow::on_checkBox_repeat_toggled(bool checked)
+{
+    if(checked) {
+        repeat = true;
+        ui->checkBox_single->setChecked(0);
+    }
+    else repeat = false;
+}
+
+void MainWindow::on_checkBox_random_toggled(bool checked)
+{
+    if(checked) {
+        randome = true;
+        ui->checkBox_repeat->setChecked(1);
+        ui->checkBox_single->setChecked(0);
+    }
+    else {
+        randome = false;
+        ui->checkBox_repeat->setChecked(0);
+    }
+}
+
+
+void MainWindow::on_checkBox_single_toggled(bool checked)
+{
+    if(checked) {
+        single = true;
+        ui->checkBox_repeat->setChecked(0);
+        ui->checkBox_random->setChecked(0);
+    }
+    else {
+        single = false;
+    }
+}

@@ -8,11 +8,13 @@
 
 class samoplayer:public QMediaPlayer
 {
-    QString name;
+    QString name, next_name;
 public:
     samoplayer();
     QString getCurrentTrack();
+    QString getNextTrack();
     void setCurrentTrack(QString name);
+    void setNextTrack(QString next_name);
     void playMusic();
     void stopMusic();
     void pauseMusic();

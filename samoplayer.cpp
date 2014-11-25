@@ -10,9 +10,19 @@ samoplayer::samoplayer() {
         setMedia(QUrl::fromLocalFile(name));
     }
 
+    void samoplayer::setNextTrack(QString name)
+    {
+        this -> name = name;
+    }
+
     QString samoplayer::getCurrentTrack()
     {
-    return name;
+        return name;
+    }
+
+    QString samoplayer::getNextTrack()
+    {
+        return next_name;
     }
 
     void samoplayer::toggleMute()
