@@ -233,7 +233,7 @@ void MainWindow::watchPlaying() {
 
 void MainWindow::watchNextTrack() {
     for(int row=0; row != pls.count();row++)
-    ui->listWidget->item(row)->setSelected(false);
+        if(ui->listWidget->item(row)->isSelected()) ui->listWidget->item(row)->setSelected(false);
     ui->listWidget->item(nextTrack)->setSelected(true);
 }
 
@@ -290,26 +290,30 @@ void MainWindow::atTrackEnd(){
 
 void MainWindow::watchStatus() {
     if(player->state() == 0) {
-        ui->button_stop->setFlat(0);
-        ui->button_play->setFlat(1);
-        //ui->button_pause->setFlat(1);
+        if(ui->button_stop->isFlat()) {
+            ui->button_play->setFlat(1);
+            ui->button_stop->setFlat(0);
+        }
         QMainWindow::setWindowTitle("Samowar Music Player v.1.3.19a" );
         ui->currentTrack_progressBar->setValue(1);
     }
     if(player->state() == 2) {
         QMainWindow::setWindowTitle("[paused] Samowar - " + player->getCurrentTrack());
         //ui->button_pause->setFlat(0);
-        ui->button_play->setFlat(0);
-        ui->button_stop->setFlat(1);
-        ui->button_play->setIcon(*iconPlay);
+        if(ui->button_play->isFlat()) {
+            ui->button_play->setFlat(0);
+            ui->button_stop->setFlat(1);
+            ui->button_play->setIcon(*iconPlay);
+        } // to prevent memory leaks
         playstate = false;
     }
     if(player->state() == 1) {
         QMainWindow::setWindowTitle("Samowar - Playing... " + player->getCurrentTrack());
-        ui->button_play->setFlat(0);
-        ui->button_stop->setFlat(1);
-        //ui->button_pause->setFlat(1);
-        ui->button_play->setIcon(*iconPause);
+        if(ui->button_play->isFlat()) {
+            ui->button_play->setFlat(0);
+            ui->button_stop->setFlat(1);
+            ui->button_play->setIcon(*iconPause);
+        } // to prevent memory leaks
         playstate = true;
     }
 }
