@@ -8,7 +8,7 @@
 #include "samoplayer.h"
 samoplayer *player= new samoplayer;
 QString dir = "/home/master-p/Music";
-QStringList pls;
+QStringList pls, pls_nameonly;
 int currentVolume = 50;
 int nextTrack = 0;
 QIcon *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls;
@@ -74,13 +74,6 @@ void MainWindow::on_button_stop_clicked()
     }
 }
 
-/*void MainWindow::on_button_pause_clicked()
-{
-    if(player -> getCurrentTrack() != "") {
-        player->pauseMusic();
-        }
-}*/
-
 void MainWindow::on_action_200_triggered()
 {
     QMessageBox msg;
@@ -118,6 +111,9 @@ MainWindow::QMainWindow::close();
 void MainWindow::on_action_add_files_triggered()
 {
     pls.append(QFileDialog::getOpenFileNames(this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)")));
+    for(int i = 0; i <= pls.count(); i++) {
+    pls_nameonly.append(pls.at(i));
+    }
     ui->listWidget->clear();
     ui->listWidget->addItems(pls);
     if(pls.count() != 0) {
@@ -139,6 +135,7 @@ void MainWindow::on_radio_mute_toggled(bool checked)
 
 void MainWindow::on_button_play_prev_clicked()
 {
+    if(pls.count() != 0) {
     if(single) {
         player -> setCurrentTrack(pls.at(nextTrack));
         player->playMusic();
@@ -160,6 +157,7 @@ void MainWindow::on_button_play_prev_clicked()
             player -> setCurrentTrack(pls.at(nextTrack));
             player->playMusic();
         }
+    }
     }
 }
 
@@ -261,6 +259,7 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 
 void MainWindow::atTrackEnd(){
     if(player->mediaStatus() == 7) { //last song ended
+        if(pls.count() != 0) {
         if(single) {
             player->setCurrentTrack(pls.at(nextTrack));
             player->playMusic();
@@ -285,6 +284,7 @@ void MainWindow::atTrackEnd(){
                 }
             }
         }
+        }
     }
 }
 
@@ -293,14 +293,16 @@ void MainWindow::watchStatus() {
         if(ui->button_stop->isFlat()) {
             ui->button_play->setFlat(1);
             ui->button_stop->setFlat(0);
+            ui->button_play->setIcon(*iconPlay);
+            ui->currentTrack_progressBar->setValue(1);
         }
+        playstate = false;
         QMainWindow::setWindowTitle("Samowar Music Player v.1.3.19a" );
-        ui->currentTrack_progressBar->setValue(1);
     }
     if(player->state() == 2) {
         QMainWindow::setWindowTitle("[paused] Samowar - " + player->getCurrentTrack());
         //ui->button_pause->setFlat(0);
-        if(ui->button_play->isFlat()) {
+        if(playstate == true) {
             ui->button_play->setFlat(0);
             ui->button_stop->setFlat(1);
             ui->button_play->setIcon(*iconPlay);
@@ -309,7 +311,7 @@ void MainWindow::watchStatus() {
     }
     if(player->state() == 1) {
         QMainWindow::setWindowTitle("Samowar - Playing... " + player->getCurrentTrack());
-        if(ui->button_play->isFlat()) {
+        if(playstate == false) {
             ui->button_play->setFlat(0);
             ui->button_stop->setFlat(1);
             ui->button_play->setIcon(*iconPause);
