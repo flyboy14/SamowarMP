@@ -224,9 +224,14 @@ void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 
 void MainWindow::on_deleteCurrentTrack_clicked()
 {
+    QList<QMediaContent> content;
     pls.removeAt(ui->listWidget->currentRow());
     ui->listWidget->clear();
-    ui->listWidget->addItems(pls);
+    for(int i = 0; i < pls.count(); i++) {
+    content.push_front(QUrl::fromLocalFile(pls[i]));
+    QFileInfo fi(pls[i]);
+    ui->listWidget->addItem(fi.fileName());
+    }
     ui->listWidget->setCurrentRow(nextTrack);
 }
 
