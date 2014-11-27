@@ -1,7 +1,6 @@
 #include "samoplayer.h"
 
 samoplayer::samoplayer() {
-    setVolume(90);
     setCurrentTrack("");
 }
     void samoplayer::setCurrentTrack(QString name)

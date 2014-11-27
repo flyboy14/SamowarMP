@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QListWidget>
+#include <QMediaPlaylist>
 
 namespace Ui {
     class MainWindow;
@@ -71,6 +72,7 @@ private slots:
 
 protected:
     Ui::MainWindow *ui;
+    QMediaPlaylist *playlist;
 };
 
 #endif // MAINWINDOW_H

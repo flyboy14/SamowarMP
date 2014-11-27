@@ -5,10 +5,11 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTimer>
+#include <QMediaPlaylist>
 #include "samoplayer.h"
 samoplayer *player= new samoplayer;
 QString dir = "/home/master-p/Music";
-QStringList pls, pls_nameonly;
+QStringList pls;
 int currentVolume = 50;
 int nextTrack = 0;
 QIcon *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls;
@@ -18,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    playlist = new QMediaPlaylist(player);
+    player->setPlaylist(playlist);
     iconPlay = new QIcon("media-play.png");
     ui->button_play->setIcon(*iconPlay);
     iconPause = new QIcon("media-pause.png");
@@ -36,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QObject::connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(watchSelectedTrack()));
         QObject::connect(ui->currentTrack_progressBar,SIGNAL(valueChanged(int)),this,SLOT(setSliderPosition()));
         QObject::connect(player,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
+                //connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(onPositionChanged(qint64)));
 }
 
 
@@ -46,12 +51,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_button_play_clicked()
 {
+    QList<QMediaContent> content;
     if(!playstate) {
    if(pls.count() == 0) {
         pls = QFileDialog::getOpenFileNames( this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)"));
         if(pls.count() != 0) {
-        ui->listWidget->addItems(pls);
-            player -> setCurrentTrack(pls.first());
+            for(int i = 0; i < pls.count(); i++) {
+            content.push_back(QUrl::fromLocalFile(pls[i]));
+            QFileInfo fi(pls[i]);
+            ui->listWidget->addItem(fi.fileName());
+            }
+            playlist->addMedia(content);
+            ui->listWidget->setCurrentRow(playlist->currentIndex() != -1? playlist->currentIndex():0);
+            player -> setCurrentTrack(pls.at(nextTrack));
             player -> playMusic();
         }
     }
@@ -111,11 +123,17 @@ MainWindow::QMainWindow::close();
 void MainWindow::on_action_add_files_triggered()
 {
     pls.append(QFileDialog::getOpenFileNames(this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)")));
-    for(int i = 0; i <= pls.count(); i++) {
-    pls_nameonly.append(pls.at(i));
-    }
-    ui->listWidget->clear();
-    ui->listWidget->addItems(pls);
+    QList<QMediaContent> content;
+    //for(const QString& f:files)
+        ui->listWidget->clear();
+        for(int i = 0; i < pls.count(); i++) {
+        content.push_front(QUrl::fromLocalFile(pls[i]));
+        QFileInfo fi(pls[i]);
+        ui->listWidget->addItem(fi.fileName());
+        }
+        playlist->addMedia(content);
+        ui->listWidget->setCurrentRow(playlist->currentIndex() != -1? playlist->currentIndex():nextTrack);
+
     if(pls.count() != 0) {
     if(player->getCurrentTrack() == "")
         player->setCurrentTrack(pls.first());
@@ -220,8 +238,8 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
 void MainWindow::watchPlaying() {
     if(player->isMuted())QMainWindow::setWindowTitle("[muted] Samowar - Playing... " + player->getCurrentTrack());
     else watchStatus();
-        int pos_secs = (player->position()-player->position()/1000)/1000-60*(player->position()/60000);
-        int dur_secs = (player->duration()-player->duration()/1000)/1000-60*(player->duration()/60000);
+        int pos_secs = (player->position()-player->position()/60000*60000)/1000;
+        int dur_secs = (player->duration()-player->duration()/60000*60000)/1000;
         if(pos_secs < 10) ui -> label_test->setText(QString::number(player->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(player->duration()/60000) +":"+ QString::number(dur_secs));
         if(dur_secs < 10) ui -> label_test->setText(QString::number(player->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(player->duration()/60000) +":0"+ QString::number(dur_secs));
         if(pos_secs < 10 && dur_secs < 10) ui -> label_test->setText(QString::number(player->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(player->duration()/60000) +":0"+ QString::number(dur_secs));

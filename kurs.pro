@@ -20,3 +20,6 @@ HEADERS  += mainwindow.h \
     samoplayer.h
 
 FORMS    += mainwindow.ui
+
+RESOURCES += \
+    res1.qrc
