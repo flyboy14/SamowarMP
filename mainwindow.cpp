@@ -33,7 +33,6 @@ MainWindow::MainWindow(QWidget *parent) :
     iconPlayNext = new QIcon("media-next.png");
     ui->button_play_next->setIcon(*iconPlayNext);
     iconClearPls = new QIcon("desktop-brush-big.png");
-    ui->button_clearPlaylist->setIcon(*iconClearPls);
         QObject::connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
         QObject::connect(player,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(watchStatus()));
         QObject::connect(player,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
@@ -207,13 +206,6 @@ void MainWindow::on_button_play_next_clicked()
     }
 }
 
-void MainWindow::on_button_clearPlaylist_clicked()
-{
-    pls.clear();
-    ui->listWidget->clear();
-    nextTrack = 0;
-}
-
 void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     player->stopMusic();
@@ -269,6 +261,7 @@ void MainWindow::setSliderPosition(){
 void MainWindow::on_horizontalSlider_sliderPressed()
 {
     if(player->state() == 2) tmp_pause = true;
+    ui->horizontalSlider->setCursor(Qt::ClosedHandCursor);
     player->pauseMusic();
     player->disconnect(ui->currentTrack_progressBar,SIGNAL(valueChanged(int)),this,SLOT(setSliderPosition()));
 }
@@ -278,6 +271,7 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 {
     player->connect(ui->currentTrack_progressBar,SIGNAL(valueChanged(int)),this,SLOT(setSliderPosition()));
     if(!tmp_pause)player->playMusic();//0 - stopped 1 - playing 2 - paused
+    ui->horizontalSlider->setCursor(Qt::OpenHandCursor);
 }
 
 void MainWindow::atTrackEnd(){
@@ -320,24 +314,27 @@ void MainWindow::watchStatus() {
             ui->currentTrack_progressBar->setValue(1);
         }
         playstate = false;
-        QMainWindow::setWindowTitle("Samowar Music Player v.1.3.19a" );
+        QMainWindow::setWindowTitle("Samowar Music Player v.1.3.27a" );
     }
     if(player->state() == 2) {
-        QMainWindow::setWindowTitle("[paused] Samowar - " + player->getCurrentTrack());
-        //ui->button_pause->setFlat(0);
+        QFileInfo fi(pls[nextTrack]);
+        QMainWindow::setWindowTitle("[paused] Samowar - " + fi.fileName());
         if(playstate == true) {
             ui->button_play->setFlat(0);
             ui->button_stop->setFlat(1);
             ui->button_play->setIcon(*iconPlay);
+            ui->button_play->setToolTip("Play music");
         } // to prevent memory leaks
         playstate = false;
     }
     if(player->state() == 1) {
-        QMainWindow::setWindowTitle("Samowar - Playing... " + player->getCurrentTrack());
+        QFileInfo fi(pls[nextTrack]);
+        QMainWindow::setWindowTitle("Samowar - Playing... " + fi.fileName() );
         if(playstate == false) {
             ui->button_play->setFlat(0);
             ui->button_stop->setFlat(1);
             ui->button_play->setIcon(*iconPause);
+            ui->button_play->setToolTip("Pause music");
         } // to prevent memory leaks
         playstate = true;
     }
@@ -376,4 +373,26 @@ void MainWindow::on_checkBox_single_toggled(bool checked)
     else {
         single = false;
     }
+}
+
+void MainWindow::on_actionClear_playlist_triggered()
+{
+    pls.clear();
+    ui->listWidget->clear();
+    nextTrack = 0;
+}
+
+void MainWindow::on_button_play_released()
+{
+    ui->button_play->setStyleSheet("QPushButton::hover { border-image:url(:/media-information.png);}");
+}
+
+void MainWindow::on_volumeSlider_sliderPressed()
+{
+    ui->volumeSlider->setCursor(Qt::ClosedHandCursor);
+}
+
+void MainWindow::on_volumeSlider_sliderReleased()
+{
+    ui->volumeSlider->setCursor(Qt::OpenHandCursor);
 }

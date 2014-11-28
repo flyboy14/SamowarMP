@@ -36,8 +36,6 @@ private slots:
 
     void on_button_stop_clicked();
 
-    //void on_button_pause_clicked();
-
     void on_action_200_triggered();
 
     void on_actionExit_triggered();
@@ -51,8 +49,6 @@ private slots:
     void on_button_play_prev_clicked();
 
     void on_button_play_next_clicked();
-
-    void on_button_clearPlaylist_clicked();
 
     void on_listWidget_itemDoubleClicked(QListWidgetItem *item);
 
@@ -70,9 +66,20 @@ private slots:
 
     void on_checkBox_single_toggled(bool checked);
 
+    void on_actionClear_playlist_triggered();
+
+    void on_button_play_released();
+
+    void on_volumeSlider_sliderPressed();
+
+    void on_volumeSlider_sliderReleased();
+
 protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
+    //void dragEnterEvent(QDragEnterEvent *event);
+    //void dropEvent(QDropEvent *event);
+
 };
 
 #endif // MAINWINDOW_H
