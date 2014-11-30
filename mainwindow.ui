@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>769</width>
-    <height>304</height>
+    <width>767</width>
+    <height>306</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,14 +15,14 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>samowar.gif</normaloff>samowar.gif</iconset>
+    <normaloff>media-information.png</normaloff>media-information.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="button_play">
     <property name="geometry">
      <rect>
-      <x>270</x>
-      <y>30</y>
+      <x>247</x>
+      <y>34</y>
       <width>61</width>
       <height>71</height>
      </rect>
@@ -107,8 +107,8 @@
    <widget class="QPushButton" name="button_stop">
     <property name="geometry">
      <rect>
-      <x>330</x>
-      <y>30</y>
+      <x>307</x>
+      <y>35</y>
       <width>61</width>
       <height>70</height>
      </rect>
@@ -247,7 +247,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>30</y>
+       <y>27</y>
        <width>59</width>
        <height>14</height>
       </rect>
@@ -351,6 +351,41 @@
       <string>Single</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="deleteCurrentTrack">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>178</y>
+       <width>131</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete selected item&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string> delete current</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../build-kurs-Desktop-Release/brush-big.png</normaloff>../build-kurs-Desktop-Release/brush-big.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>12</width>
+       <height>12</height>
+      </size>
+     </property>
+     <property name="shortcut">
+      <string>Del</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+    </widget>
    </widget>
    <widget class="QProgressBar" name="currentTrack_progressBar">
     <property name="geometry">
@@ -383,8 +418,8 @@
    <widget class="QPushButton" name="button_play_prev">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>30</y>
+      <x>147</x>
+      <y>35</y>
       <width>76</width>
       <height>70</height>
      </rect>
@@ -407,8 +442,8 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>64</width>
-      <height>64</height>
+      <width>68</width>
+      <height>68</height>
      </size>
     </property>
     <property name="shortcut">
@@ -421,8 +456,8 @@
    <widget class="QPushButton" name="button_play_next">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>30</y>
+      <x>387</x>
+      <y>35</y>
       <width>76</width>
       <height>70</height>
      </rect>
@@ -445,8 +480,8 @@
     </property>
     <property name="iconSize">
      <size>
-      <width>64</width>
-      <height>64</height>
+      <width>68</width>
+      <height>68</height>
      </size>
     </property>
     <property name="shortcut">
@@ -469,7 +504,7 @@
     <property name="geometry">
      <rect>
       <x>610</x>
-      <y>250</y>
+      <y>253</y>
       <width>151</width>
       <height>21</height>
      </rect>
@@ -506,10 +541,10 @@
      <number>1</number>
     </property>
     <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOn</enum>
+     <enum>Qt::ScrollBarAsNeeded</enum>
     </property>
     <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAlwaysOn</enum>
+     <enum>Qt::ScrollBarAsNeeded</enum>
     </property>
     <property name="sizeAdjustPolicy">
      <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -564,7 +599,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>250</y>
+      <y>246</y>
       <width>591</width>
       <height>31</height>
      </rect>
@@ -615,39 +650,55 @@
      <number>5</number>
     </property>
    </widget>
-   <widget class="QPushButton" name="deleteCurrentTrack">
+   <widget class="QListWidget" name="listDebug">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
-      <x>586</x>
-      <y>227</y>
-      <width>14</width>
-      <height>14</height>
+      <x>10</x>
+      <y>320</y>
+      <width>751</width>
+      <height>131</height>
      </rect>
     </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
+    <property name="autoScrollMargin">
+     <number>1</number>
     </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete selected item&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    <property name="verticalScrollMode">
+     <enum>QAbstractItemView::ScrollPerItem</enum>
+    </property>
+    <property name="isWrapping" stdset="0">
+     <bool>false</bool>
+    </property>
+    <property name="resizeMode">
+     <enum>QListView::Fixed</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>300</y>
+      <width>111</width>
+      <height>16</height>
+     </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>Debug info</string>
     </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../build-kurs-Desktop-Release/brush-big.png</normaloff>../build-kurs-Desktop-Release/brush-big.png</iconset>
+   </widget>
+   <widget class="QPushButton" name="buttonDebugClear">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>300</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
     </property>
-    <property name="iconSize">
-     <size>
-      <width>12</width>
-      <height>12</height>
-     </size>
-    </property>
-    <property name="shortcut">
-     <string>Del</string>
-    </property>
-    <property name="flat">
-     <bool>true</bool>
+    <property name="text">
+     <string>Clear</string>
     </property>
    </widget>
    <zorder>currentTrack_progressBar</zorder>
@@ -658,16 +709,18 @@
    <zorder>button_play_prev</zorder>
    <zorder>button_play_next</zorder>
    <zorder>label_test</zorder>
-   <zorder>listWidget</zorder>
    <zorder>horizontalSlider</zorder>
-   <zorder>deleteCurrentTrack</zorder>
+   <zorder>listDebug</zorder>
+   <zorder>label_3</zorder>
+   <zorder>buttonDebugClear</zorder>
+   <zorder>listWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>769</width>
+     <width>767</width>
      <height>17</height>
     </rect>
    </property>
@@ -705,6 +758,7 @@
     <property name="title">
      <string>&amp;Donate</string>
     </property>
+    <addaction name="actionToggle_debug_output"/>
     <addaction name="action_200"/>
     <addaction name="actionExit"/>
    </widget>
@@ -740,6 +794,11 @@
   <action name="actionClear_playlist">
    <property name="text">
     <string>&amp;Clear playlist</string>
+   </property>
+  </action>
+  <action name="actionToggle_debug_output">
+   <property name="text">
+    <string>Show/hide debug output</string>
    </property>
   </action>
  </widget>

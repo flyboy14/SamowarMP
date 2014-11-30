@@ -74,9 +74,14 @@ private slots:
 
     void on_volumeSlider_sliderReleased();
 
+    void on_actionToggle_debug_output_triggered();
+
+    void on_buttonDebugClear_clicked();
+
 protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
+    QIcon *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconSamowar;
     //void dragEnterEvent(QDragEnterEvent *event);
     //void dropEvent(QDropEvent *event);
 
