@@ -78,6 +78,18 @@ private slots:
 
     void on_buttonDebugClear_clicked();
 
+    void on_dialVolume_valueChanged(int value);
+
+    void on_dialVolume_sliderPressed();
+
+    void on_dialVolume_sliderReleased();
+
+    void on_actionDial_triggered(bool checked);
+
+    void on_actionAdd_directory_s_triggered();
+
+    void on_actionSave_playlist_triggered();
+
 protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
