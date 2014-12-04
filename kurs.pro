@@ -14,7 +14,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    samoplayer.cpp
+    samoplayer.cpp \
+    bd.cpp
 
 HEADERS  += mainwindow.h \
     samoplayer.h

@@ -6,445 +6,76 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
-    <height>337</height>
+    <width>817</width>
+    <height>360</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
-   <string>Samowar Music player v.1.4.33a</string>
+   <string>Samowar Music player v.1.6.19a</string>
   </property>
   <property name="windowIcon">
    <iconset>
     <normaloff>media-information.png</normaloff>media-information.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QCommandLinkButton" name="button_play">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>31</y>
-      <width>81</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="palette">
-     <palette>
-      <active>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>94</red>
-          <green>255</green>
-          <blue>94</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </active>
-      <inactive>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>94</red>
-          <green>255</green>
-          <blue>94</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </inactive>
-      <disabled>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>190</red>
-          <green>190</green>
-          <blue>190</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </disabled>
-     </palette>
-    </property>
-    <property name="font">
-     <font>
-      <family>Terminus</family>
-      <pointsize>21</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="mouseTracking">
+   <widget class="QListWidget" name="listDebug">
+    <property name="enabled">
      <bool>true</bool>
     </property>
-    <property name="focusPolicy">
-     <enum>Qt::StrongFocus</enum>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Play music&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-play.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-play.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>64</width>
-      <height>64</height>
-     </size>
-    </property>
-    <property name="shortcut">
-     <string>F9</string>
-    </property>
-    <property name="autoDefault">
-     <bool>false</bool>
-    </property>
-    <property name="default">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QCommandLinkButton" name="button_stop">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>31</y>
+      <x>19</x>
+      <y>386</y>
+      <width>801</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="autoScrollMargin">
+     <number>1</number>
+    </property>
+    <property name="verticalScrollMode">
+     <enum>QAbstractItemView::ScrollPerItem</enum>
+    </property>
+    <property name="isWrapping" stdset="0">
+     <bool>false</bool>
+    </property>
+    <property name="resizeMode">
+     <enum>QListView::Fixed</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonDebugClear">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>360</y>
       <width>80</width>
-      <height>81</height>
+      <height>22</height>
      </rect>
-    </property>
-    <property name="palette">
-     <palette>
-      <active>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>103</green>
-          <blue>103</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </active>
-      <inactive>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>255</red>
-          <green>103</green>
-          <blue>103</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </inactive>
-      <disabled>
-       <colorrole role="ButtonText">
-        <brush brushstyle="SolidPattern">
-         <color alpha="255">
-          <red>190</red>
-          <green>190</green>
-          <blue>190</blue>
-         </color>
-        </brush>
-       </colorrole>
-      </disabled>
-     </palette>
-    </property>
-    <property name="font">
-     <font>
-      <family>Terminus</family>
-      <pointsize>21</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::StrongFocus</enum>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop playing&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="text">
-     <string/>
+     <string>Clear</string>
     </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-stop.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-stop.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>64</width>
-      <height>64</height>
-     </size>
-    </property>
-    <property name="shortcut">
-     <string>F10</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>0</y>
-      <width>371</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>ArrowCursor</cursorShape>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Listen to music with Flavour&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string>Welcome to Samowar Music player (alpha)</string>
-    </property>
-   </widget>
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>40</y>
-      <width>151</width>
-      <height>201</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Controls</string>
-    </property>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>91</width>
-       <height>16</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Volume</string>
-     </property>
-    </widget>
-    <widget class="QRadioButton" name="radio_mute">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>60</y>
-       <width>71</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="text">
-      <string>&amp;Mute</string>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>16</width>
-       <height>0</height>
-      </size>
-     </property>
-    </widget>
-    <widget class="Line" name="line">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>80</y>
-       <width>151</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBox_random">
-     <property name="geometry">
-      <rect>
-       <x>8</x>
-       <y>136</y>
-       <width>111</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle shuffle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>Random</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBox_repeat">
-     <property name="geometry">
-      <rect>
-       <x>8</x>
-       <y>96</y>
-       <width>111</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle playlist repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>Repeat</string>
-     </property>
-    </widget>
-    <widget class="QCheckBox" name="checkBox_single">
-     <property name="geometry">
-      <rect>
-       <x>8</x>
-       <y>116</y>
-       <width>101</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle single song repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>Single</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="deleteCurrentTrack">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>175</y>
-       <width>131</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="cursor">
-      <cursorShape>PointingHandCursor</cursorShape>
-     </property>
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete selected item&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string> delete current</string>
-     </property>
-     <property name="icon">
-      <iconset>
-       <normaloff>../build-kurs-Desktop-Release/brush-big.png</normaloff>../build-kurs-Desktop-Release/brush-big.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>12</width>
-       <height>12</height>
-      </size>
-     </property>
-     <property name="shortcut">
-      <string>Del</string>
-     </property>
-     <property name="flat">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QSlider" name="volumeSlider">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>40</y>
-       <width>131</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="cursor">
-      <cursorShape>OpenHandCursor</cursorShape>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="value">
-      <number>90</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
-    <widget class="QDial" name="dialVolume">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>30</y>
-       <width>71</width>
-       <height>71</height>
-      </rect>
-     </property>
-     <property name="cursor">
-      <cursorShape>OpenHandCursor</cursorShape>
-     </property>
-     <property name="focusPolicy">
-      <enum>Qt::WheelFocus</enum>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="value">
-      <number>90</number>
-     </property>
-    </widget>
-    <widget class="QLabel" name="labelVolume">
-     <property name="geometry">
-      <rect>
-       <x>64</x>
-       <y>79</y>
-       <width>59</width>
-       <height>14</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>8</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>90</string>
-     </property>
-    </widget>
-    <zorder>label_2</zorder>
-    <zorder>line</zorder>
-    <zorder>checkBox_random</zorder>
-    <zorder>checkBox_repeat</zorder>
-    <zorder>checkBox_single</zorder>
-    <zorder>deleteCurrentTrack</zorder>
-    <zorder>radio_mute</zorder>
-    <zorder>volumeSlider</zorder>
-    <zorder>dialVolume</zorder>
-    <zorder>labelVolume</zorder>
    </widget>
    <widget class="QProgressBar" name="currentTrack_progressBar">
     <property name="geometry">
      <rect>
-      <x>-10</x>
-      <y>-20</y>
-      <width>791</width>
-      <height>51</height>
+      <x>-2</x>
+      <y>0</y>
+      <width>821</width>
+      <height>41</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
     </property>
     <property name="cursor">
      <cursorShape>ArrowCursor</cursorShape>
@@ -465,301 +96,711 @@
      <bool>false</bool>
     </property>
    </widget>
-   <widget class="QCommandLinkButton" name="button_play_prev">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>165</x>
-      <y>31</y>
-      <width>81</width>
-      <height>81</height>
+      <x>678</x>
+      <y>52</y>
+      <width>131</width>
+      <height>281</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Controls</string>
+       </property>
+       <widget class="Line" name="line">
+        <property name="geometry">
+         <rect>
+          <x>4</x>
+          <y>140</y>
+          <width>121</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_repeat">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>168</y>
+          <width>70</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle playlist repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Repeat</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_single">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>194</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle single song repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Single</string>
+        </property>
+       </widget>
+       <widget class="QCheckBox" name="checkBox_random">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>220</y>
+          <width>76</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle shuffle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Random</string>
+        </property>
+       </widget>
+       <widget class="QDial" name="dialVolume">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>39</y>
+          <width>81</width>
+          <height>81</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>OpenHandCursor</cursorShape>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::WheelFocus</enum>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+        <property name="value">
+         <number>90</number>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelVolume">
+        <property name="geometry">
+         <rect>
+          <x>78</x>
+          <y>97</y>
+          <width>16</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>90</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_2">
+        <property name="geometry">
+         <rect>
+          <x>9</x>
+          <y>24</y>
+          <width>81</width>
+          <height>16</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Volume</string>
+        </property>
+       </widget>
+       <widget class="QRadioButton" name="radio_mute">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="geometry">
+         <rect>
+          <x>7</x>
+          <y>120</y>
+          <width>56</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="cursor">
+         <cursorShape>PointingHandCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string>&amp;Mute</string>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deleteCurrentTrack">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete selected item&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string> delete current</string>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>../build-kurs-Desktop-Release/brush-big.png</normaloff>../build-kurs-Desktop-Release/brush-big.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>12</width>
+         <height>12</height>
+        </size>
+       </property>
+       <property name="shortcut">
+        <string>Del</string>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>208</x>
+      <y>42</y>
+      <width>341</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>100</height>
+     </size>
+    </property>
+    <widget class="QCommandLinkButton" name="button_play_next">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>10</y>
+       <width>81</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Next track (F12)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-next.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-next.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>68</width>
+       <height>68</height>
+      </size>
+     </property>
+     <property name="shortcut">
+      <string>F12</string>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QCommandLinkButton" name="button_stop">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>10</y>
+       <width>81</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="palette">
+      <palette>
+       <active>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>103</green>
+           <blue>103</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>255</red>
+           <green>103</green>
+           <blue>103</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>190</red>
+           <green>190</green>
+           <blue>190</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="font">
+      <font>
+       <family>Terminus</family>
+       <pointsize>21</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop playing (F10)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-stop.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-stop.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>64</width>
+       <height>64</height>
+      </size>
+     </property>
+     <property name="shortcut">
+      <string>F10</string>
+     </property>
+    </widget>
+    <widget class="QCommandLinkButton" name="button_play_prev">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>81</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Previous track (F11)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-previous.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-previous.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>68</width>
+       <height>68</height>
+      </size>
+     </property>
+     <property name="shortcut">
+      <string>F11</string>
+     </property>
+    </widget>
+    <widget class="QCommandLinkButton" name="button_play">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>10</y>
+       <width>81</width>
+       <height>80</height>
+      </rect>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>100</width>
+       <height>100</height>
+      </size>
+     </property>
+     <property name="palette">
+      <palette>
+       <active>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>94</red>
+           <green>255</green>
+           <blue>94</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </active>
+       <inactive>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>94</red>
+           <green>255</green>
+           <blue>94</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </inactive>
+       <disabled>
+        <colorrole role="ButtonText">
+         <brush brushstyle="SolidPattern">
+          <color alpha="255">
+           <red>190</red>
+           <green>190</green>
+           <blue>190</blue>
+          </color>
+         </brush>
+        </colorrole>
+       </disabled>
+      </palette>
+     </property>
+     <property name="font">
+      <font>
+       <family>Terminus</family>
+       <pointsize>21</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
+     <property name="mouseTracking">
+      <bool>true</bool>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Play music (F9)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-play.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-play.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>64</width>
+       <height>64</height>
+      </size>
+     </property>
+     <property name="shortcut">
+      <string>F9</string>
+     </property>
+     <property name="autoDefault">
+      <bool>false</bool>
+     </property>
+     <property name="default">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <zorder>button_stop</zorder>
+    <zorder>button_play_prev</zorder>
+    <zorder>button_play</zorder>
+    <zorder>button_play_next</zorder>
+    <zorder>A</zorder>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>199</x>
+      <y>13</y>
+      <width>401</width>
+      <height>16</height>
      </rect>
     </property>
     <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
+     <cursorShape>ArrowCursor</cursorShape>
     </property>
     <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Previous track&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Listen to music with Flavour&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="text">
-     <string/>
+     <string>Welcome to Samowar Music player (alpha)</string>
     </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-previous.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-previous.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>68</width>
-      <height>68</height>
-     </size>
-    </property>
-    <property name="shortcut">
-     <string>F11</string>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QCommandLinkButton" name="button_play_next">
-    <property name="geometry">
-     <rect>
-      <x>385</x>
-      <y>31</y>
-      <width>81</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>PointingHandCursor</cursorShape>
-    </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="toolTip">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Next track&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="icon">
-     <iconset>
-      <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-next.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-next.png</iconset>
-    </property>
-    <property name="iconSize">
-     <size>
-      <width>68</width>
-      <height>68</height>
-     </size>
-    </property>
-    <property name="shortcut">
-     <string>F12</string>
-    </property>
-    <property name="checkable">
-     <bool>false</bool>
-    </property>
-    <property name="autoDefault">
-     <bool>false</bool>
-    </property>
-    <property name="default">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_test">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>261</y>
-      <width>151</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>duration be here</string>
-    </property>
-   </widget>
-   <widget class="QListWidget" name="listWidget">
+   <widget class="QTabWidget" name="A">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>112</y>
-      <width>591</width>
-      <height>141</height>
+      <width>661</width>
+      <height>221</height>
      </rect>
     </property>
-    <property name="mouseTracking">
-     <bool>true</bool>
-    </property>
-    <property name="contextMenuPolicy">
-     <enum>Qt::CustomContextMenu</enum>
-    </property>
-    <property name="acceptDrops">
-     <bool>false</bool>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAsNeeded</enum>
-    </property>
-    <property name="horizontalScrollBarPolicy">
-     <enum>Qt::ScrollBarAsNeeded</enum>
-    </property>
-    <property name="sizeAdjustPolicy">
-     <enum>QAbstractScrollArea::AdjustToContents</enum>
-    </property>
-    <property name="autoScroll">
-     <bool>true</bool>
-    </property>
-    <property name="tabKeyNavigation">
-     <bool>true</bool>
-    </property>
-    <property name="dragEnabled">
-     <bool>false</bool>
-    </property>
-    <property name="dragDropOverwriteMode">
-     <bool>true</bool>
-    </property>
-    <property name="dragDropMode">
-     <enum>QAbstractItemView::NoDragDrop</enum>
-    </property>
-    <property name="defaultDropAction">
-     <enum>Qt::MoveAction</enum>
-    </property>
-    <property name="alternatingRowColors">
-     <bool>true</bool>
-    </property>
-    <property name="selectionMode">
-     <enum>QAbstractItemView::SingleSelection</enum>
-    </property>
-    <property name="selectionBehavior">
-     <enum>QAbstractItemView::SelectItems</enum>
-    </property>
-    <property name="textElideMode">
-     <enum>Qt::ElideNone</enum>
-    </property>
-    <property name="verticalScrollMode">
-     <enum>QAbstractItemView::ScrollPerPixel</enum>
-    </property>
-    <property name="flow">
-     <enum>QListView::TopToBottom</enum>
-    </property>
-    <property name="resizeMode">
-     <enum>QListView::Adjust</enum>
-    </property>
-    <property name="spacing">
-     <number>1</number>
-    </property>
-    <property name="sortingEnabled">
-     <bool>false</bool>
-    </property>
-   </widget>
-   <widget class="QSlider" name="horizontalSlider">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>255</y>
-      <width>591</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="cursor">
-     <cursorShape>OpenHandCursor</cursorShape>
-    </property>
-    <property name="mouseTracking">
-     <bool>false</bool>
-    </property>
-    <property name="focusPolicy">
-     <enum>Qt::NoFocus</enum>
-    </property>
-    <property name="contextMenuPolicy">
-     <enum>Qt::DefaultContextMenu</enum>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="minimum">
+    <property name="currentIndex">
      <number>0</number>
     </property>
-    <property name="maximum">
-     <number>100</number>
-    </property>
-    <property name="singleStep">
-     <number>1</number>
-    </property>
-    <property name="pageStep">
-     <number>10</number>
-    </property>
-    <property name="value">
-     <number>0</number>
-    </property>
-    <property name="sliderPosition">
-     <number>0</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-    <property name="invertedAppearance">
-     <bool>false</bool>
-    </property>
-    <property name="invertedControls">
-     <bool>false</bool>
-    </property>
-    <property name="tickPosition">
-     <enum>QSlider::TicksAbove</enum>
-    </property>
-    <property name="tickInterval">
-     <number>3</number>
-    </property>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>♫</string>
+     </attribute>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="1" column="1">
+         <widget class="QLabel" name="label_test">
+          <property name="text">
+           <string>duration be here</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QSlider" name="horizontalSlider">
+          <property name="cursor">
+           <cursorShape>OpenHandCursor</cursorShape>
+          </property>
+          <property name="mouseTracking">
+           <bool>false</bool>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::DefaultContextMenu</enum>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="minimum">
+           <number>0</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="singleStep">
+           <number>1</number>
+          </property>
+          <property name="pageStep">
+           <number>10</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="sliderPosition">
+           <number>0</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="invertedAppearance">
+           <bool>false</bool>
+          </property>
+          <property name="invertedControls">
+           <bool>false</bool>
+          </property>
+          <property name="tickPosition">
+           <enum>QSlider::TicksAbove</enum>
+          </property>
+          <property name="tickInterval">
+           <number>3</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="2">
+         <widget class="QListWidget" name="listWidget">
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
+          <property name="acceptDrops">
+           <bool>false</bool>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <property name="autoScroll">
+           <bool>true</bool>
+          </property>
+          <property name="tabKeyNavigation">
+           <bool>true</bool>
+          </property>
+          <property name="dragEnabled">
+           <bool>false</bool>
+          </property>
+          <property name="dragDropOverwriteMode">
+           <bool>true</bool>
+          </property>
+          <property name="dragDropMode">
+           <enum>QAbstractItemView::NoDragDrop</enum>
+          </property>
+          <property name="defaultDropAction">
+           <enum>Qt::MoveAction</enum>
+          </property>
+          <property name="alternatingRowColors">
+           <bool>true</bool>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectItems</enum>
+          </property>
+          <property name="textElideMode">
+           <enum>Qt::ElideNone</enum>
+          </property>
+          <property name="verticalScrollMode">
+           <enum>QAbstractItemView::ScrollPerPixel</enum>
+          </property>
+          <property name="flow">
+           <enum>QListView::TopToBottom</enum>
+          </property>
+          <property name="resizeMode">
+           <enum>QListView::Adjust</enum>
+          </property>
+          <property name="spacing">
+           <number>1</number>
+          </property>
+          <property name="sortingEnabled">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>…</string>
+     </attribute>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QTextBrowser" name="textBrowser">
+        <property name="html">
+         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Quick tip:&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Note, that pressing on player slider isn't allowed, therefore to change current track position you have to move it directly.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Database support is not implemented yet.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Sergey Kozak made this.&lt;br /&gt;E-mail: sergeykozak95@gmail.com&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Skype: flyborn.boogie&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;BSUIR, 2014&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
-   <widget class="QListWidget" name="listDebug">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>340</y>
-      <width>751</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="autoScrollMargin">
-     <number>1</number>
-    </property>
-    <property name="verticalScrollMode">
-     <enum>QAbstractItemView::ScrollPerItem</enum>
-    </property>
-    <property name="isWrapping" stdset="0">
-     <bool>false</bool>
-    </property>
-    <property name="resizeMode">
-     <enum>QListView::Fixed</enum>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>320</y>
-      <width>111</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Debug info</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttonDebugClear">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>320</y>
-      <width>81</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Clear</string>
-    </property>
-   </widget>
-   <zorder>button_play_next</zorder>
-   <zorder>button_stop</zorder>
-   <zorder>button_play</zorder>
-   <zorder>button_play_prev</zorder>
-   <zorder>groupBox</zorder>
-   <zorder>label_test</zorder>
-   <zorder>horizontalSlider</zorder>
-   <zorder>listDebug</zorder>
-   <zorder>label_3</zorder>
-   <zorder>buttonDebugClear</zorder>
-   <zorder>listWidget</zorder>
    <zorder>currentTrack_progressBar</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>widget</zorder>
+   <zorder>A</zorder>
+   <zorder>listDebug</zorder>
+   <zorder>buttonDebugClear</zorder>
    <zorder>label</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
@@ -767,7 +808,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>766</width>
+     <width>817</width>
      <height>17</height>
     </rect>
    </property>
@@ -806,26 +847,13 @@
      </font>
     </property>
     <property name="title">
-     <string>&amp;Donate</string>
+     <string>&amp;Controls</string>
     </property>
     <addaction name="actionToggle_debug_output"/>
     <addaction name="action_200"/>
     <addaction name="actionExit"/>
    </widget>
-   <widget class="QMenu" name="menuAppearence">
-    <property name="title">
-     <string>&amp;Appearence</string>
-    </property>
-    <widget class="QMenu" name="menuVolume_slider_type">
-     <property name="title">
-      <string>&amp;Volume slider type</string>
-     </property>
-     <addaction name="actionDial"/>
-    </widget>
-    <addaction name="menuVolume_slider_type"/>
-   </widget>
    <addaction name="menuOptions"/>
-   <addaction name="menuAppearence"/>
    <addaction name="menuDonate"/>
   </widget>
   <action name="actionExit">
@@ -896,38 +924,5 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>volumeSlider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>dialVolume</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>699</x>
-     <y>106</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>658</x>
-     <y>128</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>dialVolume</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>volumeSlider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>629</x>
-     <y>143</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>732</x>
-     <y>105</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

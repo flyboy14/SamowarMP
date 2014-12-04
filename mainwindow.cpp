@@ -14,6 +14,7 @@ QString dir = "/home/master-p/Music";
 QStringList pls;
 int currentVolume = 50;
 int nextTrack = 0;
+int def_width, def_height;
 bool debug=false, repeat=false, randome=false, single=false, tmp_pause, playstate = false;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -21,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->setFixedSize(this->size().width(), this->size().height());
+    this->setGeometry(230,150,0,0);
+    def_width = this->size().width();
+    def_height = this->size().height();
     //iconSamowar = new QIcon("media-information.png");
     playlist = new QMediaPlaylist(player);
     player->setPlaylist(playlist);
@@ -36,11 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //ui->button_play_next->setIcon(*iconPlayNext);
     //iconClearPls = new QIcon("desktop-brush-big.png");
     ui->listDebug->setVisible(false);
-    ui->label_3->setVisible(false);
     ui->buttonDebugClear->setVisible(false);
-    ui->dialVolume->setVisible(false);
-    ui->labelVolume->setVisible(false);
-
     QObject::connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
     QObject::connect(player,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(watchStatus()));
     QObject::connect(player,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
@@ -48,7 +49,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(ui->currentTrack_progressBar,SIGNAL(valueChanged(int)),this,SLOT(setSliderPosition()));
     QObject::connect(player,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
                 //connect(player,SIGNAL(positionChanged(qint64)),this,SLOT(onPositionChanged(qint64)));
-    MainWindow::on_actionDial_triggered(true);
 }
 
 MainWindow::~MainWindow()
@@ -145,12 +145,6 @@ void MainWindow::on_action_add_files_triggered()
         if(player->getCurrentTrack() == "")
             player->setCurrentTrack(pls.first());
     }
-}
-
-
-void MainWindow::on_volumeSlider_valueChanged(int value)
-{
-    player -> setVolume(value);
 }
 
 void MainWindow::on_radio_mute_toggled(bool checked)
@@ -370,7 +364,7 @@ void MainWindow::watchStatus() {
             ui->button_play->setIcon(*iconPlay);
             ui->currentTrack_progressBar->setValue(1);
         playstate = false;
-        QMainWindow::setWindowTitle("Samowar Music Player v.1.4.33a" );
+        QMainWindow::setWindowTitle("Samowar Music Player v.1.6.19a" );
     }
     if(player->state() == 2) {
         QFileInfo fi(player->getCurrentTrack());
@@ -379,7 +373,7 @@ void MainWindow::watchStatus() {
             //ui->button_play->setFlat(0);
             //ui->button_stop->setFlat(1);
             ui->button_play->setIcon(*iconPlay);
-            ui->button_play->setToolTip("Play music");
+            ui->button_play->setToolTip("Play music (F9)");
         } // to prevent memory leaks
         playstate = false;
     }
@@ -390,7 +384,7 @@ void MainWindow::watchStatus() {
             //ui->button_play->setFlat(0);
             //ui->button_stop->setFlat(1);
             ui->button_play->setIcon(*iconPause);
-            ui->button_play->setToolTip("Pause music");
+            ui->button_play->setToolTip("Pause music (F9)");
         } // to prevent memory leaks
         playstate = true;
     }
@@ -444,32 +438,19 @@ void MainWindow::on_button_play_released()
     ui->button_play->setStyleSheet("QPushButton::hover { border-image:url(:/media-information.png);}");
 }
 
-void MainWindow::on_volumeSlider_sliderPressed()
-{
-    ui->volumeSlider->setCursor(Qt::ClosedHandCursor);
-}
-
-void MainWindow::on_volumeSlider_sliderReleased()
-{
-    ui->volumeSlider->setCursor(Qt::OpenHandCursor);
-}
-
 void MainWindow::on_actionToggle_debug_output_triggered()
 {
     if(debug) {
         ui->listDebug->setVisible(false);
         ui->buttonDebugClear->setVisible(false);
-        ui->label_3->setVisible(false);
         debug = false;
-        if(ui -> actionDial->isChecked()) window()->setGeometry(90,90,766,328);
-        else window()->setGeometry(90,90,766,308);
+        window()->setFixedSize(def_width,def_height);
     }
     else {
         ui->listDebug->setVisible(true);
         ui->buttonDebugClear->setVisible(true);
-        ui->label_3->setVisible(true);
         debug = true;
-        window()->setGeometry(90,90,766,513);
+        window()->setFixedSize(this->size().width(), this->size().height()+190);
     }
 }
 
@@ -496,46 +477,6 @@ void MainWindow::on_dialVolume_sliderReleased()
     ui->dialVolume->setCursor(Qt::OpenHandCursor);
 }
 
-void MainWindow::on_actionDial_triggered(bool checked)
-{
-    if(checked) {
-        ui->groupBox->setGeometry(610,40,151,231);
-        ui->labelVolume->setGeometry(65,84,59,14);
-        ui->dialVolume->setGeometry(0,34,71,71);
-        ui->radio_mute->setGeometry(80,20,71,20);
-        ui->line->setGeometry(0,100,151,20);
-        ui->checkBox_repeat->setGeometry(10,120,111,21);
-        ui->checkBox_single->setGeometry(10,140,111,21);
-        ui->checkBox_random->setGeometry(10,160,111,21);
-        ui->deleteCurrentTrack->setGeometry(10,205,131,21);
-        ui->listWidget->setGeometry(10,112,591,171);
-        ui->horizontalSlider->setGeometry(10,288,591,31);
-        ui->label_test->setGeometry(610,295,151,21);
-        window()->setGeometry(90,90,766,340);
-        ui->dialVolume->setVisible(true);
-        ui->labelVolume->setVisible(true);
-        ui->volumeSlider->setVisible(false);
-    }
-    else {
-        ui->groupBox->setGeometry(610,40,151,201);
-        ui->labelVolume->setGeometry(65,84,59,14);
-        ui->dialVolume->setGeometry(0,34,71,71);
-        ui->radio_mute->setGeometry(10,60,71,20);
-        ui->line->setGeometry(0,80,151,20);
-        ui->checkBox_repeat->setGeometry(10,96,111,21);
-        ui->checkBox_single->setGeometry(10,116,111,21);
-        ui->checkBox_random->setGeometry(10,136,111,21);
-        ui->deleteCurrentTrack->setGeometry(10,175,131,21);
-        ui->listWidget->setGeometry(10,112,591,141);
-        ui->horizontalSlider->setGeometry(10,255,591,31);
-        ui->label_test->setGeometry(610,262,151,21);
-        window()->setGeometry(90,90,766,308);
-        ui->dialVolume->setVisible(false);
-        ui->labelVolume->setVisible(false);
-        ui->volumeSlider->setVisible(true);
-    }
-}
-
 void MainWindow::on_actionAdd_directory_s_triggered()
 {
     QString directory = QFileDialog::getExistingDirectory(this,tr("Select dir to import files"));
@@ -557,9 +498,10 @@ void MainWindow::on_actionAdd_directory_s_triggered()
 
 void MainWindow::on_actionSave_playlist_triggered()
 {
-    //sqlite3 *currentPlaylist;
-    //sqlite3_stmt *ppStmt;
-    //const char* tail;
-    //int rc=sqlite3_open("/home/master-p/test.db", &currentPlaylist);
-    //sqlite3_prepare(currentPlaylist,"aaaarrrrrrrrrrrrrrrrrgggggggggggggh",10,&ppStmt, &tail);
+//    sqlite3 *currentPlaylist;
+//    sqlite3_stmt *ppStmt;
+//    const char* tail;
+//    int rc=sqlite3_open("/home/master-p/test.db", &currentPlaylist);
+//    sqlite3_prepare(currentPlaylist,"aaaarrrrrrrrrrrrrrrrrgggggggggggggh",10,&ppStmt, &tail);
+//    sqlite3_column_table_name()
 }

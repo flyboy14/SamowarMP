@@ -42,8 +42,6 @@ private slots:
 
     void on_action_add_files_triggered();
 
-    void on_volumeSlider_valueChanged(int value);
-
     void on_radio_mute_toggled(bool checked);
 
     void on_button_play_prev_clicked();
@@ -70,10 +68,6 @@ private slots:
 
     void on_button_play_released();
 
-    void on_volumeSlider_sliderPressed();
-
-    void on_volumeSlider_sliderReleased();
-
     void on_actionToggle_debug_output_triggered();
 
     void on_buttonDebugClear_clicked();
@@ -83,8 +77,6 @@ private slots:
     void on_dialVolume_sliderPressed();
 
     void on_dialVolume_sliderReleased();
-
-    void on_actionDial_triggered(bool checked);
 
     void on_actionAdd_directory_s_triggered();
 
