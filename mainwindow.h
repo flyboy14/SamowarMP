@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QListWidget>
 #include <QMediaPlaylist>
+#include <QMediaPlayer>
 
 namespace Ui {
     class MainWindow;
@@ -85,9 +86,9 @@ private slots:
 protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
+    QList<QMediaContent> content;
     QIcon *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconSamowar;
-    //void dragEnterEvent(QDragEnterEvent *event);
-    //void dropEvent(QDropEvent *event);
+    QStringList files;
 
 };
 
