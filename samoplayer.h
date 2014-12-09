@@ -4,6 +4,7 @@
 #include <QAudio>
 #include <QMediaPlayer>
 #include <QMainWindow>
+#include <QFileInfo>
 #include "mainwindow.h"
 
 class samoplayer:public QMediaPlayer
@@ -11,7 +12,7 @@ class samoplayer:public QMediaPlayer
     QString name, next_name;
 public:
     samoplayer();
-    QString getCurrentTrack();
+    QString getCurrentTrack(QStringList filez, QMediaPlaylist *pls);
     QString getNextTrack();
     void setCurrentTrack(QString name);
     void setNextTrack(QString next_name);

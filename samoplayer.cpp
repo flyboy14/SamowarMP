@@ -1,4 +1,6 @@
 #include "samoplayer.h"
+#include <QCoreApplication>
+#include <QFileInfo>
 
 samoplayer::samoplayer() {
     setCurrentTrack("");
@@ -14,9 +16,12 @@ samoplayer::samoplayer() {
         this -> name = name;
     }
 
-    QString samoplayer::getCurrentTrack()
+    QString samoplayer::getCurrentTrack(QStringList filez, QMediaPlaylist *pls)
     {
-        return name;
+        QStringList files = filez;
+        QMediaPlaylist *playlist = pls;
+        QFileInfo fi(files[playlist->currentIndex()]);
+        return fi.fileName();
     }
 
     QString samoplayer::getNextTrack()

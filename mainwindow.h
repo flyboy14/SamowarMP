@@ -21,6 +21,10 @@ public:
 
 private slots:
 
+    void progress();
+
+    void changeCurrentTab();
+
     void atTrackEnd();
 
     void setSliderPosition();
