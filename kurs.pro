@@ -23,4 +23,5 @@ FORMS    += mainwindow.ui
 
 RESOURCES += \
     res1.qrc
-LIBS += -lsqlite3
+#LIBS += -lsqlite3
+

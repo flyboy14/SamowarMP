@@ -1,3 +1,13 @@
 <RCC>
-    <qresource prefix="/new/prefix1"/>
+    <qresource prefix="/new/prefix1">
+        <file>samowar.gif</file>
+        <file>brush-big.png</file>
+        <file>desktop-brush-big.png</file>
+        <file>media-information.png</file>
+        <file>media-next.png</file>
+        <file>media-pause.png</file>
+        <file>media-play.png</file>
+        <file>media-previous.png</file>
+        <file>media-stop.png</file>
+    </qresource>
 </RCC>

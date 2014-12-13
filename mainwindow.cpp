@@ -7,8 +7,8 @@
 #include <QFileDialog>
 #include <QTimer>
 #include "samoplayer.h"
+QString dir = "";
 samoplayer *plr= new samoplayer;
-QString dir = "/home/master-p/Music";
 int currentVolume = 50;
 int nextTrack = 0, nowSelected = 0;
 int def_width, def_height;
@@ -23,9 +23,10 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setGeometry(230,150,0,0);
     def_width = this->size().width();
     def_height = this->size().height();
+    dir = "/home/master-p/Music";
     //iconSamowar = new QIcon("media-information.png");
     QCoreApplication::setApplicationName("Samowar Music Player");
-    QCoreApplication::setApplicationVersion("1.9.01a");
+    QCoreApplication::setApplicationVersion("1.9.17a");
     iconPlay = new QIcon(QApplication::applicationDirPath()+"/media-play.png");
     ui->button_play->setIcon(*iconPlay);
     iconPause = new QIcon(QApplication::applicationDirPath()+"/media-pause.png");
@@ -39,8 +40,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->deleteCurrentTrack->setIcon(*iconClearPls);
     ui->listDebug->setVisible(false);
     ui->buttonDebugClear->setVisible(false);
+    window()->setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
     playlist = new QMediaPlaylist(plr);
     plr->setPlaylist(playlist);
+    connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this, SLOT(mySliderValueChanged(int)));
     QObject::connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
     QObject::connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
     QObject::connect(plr,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
@@ -51,9 +54,15 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(changeCurrentTab()));
     QObject::connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
     QStringList cmdline_args = QApplication::arguments();
-    if(cmdline_args.count() > 1) {
+    if(cmdline_args.count() > 0) {
         cmdline_args.removeAt(0);
-        files = cmdline_args;
+        for(int i = 0; i < cmdline_args.count(); i++) {
+            if(!cmdline_args[i].contains(QDir::currentPath())) {
+                files.append(QDir::currentPath()+"/"+cmdline_args[i]);
+                ui->listDebug->addItem(files[i]);
+            }
+            else files = cmdline_args;
+        }
         for(int i = 0; i < files.count(); i++) {
             content.push_back(QUrl::fromLocalFile(files[i]));
             QFileInfo fi(files[i]);
@@ -61,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         playlist->addMedia(content);
         ui->listWidget->setCurrentRow(playlist->currentIndex() != -1? playlist->currentIndex():0);
+//        nextTrack++;
+//        nowSelected++;
         plr->playMusic();
     }
 }
@@ -84,11 +95,13 @@ void MainWindow::on_button_play_clicked()
             ui->listWidget->setCurrentRow(nextTrack);
             //nextTrack = playlist->currentIndex();
             //ui->listWidget->setCurrentRow(playlist->currentIndex() != -1? playlist->currentIndex():0);
+            ui->currentTrack_progressBar->setValue(1);
             plr->playMusic();
         }
                 else {
                     if(plr->state() != 2)playlist->setCurrentIndex(nowSelected); //0 - stopped 1 - playing 2 - paused
                     ui->listWidget->item(nextTrack)->setSelected(true);
+                    //ui->currentTrack_progressBar->setValue(1);
                     plr->playMusic();
                 }
     }
@@ -161,7 +174,10 @@ void MainWindow::on_button_play_prev_clicked()
     if(playlist->playbackMode() == QMediaPlaylist::Sequential)
     {
         if(nextTrack != 0) {
+            ui->currentTrack_progressBar->setValue(1);
             playlist->previous();
+            if(nextTrack == playlist->mediaCount()-1) nextTrack--;
+            ui->listWidget->item(nextTrack)->setSelected(true);
             char *buffer = new char[100];
             char *buffer1 = new char[100];
             sprintf(buffer,"%d",nextTrack);
@@ -171,14 +187,20 @@ void MainWindow::on_button_play_prev_clicked()
             ui->listDebug->addItem(str+buffer+str1+buffer1);
         }
     }
-    else if(playlist->mediaCount()!=0)playlist->previous();
+    else if(playlist->mediaCount()!=0) {
+        ui->currentTrack_progressBar->setValue(1);
+        playlist->previous();
+    }
 }
 
 void MainWindow::on_button_play_next_clicked()
 {
     if(playlist->mediaCount() != 0) {
         if(playlist->playbackMode() == QMediaPlaylist::Sequential)
-        {if(nextTrack != playlist->mediaCount()-1){playlist->next();
+        {if(nextTrack != playlist->mediaCount()-1) {
+                ui->currentTrack_progressBar->setValue(1);
+                playlist->next();
+                ui->listWidget->item(nextTrack)->setSelected(true);
                 char *buffer = new char[100];
                 char *buffer1 = new char[100];
                 sprintf(buffer,"%d",nextTrack);
@@ -187,7 +209,10 @@ void MainWindow::on_button_play_next_clicked()
                 const QString& str1(", current index is now ");
              ui->listDebug->addItem(str+buffer+str1+buffer1);}
         }
-        else playlist->next();
+        else {
+            ui->currentTrack_progressBar->setValue(1);
+            playlist->next();
+        }
     }
 }
 
@@ -299,14 +324,16 @@ void MainWindow::on_horizontalSlider_sliderPressed()
     ui->horizontalSlider->setCursor(Qt::ClosedHandCursor);
     plr->pauseMusic();
     plr->disconnect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
+    plr->disconnect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this, SLOT(mySliderValueChanged(int)));
 }
 
 
 void MainWindow::on_horizontalSlider_sliderReleased()
 {
     if(!tmp_pause) plr->playMusic();//0 - stopped 1 - playing 2 - paused
-    ui->horizontalSlider->setCursor(Qt::OpenHandCursor);
+    ui->horizontalSlider->setCursor(Qt::PointingHandCursor);
     plr->connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
+    plr->connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this, SLOT(mySliderValueChanged(int)));
 }
 
 void MainWindow::atTrackEnd() {
@@ -333,7 +360,7 @@ void MainWindow::watchStatus() {
             ui->currentTrack_progressBar->setValue(1);
             ui->horizontalSlider->setValue(0);
         playstate = false;
-        QMainWindow::setWindowTitle("Samowar Music Player v.1.9.01a" );
+        QMainWindow::setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
     }
     if(plr->state() == 2) {
         QFileInfo fi(files[nextTrack]);
@@ -460,11 +487,14 @@ void MainWindow::on_actionAdd_directory_s_triggered()
     QDir dirs(directory);
     QList<QMediaContent> new_content;
     int tmp = files.count();
-    files.append(dirs.entryList(QStringList() << "*.mp3" << "*.flac" << "*.wav" << "*.ogg" << "*.3ga"));
+    QStringList tmp_list;
+    tmp_list.append(dirs.entryList(QStringList() << "*.mp3" << "*.flac" << "*.wav" << "*.ogg" << "*.3ga"));
+
+    for(int i = 0; i < tmp_list.count(); i++) files.append(dirs.path()+"/"+tmp_list[i]); //add dir name to added items in list
+
     for(int i = tmp; i < files.count(); i++) {
-        //files.append(files[i]);
-        content.push_back(QUrl::fromLocalFile(dirs.path()+"/"+files[i]));
-        new_content.push_back(QUrl::fromLocalFile(dirs.path()+"/"+files[i]));
+        content.push_back(QUrl::fromLocalFile(files[i]));
+        new_content.push_back(QUrl::fromLocalFile(files[i]));
         QFileInfo fi(files[i]);
         ui->listWidget->addItem(fi.fileName());
     }
@@ -490,5 +520,51 @@ void MainWindow::progress() {
     if(plr->duration() != 0) {
     ui -> currentTrack_progressBar->setValue(plr->position()*100/plr->duration());
     ui -> horizontalSlider->setValue(plr->position()*100/plr->duration());
+    }
+}
+
+void MainWindow::mySliderValueChanged(int newPos)
+{
+    // Make slider to follow the mouse directly and not by pageStep steps
+    Qt::MouseButtons btns = QApplication::mouseButtons();
+    QPoint localMousePos = ui->horizontalSlider->mapFromGlobal(QCursor::pos());
+    bool clickOnSlider = (btns & Qt::LeftButton) &&
+                         (localMousePos.x() >= 0 && localMousePos.y() >= 0 &&
+                          localMousePos.x() < ui->horizontalSlider->size().width() &&
+                          localMousePos.y() < ui->horizontalSlider->size().height()+20);
+    if (clickOnSlider)
+    {
+        // Attention! The following works only for Horizontal, Left-to-right sliders
+        float posRatio = localMousePos.x() / (float )ui->horizontalSlider->size().width();
+        int sliderRange = ui->horizontalSlider->maximum() - ui->horizontalSlider->minimum();
+        int sliderPosUnderMouse = ui->horizontalSlider->minimum() + sliderRange * posRatio;
+        if (sliderPosUnderMouse != newPos)
+        {
+            ui->horizontalSlider->setValue(sliderPosUnderMouse);
+            plr->setPosition(plr->duration()/100*sliderPosUnderMouse);
+            return;
+        }
+    }
+    // ...
+}
+
+void MainWindow::on_actionRemove_duplicates_triggered()
+{
+    if(files.count() != 0) {
+    for(int cur = 0;cur < files.count(); cur++) {
+        for(int i = cur+1; i < files.count(); i++) {
+            if(files[cur] == files[i]) {
+                files.removeAt(i);
+                content.removeAt(i);
+                playlist->removeMedia(i);
+            }
+        }
+    }
+    ui->listWidget->clear();
+    for(int j = 0; j < playlist->mediaCount(); j++) {
+        QFileInfo fi(files[j]);
+        ui->listWidget->addItem(fi.fileName());
+    }
+    ui->listWidget->item(nextTrack)->setSelected(true);
     }
 }

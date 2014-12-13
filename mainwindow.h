@@ -21,6 +21,8 @@ public:
 
 private slots:
 
+    void mySliderValueChanged(int newPos);
+
     void progress();
 
     void changeCurrentTab();
@@ -86,6 +88,8 @@ private slots:
     void on_actionAdd_directory_s_triggered();
 
     void on_actionSave_playlist_triggered();
+
+    void on_actionRemove_duplicates_triggered();
 
 protected:
     Ui::MainWindow *ui;

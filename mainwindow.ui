@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>817</width>
-    <height>362</height>
+    <height>452</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>Samowar Music Player v.1.9.01a</string>
+   <string/>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>390</y>
+      <y>450</y>
       <width>801</width>
       <height>141</height>
      </rect>
@@ -52,8 +52,8 @@
    <widget class="QPushButton" name="buttonDebugClear">
     <property name="geometry">
      <rect>
-      <x>730</x>
-      <y>360</y>
+      <x>727</x>
+      <y>428</y>
       <width>80</width>
       <height>22</height>
      </rect>
@@ -99,10 +99,10 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>678</x>
-      <y>52</y>
+      <x>675</x>
+      <y>120</y>
       <width>131</width>
-      <height>281</height>
+      <height>291</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -168,7 +168,7 @@
           <x>10</x>
           <y>220</y>
           <width>121</width>
-          <height>16</height>
+          <height>21</height>
          </rect>
         </property>
         <property name="cursor">
@@ -184,8 +184,8 @@
        <widget class="QDial" name="dialVolume">
         <property name="geometry">
          <rect>
-          <x>0</x>
-          <y>39</y>
+          <x>6</x>
+          <y>40</y>
           <width>81</width>
           <height>81</height>
          </rect>
@@ -206,8 +206,8 @@
        <widget class="QLabel" name="labelVolume">
         <property name="geometry">
          <rect>
-          <x>78</x>
-          <y>97</y>
+          <x>81</x>
+          <y>102</y>
           <width>31</width>
           <height>21</height>
          </rect>
@@ -295,8 +295,8 @@
    <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>208</x>
-      <y>42</y>
+      <x>230</x>
+      <y>40</y>
       <width>341</width>
       <height>91</height>
      </rect>
@@ -310,7 +310,7 @@
     <widget class="QCommandLinkButton" name="button_play_next">
      <property name="geometry">
       <rect>
-       <x>240</x>
+       <x>244</x>
        <y>10</y>
        <width>81</width>
        <height>80</height>
@@ -360,7 +360,7 @@
     <widget class="QCommandLinkButton" name="button_stop">
      <property name="geometry">
       <rect>
-       <x>160</x>
+       <x>164</x>
        <y>10</y>
        <width>81</width>
        <height>80</height>
@@ -449,7 +449,7 @@
     <widget class="QCommandLinkButton" name="button_play_prev">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>6</x>
        <y>10</y>
        <width>81</width>
        <height>80</height>
@@ -490,7 +490,7 @@
     <widget class="QCommandLinkButton" name="button_play">
      <property name="geometry">
       <rect>
-       <x>90</x>
+       <x>86</x>
        <y>10</y>
        <width>81</width>
        <height>80</height>
@@ -615,7 +615,7 @@
       <x>10</x>
       <y>112</y>
       <width>661</width>
-      <height>221</height>
+      <height>301</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -638,7 +638,7 @@
         <item row="1" column="0">
          <widget class="QSlider" name="horizontalSlider">
           <property name="cursor">
-           <cursorShape>OpenHandCursor</cursorShape>
+           <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="mouseTracking">
            <bool>false</bool>
@@ -662,7 +662,7 @@
            <number>0</number>
           </property>
           <property name="pageStep">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="value">
            <number>0</number>
@@ -778,16 +778,18 @@
          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Oxygen-Sans'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;WARNING!&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Playing any Snoop Dogg's songs on linux systems may cause hard laggs!&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Note, that pressing on player slider isn't allowed, therefore to change current track position you have to move it directly.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Database support is not implemented yet.&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Sergey Kozak made this.&lt;br /&gt;E-mail: sergeykozak95@gmail.com&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;Skype: flyborn.boogie&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Sans Serif'; font-size:9pt;&quot;&gt;BSUIR, 2014&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
         </property>
@@ -810,13 +812,8 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>817</width>
-     <height>21</height>
+     <height>29</height>
     </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>Terminus</family>
-    </font>
    </property>
    <widget class="QMenu" name="menuOptions">
     <property name="minimumSize">
@@ -825,13 +822,6 @@ p, li { white-space: pre-wrap; }
       <height>0</height>
      </size>
     </property>
-    <property name="font">
-     <font>
-      <family>Terminus</family>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
     <property name="title">
      <string>&amp;Playlist</string>
     </property>
@@ -839,14 +829,10 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionOpen_playlist"/>
     <addaction name="actionAdd_directory_s"/>
     <addaction name="action_add_files"/>
+    <addaction name="actionRemove_duplicates"/>
     <addaction name="actionClear_playlist"/>
    </widget>
    <widget class="QMenu" name="menuDonate">
-    <property name="font">
-     <font>
-      <family>Terminus</family>
-     </font>
-    </property>
     <property name="title">
      <string>&amp;Controls</string>
     </property>
@@ -861,21 +847,10 @@ p, li { white-space: pre-wrap; }
    <property name="text">
     <string>&amp;Exit</string>
    </property>
-   <property name="font">
-    <font>
-     <family>Terminus</family>
-     <underline>true</underline>
-    </font>
-   </property>
   </action>
   <action name="action_200">
    <property name="text">
     <string>&amp;Now give me 200$ (for further development)</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>Terminus</family>
-    </font>
    </property>
   </action>
   <action name="action_add_files">
@@ -920,6 +895,11 @@ p, li { white-space: pre-wrap; }
   <action name="actionOpen_playlist">
    <property name="text">
     <string>&amp;Open playlist</string>
+   </property>
+  </action>
+  <action name="actionRemove_duplicates">
+   <property name="text">
+    <string>&amp;Remove duplicates</string>
    </property>
   </action>
  </widget>
