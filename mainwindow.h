@@ -18,6 +18,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+public slots:
+    void add_files_from_behind();
 
 private slots:
 
@@ -90,6 +92,8 @@ private slots:
     void on_actionSave_playlist_triggered();
 
     void on_actionRemove_duplicates_triggered();
+
+    void on_actionOpen_playlist_triggered();
 
 protected:
     Ui::MainWindow *ui;

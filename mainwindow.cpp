@@ -6,7 +6,11 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTimer>
+#include <QSharedMemory>
+#include <iostream>
+#include <fstream>
 #include "samoplayer.h"
+using namespace std;
 QString dir = "";
 samoplayer *plr= new samoplayer;
 int currentVolume = 50;
@@ -24,9 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
     def_width = this->size().width();
     def_height = this->size().height();
     dir = "/home/master-p/Music";
-    //iconSamowar = new QIcon("media-information.png");
-    QCoreApplication::setApplicationName("Samowar Music Player");
-    QCoreApplication::setApplicationVersion("1.9.17a");
+    iconSamowar = new QIcon(QApplication::applicationDirPath()+"/media-information.png");
+    QApplication::setApplicationName("Samowar Music Player");
+    QApplication::setApplicationVersion("2.0.1b");
     iconPlay = new QIcon(QApplication::applicationDirPath()+"/media-play.png");
     ui->button_play->setIcon(*iconPlay);
     iconPause = new QIcon(QApplication::applicationDirPath()+"/media-pause.png");
@@ -44,36 +48,16 @@ MainWindow::MainWindow(QWidget *parent) :
     playlist = new QMediaPlaylist(plr);
     plr->setPlaylist(playlist);
     connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this, SLOT(mySliderValueChanged(int)));
-    QObject::connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
-    QObject::connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
-    QObject::connect(plr,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
-    QObject::connect(plr,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(watchStatus()));
-    QObject::connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(watchSelectedTrack()));
-    QObject::connect(ui->horizontalSlider,SIGNAL(valueChanged(int)),ui->currentTrack_progressBar,SLOT(setValue(int)));
-    QObject::connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
-    QObject::connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(changeCurrentTab()));
-    QObject::connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
-    QStringList cmdline_args = QApplication::arguments();
-    if(cmdline_args.count() > 0) {
-        cmdline_args.removeAt(0);
-        for(int i = 0; i < cmdline_args.count(); i++) {
-            if(!cmdline_args[i].contains(QDir::currentPath())) {
-                files.append(QDir::currentPath()+"/"+cmdline_args[i]);
-                ui->listDebug->addItem(files[i]);
-            }
-            else files = cmdline_args;
-        }
-        for(int i = 0; i < files.count(); i++) {
-            content.push_back(QUrl::fromLocalFile(files[i]));
-            QFileInfo fi(files[i]);
-            ui->listWidget->addItem(fi.fileName());
-        }
-        playlist->addMedia(content);
-        ui->listWidget->setCurrentRow(playlist->currentIndex() != -1? playlist->currentIndex():0);
-//        nextTrack++;
-//        nowSelected++;
-        plr->playMusic();
-    }
+    connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
+    connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
+    connect(plr,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
+    connect(plr,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(watchStatus()));
+    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(watchSelectedTrack()));
+    connect(ui->horizontalSlider,SIGNAL(valueChanged(int)),ui->currentTrack_progressBar,SLOT(setValue(int)));
+    connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
+    connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(changeCurrentTab()));
+    connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
+add_files_from_behind();
 }
 
 MainWindow::~MainWindow()
@@ -510,6 +494,16 @@ void MainWindow::on_actionSave_playlist_triggered()
 //    int rc=sqlite3_open("/home/master-p/test.db", &currentPlaylist);
 //    sqlite3_prepare(currentPlaylist,"aaaarrrrrrrrrrrrrrrrrgggggggggggggh",10,&ppStmt, &tail);
 //    sqlite3_column_table_name()
+
+    QString filename;
+    filename = QFileDialog::getSaveFileName(this, "Save playlisto", QApplication::applicationDirPath(), tr("Samowar playlist files (*.smw)"));
+    if(!filename.contains(".smw"))filename+=".smw";
+    QFile f( filename );
+    f.open( QIODevice::WriteOnly );
+    QTextStream outstream(&f);
+    for(int i = 0; i < files.count(); i++)
+    outstream << files[i] << '\n';
+    f.close();
 }
 
 void MainWindow::changeCurrentTab() {
@@ -567,4 +561,55 @@ void MainWindow::on_actionRemove_duplicates_triggered()
     }
     ui->listWidget->item(nextTrack)->setSelected(true);
     }
+}
+
+void MainWindow::add_files_from_behind()
+{
+    QStringList cmdline_args = QApplication::arguments();
+if(cmdline_args.count() > 0) {
+    cmdline_args.removeAt(0);
+    for(int i = 0; i < cmdline_args.count(); i++) {
+        if(!cmdline_args[i].contains(QDir::currentPath())) {
+            files.append(QDir::currentPath()+"/"+cmdline_args[i]);
+            ui->listDebug->addItem(files[i]);
+        }
+        else files = cmdline_args;
+    }
+    for(int i = 0; i < files.count(); i++) {
+        content.push_back(QUrl::fromLocalFile(files[i]));
+        QFileInfo fi(files[i]);
+        ui->listWidget->addItem(fi.fileName());
+    }
+    playlist->addMedia(content);
+}
+if(!playstate) plr->playMusic();
+}
+
+void MainWindow::on_actionOpen_playlist_triggered()
+{
+    QList<QMediaContent> new_content;
+    QFile f(QFileDialog::getOpenFileName(this, tr("Open samowar playlist"), QApplication::applicationDirPath(), tr("Samowar playlist files (*.smw)")));
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+        ui->listDebug->addItem("fail");
+    on_actionClear_playlist_triggered();
+    //ui->A->currentWidget();
+    QTextStream in(&f);
+    QString line, tmp;
+    while (!in.atEnd()) {
+        line = in.readAll();
+        for(int i = 0; i < line.count();i++) {
+            if(line.at(i) == '\n') {
+                files.append(tmp);
+                new_content.push_back(QUrl::fromLocalFile(files.last()));
+                QFileInfo fi(files.last());
+                ui->listWidget->addItem(fi.fileName());
+                ui->listDebug->addItem(tmp);
+                tmp = "";
+            }
+
+            else tmp.append(line.at(i));
+        }
+
+    }
+playlist->addMedia(new_content);
 }

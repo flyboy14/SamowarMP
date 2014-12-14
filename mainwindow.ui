@@ -603,7 +603,7 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Listen to music with Flavour&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="text">
-     <string>Welcome to Samowar Music player (alpha)</string>
+     <string>Welcome to Samowar Music player (beta)</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -825,10 +825,10 @@ p, li { white-space: pre-wrap; }
     <property name="title">
      <string>&amp;Playlist</string>
     </property>
-    <addaction name="actionSave_playlist"/>
-    <addaction name="actionOpen_playlist"/>
-    <addaction name="actionAdd_directory_s"/>
     <addaction name="action_add_files"/>
+    <addaction name="actionAdd_directory_s"/>
+    <addaction name="actionOpen_playlist"/>
+    <addaction name="actionSave_playlist"/>
     <addaction name="actionRemove_duplicates"/>
     <addaction name="actionClear_playlist"/>
    </widget>
