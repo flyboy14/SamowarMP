@@ -21,7 +21,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui
 
-RESOURCES += \
-    res1.qrc
+RESOURCES +=
 #LIBS += -lsqlite3
 

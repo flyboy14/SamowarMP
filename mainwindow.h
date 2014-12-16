@@ -22,6 +22,11 @@ public slots:
     void add_files_from_behind();
 
 private slots:
+    void saveConfiguration();
+
+    void loadConfiguration();
+
+    void watchPlaylistChanges();
 
     void mySliderValueChanged(int newPos);
 
@@ -95,11 +100,15 @@ private slots:
 
     void on_actionOpen_playlist_triggered();
 
+    void listWidgetMenu(QPoint point);
+
+    void watchCurrentTab();
+
 protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
     QList<QMediaContent> content;
-    QIcon *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconSamowar;
+    QIcon *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
     QStringList files;
 
 };

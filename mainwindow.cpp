@@ -14,7 +14,7 @@ using namespace std;
 QString dir = "";
 samoplayer *plr= new samoplayer;
 int currentVolume = 50;
-int nextTrack = 0, nowSelected = 0;
+int nextTrack = 0, nowSelected = 0, currentTab = 0;
 int def_width, def_height;
 bool debug=false, repeat=false, randome=false, single=false, tmp_pause, playstate = false;
 
@@ -28,20 +28,42 @@ MainWindow::MainWindow(QWidget *parent) :
     def_width = this->size().width();
     def_height = this->size().height();
     dir = "/home/master-p/Music";
-    iconSamowar = new QIcon(QApplication::applicationDirPath()+"/media-information.png");
+    iconSamowar = new QIcon(QApplication::applicationDirPath()+"/icons/media-information.png");
     QApplication::setApplicationName("Samowar Music Player");
-    QApplication::setApplicationVersion("2.0.1b");
-    iconPlay = new QIcon(QApplication::applicationDirPath()+"/media-play.png");
+    QApplication::setApplicationVersion("2.1.3b");
+    iconSavePlaylist = new QIcon(QApplication::applicationDirPath()+"/icons/submenu-save-playlist.png");
+    ui->actionSave_playlist->setIcon(*iconSavePlaylist);
+    iconOpenPlaylist = new QIcon(QApplication::applicationDirPath()+"/icons/submenu-open-playlist.png");
+    ui->actionOpen_playlist->setIcon(*iconOpenPlaylist);
+    iconRemoveDuplicates = new QIcon(QApplication::applicationDirPath()+"/icons/submenu-remove-duplicates.png");
+    ui->actionRemove_duplicates->setIcon(*iconRemoveDuplicates);
+    iconExit = new QIcon(QApplication::applicationDirPath()+"/icons/submenu-exit.png");
+    ui->actionExit->setIcon(*iconExit);
+    iconDebugOutput = new QIcon(QApplication::applicationDirPath()+"/icons/submenu-debug-output.png");
+    ui->actionToggle_debug_output->setIcon(*iconDebugOutput);
+    icon200 = new QIcon(QApplication::applicationDirPath()+"/icons/submenu-200.png");
+    ui->action_200->setIcon(*icon200);
+    iconAddTrack = new QIcon(QApplication::applicationDirPath()+"/icons/submenu-add-track.png");
+    ui->action_add_files->setIcon(*iconAddTrack);
+    iconAddFolder = new QIcon(QApplication::applicationDirPath()+"/icons/submenu-add-folder.png");
+    ui->actionAdd_directory_s->setIcon(*iconAddFolder);
+//    iconMenuPlaylist = new QIcon(QApplication::applicationDirPath()+"/icons/menu-playlist.png");
+//    ui->menuOptions->setIcon(*iconMenuPlaylist);
+//    iconMenuOptions = new QIcon(QApplication::applicationDirPath()+"/icons/menu-options.png");
+//    ui->menuDonate->setIcon(*iconMenuOptions);
+    iconPlay = new QIcon(QApplication::applicationDirPath()+"/icons/media-play.png");
     ui->button_play->setIcon(*iconPlay);
-    iconPause = new QIcon(QApplication::applicationDirPath()+"/media-pause.png");
-    iconStop = new QIcon(QApplication::applicationDirPath()+"/media-stop.png");
+    iconPause = new QIcon(QApplication::applicationDirPath()+"/icons/media-pause.png");
+    iconStop = new QIcon(QApplication::applicationDirPath()+"/icons/media-stop.png");
     ui->button_stop->setIcon(*iconStop);
-    iconPlayPrev = new QIcon(QApplication::applicationDirPath()+"/media-previous.png");
+    iconPlayPrev = new QIcon(QApplication::applicationDirPath()+"/icons/media-previous.png");
     ui->button_play_prev->setIcon(*iconPlayPrev);
-    iconPlayNext = new QIcon(QApplication::applicationDirPath()+"/media-next.png");
+    iconPlayNext = new QIcon(QApplication::applicationDirPath()+"/icons/media-next.png");
     ui->button_play_next->setIcon(*iconPlayNext);
-    iconClearPls = new QIcon(QApplication::applicationDirPath()+"/brush-big.png");
-    ui->deleteCurrentTrack->setIcon(*iconClearPls);
+        iconClearPls = new QIcon(QApplication::applicationDirPath()+"/icons/brush-big.png");
+        ui->actionClear_playlist->setIcon(*iconClearPls);
+    iconDeleteCurrent = new QIcon(QApplication::applicationDirPath()+"/icons/brush-big.png");
+    ui->deleteCurrentTrack->setIcon(*iconDeleteCurrent);
     ui->listDebug->setVisible(false);
     ui->buttonDebugClear->setVisible(false);
     window()->setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
@@ -52,12 +74,18 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
     connect(plr,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
     connect(plr,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(watchStatus()));
-    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(watchSelectedTrack()));
+    connect(ui->listWidget,SIGNAL(currentRowChanged(int)),this,SLOT(watchSelectedTrack()));
+    //connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(watchSelectedTrack()));
     connect(ui->horizontalSlider,SIGNAL(valueChanged(int)),ui->currentTrack_progressBar,SLOT(setValue(int)));
     connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
     connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(changeCurrentTab()));
     connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
-add_files_from_behind();
+    connect(playlist,SIGNAL(mediaRemoved(int,int)),this,SLOT(watchPlaylistChanges()));
+    connect(playlist,SIGNAL(mediaInserted(int,int)),this,SLOT(watchPlaylistChanges()));
+    connect(ui->A,SIGNAL(currentChanged(int)),this,SLOT(watchCurrentTab()));
+    add_files_from_behind();
+        loadConfiguration();
+    //ui->A->currentWidget()->layout();
 }
 
 MainWindow::~MainWindow()
@@ -84,7 +112,7 @@ void MainWindow::on_button_play_clicked()
         }
                 else {
                     if(plr->state() != 2)playlist->setCurrentIndex(nowSelected); //0 - stopped 1 - playing 2 - paused
-                    ui->listWidget->item(nextTrack)->setSelected(true);
+                    //ui->listWidget->item(nextTrack)->setSelected(true);
                     //ui->currentTrack_progressBar->setValue(1);
                     plr->playMusic();
                 }
@@ -121,11 +149,12 @@ void MainWindow::on_actionExit_triggered()
     int ret = msg.exec();
         switch (ret) {
                case QMessageBox::Cancel: {
-                    break;
+                break;
                 }
                case QMessageBox::Ok: {
-MainWindow::QMainWindow::close();
-                   break;
+                    saveConfiguration();
+                    MainWindow::QMainWindow::close();
+                    break;
                }
                default:
                    // Сюда пишем обработку события по умолчанию
@@ -150,7 +179,9 @@ void MainWindow::on_action_add_files_triggered()
 
 void MainWindow::on_radio_mute_toggled(bool checked)
 {
-     plr -> toggleMute();
+     //plr -> toggleMute();
+     if(checked) plr->setMuted(1);
+     else plr->setMuted(0);
 }
 
 void MainWindow::on_button_play_prev_clicked()
@@ -161,9 +192,9 @@ void MainWindow::on_button_play_prev_clicked()
             ui->currentTrack_progressBar->setValue(1);
             playlist->previous();
             if(nextTrack == playlist->mediaCount()-1) nextTrack--;
-            ui->listWidget->item(nextTrack)->setSelected(true);
-            char *buffer = new char[100];
-            char *buffer1 = new char[100];
+            ui->listWidget->item(playlist->currentIndex())->setSelected(true);
+            char *buffer = new char[3];
+            char *buffer1 = new char[3];
             sprintf(buffer,"%d",nextTrack);
             sprintf(buffer1,"%d",playlist->currentIndex());
             const QString& str("play_prev_clicked. nextTrack is now ");
@@ -184,7 +215,7 @@ void MainWindow::on_button_play_next_clicked()
         {if(nextTrack != playlist->mediaCount()-1) {
                 ui->currentTrack_progressBar->setValue(1);
                 playlist->next();
-                ui->listWidget->item(nextTrack)->setSelected(true);
+                ui->listWidget->item(playlist->currentIndex())->setSelected(true);
                 char *buffer = new char[100];
                 char *buffer1 = new char[100];
                 sprintf(buffer,"%d",nextTrack);
@@ -204,6 +235,7 @@ void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     plr->stopMusic();
     nextTrack = ui->listWidget->currentRow();
+    nowSelected = nextTrack;
     playlist->setCurrentIndex(nextTrack);
     plr->playMusic();
 }
@@ -216,34 +248,40 @@ void MainWindow::on_deleteCurrentTrack_clicked()
         playlist->clear();
         files.clear();
         ui->listWidget->clear();
-        //nextTrack = 0;
         nowSelected = 0;
     }
     if(playlist->mediaCount() != 0) {
-//        content.removeAt(nextTrack);
-//        playlist->removeMedia(nextTrack);
-//        files.removeAt(nextTrack);
-            content.removeAt(nowSelected);
-            playlist->removeMedia(nowSelected);
-            files.removeAt(nowSelected);
-        ui->listWidget->clear();
-        for(int i = 0; i < playlist->mediaCount(); i++) {
-            QFileInfo fi(files[i]);
-            ui->listWidget->addItem(fi.fileName());
-        }
-//        if(nextTrack != playlist->mediaCount()) ui->listWidget->setCurrentRow(nextTrack);
-        if(nowSelected != playlist->mediaCount()) ui->listWidget->setCurrentRow(nowSelected);
-        else {
-//            ui->listWidget->setCurrentRow(nextTrack);
-//            nextTrack--;
+        int tmp = playlist->currentIndex();
+        if(nowSelected < tmp) {disconnect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));disconnect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));plr->stopMusic();}
+        char *buffer = new char[3];
+        sprintf(buffer,"%d",playlist->currentIndex());
+        const QString& str1("deleted track. current index is ");
+        ui->listDebug->addItem(str1+buffer);
+        content.removeAt(nowSelected);
+        files.removeAt(nowSelected);
+        playlist->removeMedia(nowSelected);
+        int tmp_sel = nowSelected;
+        if(tmp_sel == playlist->mediaCount()) tmp_sel--; //if last track is about to vanish, go select previous one
+//                            //char *buffer = new char[3];
+//                            sprintf(buffer,"%d",playlist->currentIndex());
+//                            //const QString& str1("deleted track. current index is ");
+//                            ui->listDebug->addItem(str1+buffer);
+            ui->listWidget->clear();
+            for(int i = 0; i < playlist->mediaCount(); i++) {
+                QFileInfo fi(files[i]);
+                ui->listWidget->addItem(fi.fileName());
+            }
+            nowSelected = tmp_sel;
             ui->listWidget->setCurrentRow(nowSelected);
-            nowSelected--;
-        }
     }
     else {
         plr->stopMusic();
         nextTrack = 0;
+        nowSelected = 0;
     }
+    connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
+    connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
+
 }
 
 void MainWindow::on_horizontalSlider_sliderMoved(int position)
@@ -264,38 +302,32 @@ void MainWindow::watchPlaying() {
 }
 
 void MainWindow::watchNextTrack() {
-//    if(debug) {
-//        char *buffer = new char[100];
-//        sprintf(buffer,"%d",nextTrack);
-//        const QString& str("watchNextTrack called. nextTrack was ");
-//        ui->listDebug->addItem(str+buffer);
-//    }
+    if(debug) {
+        char *buffer = new char[3];
+        sprintf(buffer,"%d",nextTrack);
+        const QString& str("watchNextTrack called. nextTrack was ");
+        ui->listDebug->addItem(str+buffer);
+    }
     for(int row=0; row != playlist->mediaCount(); row++)
         if(ui->listWidget->item(row)->isSelected()) ui->listWidget->item(row)->setSelected(false);
         ui->listWidget->item(nextTrack)->setSelected(true);
-//        if(debug) {
-//            char *buffer = new char[100];
-//            sprintf(buffer,"%d",nextTrack);
-//            const QString& str("And now nexttrack is ");
-//            ui->listDebug->addItem(str+buffer);
-//        }
+        if(debug) {
+            char *buffer = new char[3];
+            sprintf(buffer,"%d",nextTrack);
+            const QString& str("And now nexttrack is ");
+            ui->listDebug->addItem(str+buffer);
+        }
 }
 
 void MainWindow::watchSelectedTrack() {
-//    if(debug) {
-//        char *buffer = new char[100];
-//        sprintf(buffer,"%d",nextTrack);
-//        const QString& str("watchSelectedTrack called. nextTrack was ");
-//        ui->listDebug->addItem(str+buffer);
-//    }
     //nextTrack = ui -> listWidget->currentRow();
     nowSelected = ui -> listWidget->currentRow();
-//    if(debug) {
-//        char *buffer = new char[100];
-//        sprintf(buffer,"%d",nextTrack);
-//        const QString& str1("and now nextTrack is ");
-//        ui->listDebug->addItem(str1+buffer);
-//    }
+    if(debug) {
+        char *buffer = new char[3];
+        sprintf(buffer,"%d",nowSelected);
+        const QString& str1("watchSelectedTrack called. nowSelected is ");
+        ui->listDebug->addItem(str1+buffer);
+    }
 }
 
 void MainWindow::setSliderPosition(){
@@ -321,15 +353,16 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 }
 
 void MainWindow::atTrackEnd() {
-    if(playlist->playbackMode() == QMediaPlaylist::Sequential && nextTrack == playlist->mediaCount()-1){}
+    if(playlist->playbackMode() == QMediaPlaylist::Sequential && nextTrack == playlist->mediaCount()-1) {}
     else
     nextTrack = playlist->currentIndex();
-//    if(debug) {
-//        char *buffer = new char[100];
-//        sprintf(buffer,"%d",nextTrack);
-//        const QString& str("atTrackEnd called. nexttrack is now ");
-//        ui->listDebug->addItem(str+buffer);
-//    }
+    ui->currentTrack_progressBar->setValue(1);
+    if(debug) {
+        char *buffer = new char[3];
+        sprintf(buffer,"%d",nextTrack);
+        const QString& str("atTrackEnd called. nexttrack is now ");
+        ui->listDebug->addItem(str+buffer);
+    }
 }
 
 void MainWindow::watchStatus() {
@@ -342,7 +375,7 @@ void MainWindow::watchStatus() {
     if(plr->state() == 0) {
             ui->button_play->setIcon(*iconPlay);
             ui->currentTrack_progressBar->setValue(1);
-            ui->horizontalSlider->setValue(0);
+            //ui->horizontalSlider->setValue(0);
         playstate = false;
         QMainWindow::setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
     }
@@ -496,18 +529,21 @@ void MainWindow::on_actionSave_playlist_triggered()
 //    sqlite3_column_table_name()
 
     QString filename;
-    filename = QFileDialog::getSaveFileName(this, "Save playlisto", QApplication::applicationDirPath(), tr("Samowar playlist files (*.smw)"));
+    filename = QFileDialog::getSaveFileName(this, "Save playlisto", QApplication::applicationDirPath()+"/playlists", tr("Samowar playlist files (*.smw)"));
     if(!filename.contains(".smw"))filename+=".smw";
     QFile f( filename );
+    QFileInfo fi(f);
     f.open( QIODevice::WriteOnly );
     QTextStream outstream(&f);
     for(int i = 0; i < files.count(); i++)
     outstream << files[i] << '\n';
     f.close();
+    if(ui->A->tabText(currentTab).contains("*"))
+        ui->A->setTabText(currentTab, fi.fileName());
 }
 
 void MainWindow::changeCurrentTab() {
-    ui->A->setCurrentWidget(ui->tab);
+    ui->A->setCurrentWidget(ui->firstTab);
 }
 
 void MainWindow::progress() {
@@ -588,13 +624,14 @@ if(!playstate) plr->playMusic();
 void MainWindow::on_actionOpen_playlist_triggered()
 {
     QList<QMediaContent> new_content;
-    QFile f(QFileDialog::getOpenFileName(this, tr("Open samowar playlist"), QApplication::applicationDirPath(), tr("Samowar playlist files (*.smw)")));
+    QFile f(QFileDialog::getOpenFileName(this, tr("Open samowar playlist"), QApplication::applicationDirPath()+"/playlists", tr("Samowar playlist files (*.smw)")));
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
-    on_actionClear_playlist_triggered();
-    //ui->A->currentWidget();
+    else on_actionClear_playlist_triggered();
+    QFileInfo fi(f);
     QTextStream in(&f);
     QString line, tmp;
+//if(ui->A->tabText(0) == "♫") {
     while (!in.atEnd()) {
         line = in.readAll();
         for(int i = 0; i < line.count();i++) {
@@ -606,10 +643,162 @@ void MainWindow::on_actionOpen_playlist_triggered()
                 ui->listDebug->addItem(tmp);
                 tmp = "";
             }
-
             else tmp.append(line.at(i));
         }
-
     }
+    f.close();
 playlist->addMedia(new_content);
+ui->A->setTabText(currentTab, fi.fileName());
+ui->A->setCurrentIndex(currentTab);
+//    }
+//    else {
+//    currentTab++;
+//        ui->A->tabBar()->addTab(fi.fileName());
+//        ui->A->setCurrentIndex(currentTab);
+
+        //ui->A->currentWidget()-> need to add different listwidget(s) & progress bar(s) to any tab
+//    }
+}
+
+void MainWindow::watchPlaylistChanges() {
+    if(!ui->A->tabText(currentTab).contains("*"))
+        ui->A->setTabText(currentTab, ui->A->tabText(currentTab)+'*');
+}
+
+void MainWindow::listWidgetMenu(QPoint point) {
+   //context menu delete
+}
+
+void MainWindow::watchCurrentTab() {
+    currentTab = ui->A->currentIndex();
+}
+
+void MainWindow::saveConfiguration() {
+    //-- volume
+    QString filename;
+    filename = QApplication::applicationDirPath()+"/config/volume.conf";
+    QFile fVol( filename );
+    fVol.open( QIODevice::WriteOnly );
+    QTextStream outstream1(&fVol);
+    outstream1 << plr->volume();
+    fVol.close();
+    //--
+    //-- playlist
+    filename = QApplication::applicationDirPath()+"/config/playlist.conf";
+    QFile fPls( filename );
+    fPls.open( QIODevice::WriteOnly );
+        QTextStream outstream2(&fPls);
+    for(int i = 0; i < files.count(); i++)
+    outstream2 << files[i] << '\n';
+    fPls.close();
+    //--
+    //-- nextTrack
+    filename = QApplication::applicationDirPath()+"/config/nexttrack.conf";
+    QFile fNext( filename );
+    fNext.open( QIODevice::WriteOnly );
+        QTextStream outstream3(&fNext);
+    outstream3 << nextTrack;
+    fNext.close();
+    //--
+    //-- currentTabText
+    filename = QApplication::applicationDirPath()+"/config/currenttabtext.conf";
+    QFile fTabText( filename );
+    fTabText.open( QIODevice::WriteOnly );
+        QTextStream outstream4(&fTabText);
+    outstream4 << ui->A->tabText(currentTab);
+    fTabText.close();
+    //--
+    //-- plr->position()
+    filename = QApplication::applicationDirPath()+"/config/position.conf";
+    QFile fPos( filename );
+    fPos.open( QIODevice::WriteOnly );
+        QTextStream outstream5(&fPos);
+    outstream5 << plr->position();
+    fPos.close();
+    //--
+    //-- plr->state()
+    filename = QApplication::applicationDirPath()+"/config/state.conf";
+    QFile fState( filename );
+    fState.open( QIODevice::WriteOnly );
+        QTextStream outstream6(&fState);
+    outstream6 << plr->state();
+    fState.close();
+
+}
+
+void MainWindow::loadConfiguration() {
+    //-- playlist
+    QFile fPls(QApplication::applicationDirPath()+"/config/playlist.conf");
+    if (!fPls.open(QIODevice::ReadOnly | QIODevice::Text))
+        ui->listDebug->addItem("fail");
+    else {}//on_actionClear_playlist_triggered();
+    QTextStream in1(&fPls);
+    QString line, tmp;
+    ui->listDebug->addItem("go");
+    while (!in1.atEnd()) {
+        line = in1.readAll();
+        for(int i = 0; i < line.count();i++) {
+            if(line.at(i) == '\n') {
+                files.append(tmp);
+                content.push_back(QUrl::fromLocalFile(files.last()));
+                QFileInfo fi(files.last());
+                ui->listWidget->addItem(fi.fileName());
+                ui->listDebug->addItem(tmp);
+                tmp = "";
+            }
+            else tmp.append(line.at(i));
+}
+    }
+    ui->listDebug->addItem("end");
+    playlist->addMedia(content);
+    fPls.close();
+    //--
+    //-- volume
+    QFile fVol(QApplication::applicationDirPath()+"/config/volume.conf");
+    if (!fVol.open(QIODevice::ReadOnly | QIODevice::Text))
+        ui->listDebug->addItem("fail");
+    QTextStream in2(&fVol);
+        line = in2.readAll();
+    ui->dialVolume->setValue(line.toInt());
+    fVol.close();
+    //--
+    //-- nextTrack
+    QFile fNext(QApplication::applicationDirPath()+"/config/nexttrack.conf");
+    if (!fNext.open(QIODevice::ReadOnly | QIODevice::Text))
+        ui->listDebug->addItem("fail");
+    QTextStream in3(&fNext);
+        line = in3.readAll();
+    nextTrack = line.toInt();
+    nowSelected = nextTrack;
+    //ui->listWidget->setCurrentRow(nowSelected);
+    playlist->setCurrentIndex(nextTrack);
+    fVol.close();
+    //--
+    //-- plr->position()
+    QFile fPos(QApplication::applicationDirPath()+"/config/position.conf");
+    if (!fPos.open(QIODevice::ReadOnly | QIODevice::Text))
+        ui->listDebug->addItem("fail");
+    QTextStream in4(&fPos);
+        line = in4.readAll();
+    plr->setPosition(line.toInt());
+    fPos.close();
+    //--
+    //-- plr->state()
+    QFile fState(QApplication::applicationDirPath()+"/config/state.conf");
+    if (!fState.open(QIODevice::ReadOnly | QIODevice::Text))
+        ui->listDebug->addItem("fail");
+    QTextStream in5(&fState);
+        line = in5.readAll();
+    if(line.toInt() == 1) plr->playMusic();
+    if(line.toInt() == 2) plr->pauseMusic();
+    fPos.close();
+    //--
+    //-- Tab text
+    QFile fTabText(QApplication::applicationDirPath()+"/config/currenttabtext.conf");
+    if (!fTabText.open(QIODevice::ReadOnly | QIODevice::Text))
+        ui->listDebug->addItem("fail");
+    QTextStream in6(&fTabText);
+        line = in6.readAll();
+    ui->A->setTabText(currentTab, line);
+    fTabText.close();
 }
