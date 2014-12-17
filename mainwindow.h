@@ -5,6 +5,7 @@
 #include <QListWidget>
 #include <QMediaPlaylist>
 #include <QMediaPlayer>
+#include <QDir>
 
 namespace Ui {
     class MainWindow;
@@ -19,9 +20,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 public slots:
+    void recursiveAddFolder(int i, QStringList tmp_list, QString file);
+
     void add_files_from_behind();
 
-private slots:
     void saveConfiguration();
 
     void loadConfiguration();
@@ -108,9 +110,8 @@ protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
     QList<QMediaContent> content;
-    QIcon *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
+    QIcon *iconCredits, *iconInfo, *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
     QStringList files;
-
 };
 
 #endif // MAINWINDOW_H

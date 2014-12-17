@@ -803,17 +803,18 @@
     <property name="title">
      <string>&amp;Playlist</string>
     </property>
-    <addaction name="action_add_files"/>
-    <addaction name="actionAdd_directory_s"/>
     <addaction name="actionOpen_playlist"/>
     <addaction name="actionSave_playlist"/>
+    <addaction name="action_add_files"/>
+    <addaction name="actionAdd_directory_s"/>
     <addaction name="actionRemove_duplicates"/>
     <addaction name="actionClear_playlist"/>
    </widget>
    <widget class="QMenu" name="menuDonate">
     <property name="title">
-     <string>&amp;Controls</string>
+     <string>&amp;Options</string>
     </property>
+    <addaction name="actionAuto_pause_when_closed"/>
     <addaction name="actionToggle_debug_output"/>
     <addaction name="action_200"/>
     <addaction name="actionExit"/>
@@ -862,7 +863,7 @@
   </action>
   <action name="actionAdd_directory_s">
    <property name="text">
-    <string>Add &amp;directory(s)</string>
+    <string>Add &amp;folder(s)</string>
    </property>
   </action>
   <action name="actionSave_playlist">
@@ -878,6 +879,24 @@
   <action name="actionRemove_duplicates">
    <property name="text">
     <string>&amp;Remove duplicates</string>
+   </property>
+  </action>
+  <action name="actionAuto_pause_when_closed">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Auto pause when close</string>
+   </property>
+  </action>
+  <action name="actionCredits">
+   <property name="text">
+    <string>&amp;Credits</string>
+   </property>
+  </action>
+  <action name="actionFeatures">
+   <property name="text">
+    <string>&amp;Features</string>
    </property>
   </action>
  </widget>
