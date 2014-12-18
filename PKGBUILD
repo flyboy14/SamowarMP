@@ -20,13 +20,14 @@ build() {
 	cd "$srcdir/$pkgname"
 	qmake
 	make
-	mkdir /usr/share/samowar ~/.config ~/.config/samowar 
-	cp -a ./icons /usr/share/samowar 
-	cp -a ./playlists ~/.config/samowar/
-	cp -a ./config ~/.config/samowar/
 }
 
 package() {
   cd $srcdir/$pkgname
   install -Dm755 ./kurs $pkgdir/usr/bin/samowar
+          mkdir /usr/share/samowar ~/.config ~/.config/samowar
+        cp -a ./icons /usr/share/samowar/
+        cp -a ./playlists ~/.config/samowar/
+        cp -a ./config ~/.config/samowar/
+
 }

@@ -12,6 +12,9 @@
 #include "samoplayer.h"
 using namespace std;
 QString dir = "";
+QString iconsDir = "/usr/share/samowar/icons";
+QString confDir = QDir::homePath()+"/.config/samowar/conf";
+QString plsDir = QDir::homePath()+"/.config/samowar/playlists";
 samoplayer *plr= new samoplayer;
 int currentVolume = 50;
 int nextTrack = 0, nowSelected = 0, currentTab = 0;
@@ -28,43 +31,43 @@ MainWindow::MainWindow(QWidget *parent) :
     def_width = this->size().width();
     def_height = this->size().height();
     dir = "/home/master-p/Music";
-    iconInfo = new QIcon(QApplication::applicationDirPath()+"/.icons/info.png");
+    iconInfo = new QIcon(iconsDir+"/info.png");
     QApplication::setApplicationName("Samowar Music Player");
     QApplication::setApplicationVersion("2.3.19b");
-    iconCredits = new QIcon(QApplication::applicationDirPath()+"/.icons/strange-creature.png");
+    iconCredits = new QIcon(iconsDir+"/strange-creature.png");
     ui->actionCredits->setIcon(*iconCredits);
-    iconSavePlaylist = new QIcon(QApplication::applicationDirPath()+"/.icons/submenu-save-playlist.png");
+    iconSavePlaylist = new QIcon(iconsDir+"/submenu-save-playlist.png");
     ui->actionSave_playlist->setIcon(*iconSavePlaylist);
-    iconOpenPlaylist = new QIcon(QApplication::applicationDirPath()+"/.icons/submenu-open-playlist.png");
+    iconOpenPlaylist = new QIcon(iconsDir+"/submenu-open-playlist.png");
     ui->actionOpen_playlist->setIcon(*iconOpenPlaylist);
-    iconRemoveDuplicates = new QIcon(QApplication::applicationDirPath()+"/.icons/submenu-remove-duplicates.png");
+    iconRemoveDuplicates = new QIcon(iconsDir+"/submenu-remove-duplicates.png");
     ui->actionRemove_duplicates->setIcon(*iconRemoveDuplicates);
-    iconExit = new QIcon(QApplication::applicationDirPath()+"/.icons/submenu-exit.png");
+    iconExit = new QIcon(iconsDir+"/submenu-exit.png");
     ui->actionExit->setIcon(*iconExit);
-    iconDebugOutput = new QIcon(QApplication::applicationDirPath()+"/.icons/submenu-debug-output.png");
+    iconDebugOutput = new QIcon(iconsDir+"/submenu-debug-output.png");
     ui->actionToggle_debug_output->setIcon(*iconDebugOutput);
-    icon200 = new QIcon(QApplication::applicationDirPath()+"/.icons/submenu-200.png");
+    icon200 = new QIcon(iconsDir+"/submenu-200.png");
     ui->action_200->setIcon(*icon200);
-    iconAddTrack = new QIcon(QApplication::applicationDirPath()+"/.icons/submenu-add-track.png");
+    iconAddTrack = new QIcon(iconsDir+"/submenu-add-track.png");
     ui->action_add_files->setIcon(*iconAddTrack);
-    iconAddFolder = new QIcon(QApplication::applicationDirPath()+"/.icons/submenu-add-folder.png");
+    iconAddFolder = new QIcon(iconsDir+"/submenu-add-folder.png");
     ui->actionAdd_directory_s->setIcon(*iconAddFolder);
 //    iconMenuPlaylist = new QIcon(QApplication::applicationDirPath()+"/.icons/menu-playlist.png");
 //    ui->menuOptions->setIcon(*iconMenuPlaylist);
 //    iconMenuOptions = new QIcon(QApplication::applicationDirPath()+"/.icons/menu-options.png");
 //    ui->menuDonate->setIcon(*iconMenuOptions);
-    iconPlay = new QIcon(QApplication::applicationDirPath()+"/.icons/media-play.png");
+    iconPlay = new QIcon(iconsDir+"/media-play.png");
     ui->button_play->setIcon(*iconPlay);
-    iconPause = new QIcon(QApplication::applicationDirPath()+"/.icons/media-pause.png");
-    iconStop = new QIcon(QApplication::applicationDirPath()+"/.icons/media-stop.png");
+    iconPause = new QIcon(iconsDir+"/media-pause.png");
+    iconStop = new QIcon(iconsDir+"/media-stop.png");
     ui->button_stop->setIcon(*iconStop);
-    iconPlayPrev = new QIcon(QApplication::applicationDirPath()+"/.icons/media-previous.png");
+    iconPlayPrev = new QIcon(iconsDir+"/media-previous.png");
     ui->button_play_prev->setIcon(*iconPlayPrev);
-    iconPlayNext = new QIcon(QApplication::applicationDirPath()+"/.icons/media-next.png");
+    iconPlayNext = new QIcon(iconsDir+"/media-next.png");
     ui->button_play_next->setIcon(*iconPlayNext);
-        iconClearPls = new QIcon(QApplication::applicationDirPath()+"/.icons/brush-big.png");
+        iconClearPls = new QIcon(iconsDir+"/brush-big.png");
         ui->actionClear_playlist->setIcon(*iconClearPls);
-    iconDeleteCurrent = new QIcon(QApplication::applicationDirPath()+"/.icons/brush-big.png");
+    iconDeleteCurrent = iconClearPls;
     ui->deleteCurrentTrack->setIcon(*iconDeleteCurrent);
     ui->listDebug->setVisible(false);
     ui->buttonDebugClear->setVisible(false);
@@ -528,7 +531,7 @@ void MainWindow::on_actionSave_playlist_triggered()
 //    sqlite3_column_table_name()
 
     QString filename;
-    filename = QFileDialog::getSaveFileName(this, "Save playlisto", QApplication::applicationDirPath()+"/playlists", tr("Samowar playlist files (*.smw)"));
+    filename = QFileDialog::getSaveFileName(this, "Save playlisto", plsDir, tr("Samowar playlist files (*.smw)"));
     if(!filename.contains(".smw"))filename+=".smw";
     QFile f( filename );
     QFileInfo fi(f);
@@ -623,7 +626,7 @@ if(!playstate) plr->playMusic();
 void MainWindow::on_actionOpen_playlist_triggered()
 {
     QList<QMediaContent> new_content;
-    QFile f(QFileDialog::getOpenFileName(this, tr("Open samowar playlist"), QApplication::applicationDirPath()+"/playlists", tr("Samowar playlist files (*.smw)")));
+    QFile f(QFileDialog::getOpenFileName(this, tr("Open samowar playlist"), plsDir, tr("Samowar playlist files (*.smw)")));
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
@@ -677,7 +680,7 @@ void MainWindow::watchCurrentTab() {
 void MainWindow::saveConfiguration() {
     QString filename;
     //-- volume
-    filename = QApplication::applicationDirPath()+"/.config/volume.conf";
+    filename = confDir+"/volume.conf";
     QFile fVol( filename );
     fVol.open( QIODevice::WriteOnly );
     QTextStream outstream1(&fVol);
@@ -685,7 +688,7 @@ void MainWindow::saveConfiguration() {
     fVol.close();
     //--
     //-- playlist
-    filename = QApplication::applicationDirPath()+"/.config/playlist.conf";
+    filename = confDir+"/playlist.conf";
     QFile fPls( filename );
     fPls.open( QIODevice::WriteOnly );
         QTextStream outstream2(&fPls);
@@ -694,7 +697,7 @@ void MainWindow::saveConfiguration() {
     fPls.close();
     //--
     //-- nextTrack
-    filename = QApplication::applicationDirPath()+"/.config/nexttrack.conf";
+    filename = confDir+"/nexttrack.conf";
     QFile fNext( filename );
     fNext.open( QIODevice::WriteOnly );
         QTextStream outstream3(&fNext);
@@ -702,7 +705,7 @@ void MainWindow::saveConfiguration() {
     fNext.close();
     //--
     //-- currentTabText
-    filename = QApplication::applicationDirPath()+"/.config/currenttabtext.conf";
+    filename = confDir+"/currenttabtext.conf";
     QFile fTabText( filename );
     fTabText.open( QIODevice::WriteOnly );
         QTextStream outstream4(&fTabText);
@@ -710,7 +713,7 @@ void MainWindow::saveConfiguration() {
     fTabText.close();
     //--
     //-- plr->position()
-    filename = QApplication::applicationDirPath()+"/.config/position.conf";
+    filename = confDir+"/position.conf";
     QFile fPos( filename );
     fPos.open( QIODevice::WriteOnly );
         QTextStream outstream5(&fPos);
@@ -718,7 +721,7 @@ void MainWindow::saveConfiguration() {
     fPos.close();
     //--
     //-- plr->state()
-    filename = QApplication::applicationDirPath()+"/.config/state.conf";
+    filename = confDir+"/state.conf";
     QFile fState( filename );
     fState.open( QIODevice::WriteOnly );
         QTextStream outstream6(&fState);
@@ -726,7 +729,7 @@ void MainWindow::saveConfiguration() {
     fState.close();
     //--
     //-- flags()
-    filename = QApplication::applicationDirPath()+"/.config/flags.conf";
+    filename = confDir+"/flags.conf";
     QFile fFlags( filename );
     fFlags.open( QIODevice::WriteOnly );
         QTextStream outstream7(&fFlags);
@@ -736,7 +739,7 @@ void MainWindow::saveConfiguration() {
     fFlags.close();
     //--
     //-- mute
-    filename = QApplication::applicationDirPath()+"/.config/mute.conf";
+    filename = confDir+"/mute.conf";
     QFile fMute( filename );
     fMute.open( QIODevice::WriteOnly );
         QTextStream outstream8(&fMute);
@@ -744,7 +747,7 @@ void MainWindow::saveConfiguration() {
     fMute.close();
     //--
     //-- continue
-    filename = QApplication::applicationDirPath()+"/.config/continue_playing.conf";
+    filename = confDir+"/continue_playing.conf";
     QFile fCont( filename );
     fCont.open( QIODevice::WriteOnly );
         QTextStream outstream9(&fCont);
@@ -756,7 +759,7 @@ void MainWindow::saveConfiguration() {
 void MainWindow::loadConfiguration() {
     QString line;
     //-- playlist
-    QFile fPls(QApplication::applicationDirPath()+"/.config/playlist.conf");
+    QFile fPls(confDir+"/playlist.conf");
     if (!fPls.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
@@ -783,7 +786,7 @@ void MainWindow::loadConfiguration() {
     }
     //--
     //-- volume
-    QFile fVol(QApplication::applicationDirPath()+"/.config/volume.conf");
+    QFile fVol(confDir+"/volume.conf");
     if (!fVol.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
@@ -794,7 +797,7 @@ void MainWindow::loadConfiguration() {
     }
     //--
     //-- nextTrack
-    QFile fNext(QApplication::applicationDirPath()+"/.config/nexttrack.conf");
+    QFile fNext(confDir+"/nexttrack.conf");
     if (!fNext.open(QIODevice::ReadOnly | QIODevice::Text))
     ui->listDebug->addItem("fail");
     else {
@@ -808,7 +811,7 @@ void MainWindow::loadConfiguration() {
     }
     //--
     //-- plr->position()
-    QFile fPos(QApplication::applicationDirPath()+"/.config/position.conf");
+    QFile fPos(confDir+"/position.conf");
     if (!fPos.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
@@ -821,7 +824,7 @@ void MainWindow::loadConfiguration() {
     }
     //--
     //-- continue
-    QFile fCont(QApplication::applicationDirPath()+"/.config/continue_playing.conf");
+    QFile fCont(confDir+"/continue_playing.conf");
     if (!fCont.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
@@ -832,7 +835,7 @@ void MainWindow::loadConfiguration() {
     }
     //--
     //-- plr->state()
-    QFile fState(QApplication::applicationDirPath()+"/.config/state.conf");
+    QFile fState(confDir+"/state.conf");
     if (!fState.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
@@ -849,7 +852,7 @@ void MainWindow::loadConfiguration() {
     }
     //--
     //-- Tab text
-    QFile fTabText(QApplication::applicationDirPath()+"/.config/currenttabtext.conf");
+    QFile fTabText(confDir+"/currenttabtext.conf");
     if (!fTabText.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
@@ -860,7 +863,7 @@ void MainWindow::loadConfiguration() {
     }
     //--
     //-- Flags
-    QFile fFlags(QApplication::applicationDirPath()+"/.config/flags.conf");
+    QFile fFlags(confDir+"/flags.conf");
     if (!fFlags.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
@@ -873,7 +876,7 @@ void MainWindow::loadConfiguration() {
     }
     //--
     //-- mute
-    QFile fMute(QApplication::applicationDirPath()+"/.config/mute.conf");
+    QFile fMute(confDir+"/mute.conf");
     if (!fMute.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
