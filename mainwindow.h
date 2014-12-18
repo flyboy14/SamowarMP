@@ -20,7 +20,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 public slots:
-    void recursiveAddFolder(int i, QStringList tmp_list, QString file);
+    QStringList recursiveAddFolder(QStringList out, QString path);
 
     void add_files_from_behind();
 

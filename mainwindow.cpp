@@ -503,30 +503,18 @@ void MainWindow::on_actionAdd_directory_s_triggered()
     dir = directory;
     if(directory.isEmpty())
         return;
-    QDir dirs(directory);
-
+    QStringList tmp_list;
     QList<QMediaContent> new_content;
     int tmp = files.count();
-    QStringList tmp_list, folderSearchLIst;
-//    folderSearchLIst=dirs.entryList(QDir::Dirs |QDir::NoDotAndDotDot | QDir::Hidden);
-//    for(int i = 0; i < folderSearchLIst.count(); i++)
-//        ui->listDebug->addItem(folderSearchLIst[i]);
-//    for(int i = 0; i < folderSearchLIst.count(); i++)
-    recursiveAddFolder(-1, tmp_list, directory);
-    for(int i = 0; i < tmp_list.count(); i++)
-        ui->listDebug->addItem(tmp_list[i]);
-//    tmp_list.append(dirs.entryList(QStringList() << "*.mp3" << "*.flac" << "*.wav" << "*.ogg" << "*.3ga"));
-//    folderSearchLIst.append(dirs.entryList(QStringList() << "*"));
-//    for(int i = 0; i < tmp_list.count(); i++) files.append(dirs.path()+"/"+tmp_list[i]); //add dir name to added items in list
-
-//    for(int i = tmp; i < files.count(); i++) {
-//        content.push_back(QUrl::fromLocalFile(files[i]));
-//        new_content.push_back(QUrl::fromLocalFile(files[i]));
-//        QFileInfo fi(files[i]);
-//        ui->listWidget->addItem(fi.fileName());
-//    }
-//    playlist->addMedia(new_content);
-//    ui->listWidget->setCurrentRow(nextTrack);
+    files.append(recursiveAddFolder(tmp_list, directory));
+    for(int i = tmp; i < files.count(); i++) {
+        content.push_back(QUrl::fromLocalFile(files[i]));
+        new_content.push_back(QUrl::fromLocalFile(files[i]));
+        QFileInfo fi(files[i]);
+        ui->listWidget->addItem(fi.fileName());
+    }
+    playlist->addMedia(new_content);
+    ui->listWidget->setCurrentRow(nextTrack);
 }
 
 void MainWindow::on_actionSave_playlist_triggered()
@@ -896,18 +884,38 @@ void MainWindow::loadConfiguration() {
     //--
 }
 
-void MainWindow::recursiveAddFolder(int i, QStringList tmp_list, QString file) {
-                QStringList zapishem; //store string with file names
-    if (QDir(file).exists()) {
-            QDir dirs(file);
-            zapishem = dirs.entryList(QStringList() << "*.mp3" << "*.flac" << "*.wav" << "*.ogg" << "*.3ga");
-            zapishem.append(dirs.entryList(QDir::Dirs |QDir::NoDotAndDotDot | QDir::Hidden));
-            while(zapishem.count() != 0) {
-                i++;
-                    recursiveAddFolder(i, tmp_list, file+"/"+zapishem.at(i));
-                    break;
+QStringList MainWindow::recursiveAddFolder(QStringList out, QString path) {
+//                file = QDir::toNativeSeparators(file);
+//                QStringList zapishem; //store string with file names
+//                static QStringList sohranim;
+//                QFileInfo filnfo(file);
+//                if (filnfo.isDir()) {
+//            QDir dirs(file);
+//            zapishem = dirs.entryList(QStringList() << "*.mp3" << "*.flac" << "*.wav" << "*.ogg" << "*.3ga");
+//            zapishem.append(dirs.entryList(QDir::Dirs |QDir::NoDotAndDotDot | QDir::Hidden));
+//            while(i != zapishem.count()-1) {
+//                    i++;
+//                    recursiveAddFolder(i, tmp_list, file+"/"+zapishem.at(i));
+//                    QString that = QDir::toNativeSeparators(zapishem.at(i));
+//                    QFileInfo finfo(that);
+//                    if (!finfo.isDir())sohranim.append(zapishem.at(i));
+//            }
+//    } else {
+//    }
+    QFileInfo finfo(path);
+    static QStringList sohranim;
+    if (finfo.isDir()) {
+            QDir dirs(path);
+            QList<QString> entrys = dirs.entryList(QDir::AllEntries|QDir::NoDotAndDotDot);
+            while(!entrys.isEmpty()) {
+                recursiveAddFolder(out, path+"/"+entrys.takeFirst());
             }
-    } else {
-            tmp_list.append(zapishem);
     }
+    else {
+            QString suf = finfo.suffix();
+            if (suf == "mp3" || suf == "flac" || suf == "wav" || suf == "ogg"  || suf == "3ga") {
+                sohranim.append(path);
+            }
+    }
+    return sohranim;
 }
