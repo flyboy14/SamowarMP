@@ -6,7 +6,7 @@ arch=('any')
 url="https://github.com/flyboy14/SamowarMP"
 license=('GPL')
 makedepends=('git' 'qt5-multimedia')
-source=("$pkgname"::'git://github.com/flyboy14/SamowarMP#branch=playlist')
+source=("$pkgname"::'git://github.com/flyboy14/SamowarMP#branch=buggy')
 md5sums=( 'SKIP' )
 
 pkgver() {
