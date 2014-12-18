@@ -88,8 +88,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(playlist,SIGNAL(mediaRemoved(int,int)),this,SLOT(watchPlaylistChanges()));
     connect(playlist,SIGNAL(mediaInserted(int,int)),this,SLOT(watchPlaylistChanges()));
     connect(ui->A,SIGNAL(currentChanged(int)),this,SLOT(watchCurrentTab()));
+            loadConfiguration();
     add_files_from_behind();
-        loadConfiguration();
     //ui->A->currentWidget()->layout();
 }
 
@@ -604,7 +604,7 @@ void MainWindow::on_actionRemove_duplicates_triggered()
 void MainWindow::add_files_from_behind()
 {
     QStringList cmdline_args = QApplication::arguments();
-if(cmdline_args.count() > 0) {
+if(cmdline_args.count() > 1) {
     cmdline_args.removeAt(0);
     for(int i = 0; i < cmdline_args.count(); i++) {
         if(!cmdline_args[i].contains(QDir::currentPath())) {
@@ -619,8 +619,8 @@ if(cmdline_args.count() > 0) {
         ui->listWidget->addItem(fi.fileName());
     }
     playlist->addMedia(content);
+    if(!playstate) plr->playMusic();
 }
-if(!playstate) plr->playMusic();
 }
 
 void MainWindow::on_actionOpen_playlist_triggered()
