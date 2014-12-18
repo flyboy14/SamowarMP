@@ -606,6 +606,7 @@ void MainWindow::add_files_from_behind()
     QStringList cmdline_args = QApplication::arguments();
 if(cmdline_args.count() > 1) {
     cmdline_args.removeAt(0);
+    if(ui->listWidget->count() != 0) on_actionClear_playlist_triggered();
     for(int i = 0; i < cmdline_args.count(); i++) {
         if(!cmdline_args[i].contains(QDir::currentPath())) {
             files.append(QDir::currentPath()+"/"+cmdline_args[i]);
