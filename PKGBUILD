@@ -1,5 +1,5 @@
 pkgname=samowar-beta-git
-pkgver=26.fe5ee12
+pkgver=28.0ed0c37
 pkgrel=1
 pkgdesc="Extremely lightweight music player, written in Qt5 (icons from buuf Deuce theme)"
 arch=('any')
@@ -25,7 +25,15 @@ build() {
 package() {
   cd $srcdir/$pkgname
   install -Dm755 ./kurs $pkgdir/usr/bin/samowar
-          mkdir /usr/share/samowar ~/.config ~/.config/samowar
+if [ ! -d "~/.config" ]; then
+  mkdir ~/.config
+fi
+if [ ! -d "~/.config/samowar" ]; then
+  mkdir ~/.config/samowar
+fi
+if [ ! -d "/usr/share/samowar" ]; then
+  mkdir /usr/share/samowar 
+fi
         cp -a ./icons /usr/share/samowar/
         cp -a ./playlists ~/.config/samowar/
         cp -a ./config ~/.config/samowar/
