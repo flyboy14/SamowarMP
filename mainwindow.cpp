@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     dir = "/home/master-p/Music";
     iconInfo = new QIcon(QApplication::applicationDirPath()+"/.icons/info.png");
     QApplication::setApplicationName("Samowar Music Player");
-    QApplication::setApplicationVersion("2.2.13b");
+    QApplication::setApplicationVersion("2.3.19b");
     iconCredits = new QIcon(QApplication::applicationDirPath()+"/.icons/strange-creature.png");
     ui->actionCredits->setIcon(*iconCredits);
     iconSavePlaylist = new QIcon(QApplication::applicationDirPath()+"/.icons/submenu-save-playlist.png");
@@ -114,6 +114,7 @@ void MainWindow::on_button_play_clicked()
         }
                 else {
                     if(plr->state() != 2)playlist->setCurrentIndex(nowSelected); //0 - stopped 1 - playing 2 - paused
+                    else ui->listWidget->setCurrentRow(nextTrack);
                     //ui->listWidget->item(nextTrack)->setSelected(true);
                     //ui->currentTrack_progressBar->setValue(1);
                     plr->playMusic();
@@ -181,7 +182,6 @@ void MainWindow::on_action_add_files_triggered()
 
 void MainWindow::on_radio_mute_toggled(bool checked)
 {
-     //plr -> toggleMute();
      if(checked) plr->setMuted(1);
      else plr->setMuted(0);
 }
@@ -503,10 +503,11 @@ void MainWindow::on_actionAdd_directory_s_triggered()
     dir = directory;
     if(directory.isEmpty())
         return;
-    QStringList tmp_list;
     QList<QMediaContent> new_content;
     int tmp = files.count();
-    files.append(recursiveAddFolder(tmp_list, directory));
+    QStringList tmp_list;
+    recursiveAddFolder(&tmp_list, directory);
+    files.append(tmp_list);
     for(int i = tmp; i < files.count(); i++) {
         content.push_back(QUrl::fromLocalFile(files[i]));
         new_content.push_back(QUrl::fromLocalFile(files[i]));
@@ -884,26 +885,8 @@ void MainWindow::loadConfiguration() {
     //--
 }
 
-QStringList MainWindow::recursiveAddFolder(QStringList out, QString path) {
-//                file = QDir::toNativeSeparators(file);
-//                QStringList zapishem; //store string with file names
-//                static QStringList sohranim;
-//                QFileInfo filnfo(file);
-//                if (filnfo.isDir()) {
-//            QDir dirs(file);
-//            zapishem = dirs.entryList(QStringList() << "*.mp3" << "*.flac" << "*.wav" << "*.ogg" << "*.3ga");
-//            zapishem.append(dirs.entryList(QDir::Dirs |QDir::NoDotAndDotDot | QDir::Hidden));
-//            while(i != zapishem.count()-1) {
-//                    i++;
-//                    recursiveAddFolder(i, tmp_list, file+"/"+zapishem.at(i));
-//                    QString that = QDir::toNativeSeparators(zapishem.at(i));
-//                    QFileInfo finfo(that);
-//                    if (!finfo.isDir())sohranim.append(zapishem.at(i));
-//            }
-//    } else {
-//    }
+void MainWindow::recursiveAddFolder(QStringList *out, QString path) {
     QFileInfo finfo(path);
-    static QStringList sohranim;
     if (finfo.isDir()) {
             QDir dirs(path);
             QList<QString> entrys = dirs.entryList(QDir::AllEntries|QDir::NoDotAndDotDot);
@@ -914,8 +897,7 @@ QStringList MainWindow::recursiveAddFolder(QStringList out, QString path) {
     else {
             QString suf = finfo.suffix();
             if (suf == "mp3" || suf == "flac" || suf == "wav" || suf == "ogg"  || suf == "3ga") {
-                sohranim.append(path);
+                out->append(path);
             }
     }
-    return sohranim;
 }
