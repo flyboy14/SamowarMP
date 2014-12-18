@@ -1,5 +1,5 @@
 pkgname=samowar-beta-git
-pkgver=2.3.19b
+pkgver=26.fe5ee12
 pkgrel=1
 pkgdesc="Extremely lightweight music player, written in Qt5 (icons from buuf Deuce theme)"
 arch=('any')
@@ -17,9 +17,13 @@ pkgver() {
 
 
 build() {
-cd "$srcdir/$pkgname"
-qmake
-make
+	cd "$srcdir/$pkgname"
+	qmake
+	make
+	mkdir /usr/share/samowar ~/.config ~/.config/samowar 
+	cp -a ./icons /usr/share/samowar 
+	cp -a ./playlists ~/.config/samowar/
+	cp -a ./config ~/.config/samowar/
 }
 
 package() {
