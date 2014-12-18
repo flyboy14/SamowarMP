@@ -606,17 +606,32 @@ void MainWindow::add_files_from_behind()
     QStringList cmdline_args = QApplication::arguments();
 if(cmdline_args.count() > 1) {
     cmdline_args.removeAt(0);
+    for(int i = 1;i < cmdline_args.count()+1;i++) {
+            i--;
+        QFileInfo fi(cmdline_args[i]);
+        QString suf = fi.suffix();
+        if (suf != "mp3" && suf != "flac" && suf != "wav" && suf != "ogg"  && suf != "3ga") {
+            QString wrongfile = "file "+fi.fileName()+" is not a music file!";
+            QMessageBox::critical(this, tr("Wrong filetype"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
+            cmdline_args.removeAt(i);
+        }
+        else i++;
+    }
+    if(cmdline_args.count()==0) return;
     if(ui->listWidget->count() != 0) {
         on_actionClear_playlist_triggered();
         ui->A->tabBar()->setTabText(currentTab, "♫*");
     }
+    QDir dirs(QDir::currentPath());
+    QStringList entrys = dirs.entryList(QDir::AllEntries|QDir::NoDotAndDotDot);
     for(int i = 0; i < cmdline_args.count(); i++) {
-        if(!cmdline_args[i].contains(QDir::currentPath())) {
+        for(int j = 0; j < entrys.count();j++) {
+         QFileInfo fi(entrys[j]);
+         if(fi.fileName() == cmdline_args[i])
             files.append(QDir::currentPath()+"/"+cmdline_args[i]);
-            ui->listDebug->addItem(files[i]);
         }
-        else files = cmdline_args;
     }
+    if(files.count() == 0) files = cmdline_args;
     for(int i = 0; i < files.count(); i++) {
         content.push_back(QUrl::fromLocalFile(files[i]));
         QFileInfo fi(files[i]);
