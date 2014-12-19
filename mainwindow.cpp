@@ -615,18 +615,42 @@ void MainWindow::on_actionRemove_duplicates_triggered()
 
 void MainWindow::add_files_from_behind()
 {
+    QString wrongfile;
     QStringList cmdline_args = QApplication::arguments();
     if(cmdline_args.count() > 1) {
         cmdline_args.removeAt(0);
+        if(cmdline_args.at(0) == "-l" || cmdline_args.at(0) == "--language") {
+            if(cmdline_args.at(1) == "en") {
+                on_actionEnglish_triggered();
+                cmdline_args.removeAt(0);
+                cmdline_args.removeAt(0);
+                if(cmdline_args.count() == 0) return;
+            }
+            if(cmdline_args.at(1) == "ru") {
+                on_action_triggered();
+                cmdline_args.removeAt(0);
+                cmdline_args.removeAt(0);
+                if(cmdline_args.count() == 0) return;
+            }
+        }
+        if(cmdline_args.at(0) == "--help" || cmdline_args.at(0) == "-h") {
+            if(language == "EN") cout << "Usage: samowar [options] [file(s)]\nOptions:\n--help or -h     Show help and exit\n--language or -l    set language(values ru, en)" << endl;
+            else cout << "Использование: samowar [options] [file(s)]\nОпции:\n--help или -h     вывести на экран справку и выйти\n--language или -l    выставить язык(значения ru, en)" << endl;
+            exit(0);
+        }
         for(int i = 1;i < cmdline_args.count()+1;i++) {
             i--;
             QFileInfo fi(cmdline_args[i]);
             QString suf = fi.suffix();
             if (suf != "mp3" && suf != "flac" && suf != "wav" && suf != "ogg"  && suf != "3ga") {
-                QString wrongfile = "file "+fi.fileName()+" is not a music file!";
-                QString wrongfileRu = "файл "+fi.fileName()+" не похож на музыкальный!";
-                if(language == "EN") QMessageBox::critical(this, tr("Wrong filetype"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
-                else QMessageBox::critical(this, tr("Неверный тип файлы"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
+                if(language == "EN") {
+                    wrongfile = "file "+fi.fileName()+" is not a music file!";
+                QMessageBox::critical(this, tr("Wrong filetype"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
+                }
+                else {
+                    wrongfile = "файл "+fi.fileName()+" не похож на музыкальный!";
+                QMessageBox::critical(this, tr("Неверный тип файлы"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
+                }
                 cmdline_args.removeAt(i);
             }
             else i++;
