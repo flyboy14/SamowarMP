@@ -34,5 +34,5 @@ fi
 if [ ! -d /usr/share/samowar ]; then
   mkdir /usr/share/samowar 
 fi
-        cp -av ./icons /usr/share/samowar/
+        cp -av ./icons $pkgdir/usr/share/samowar/
 }
