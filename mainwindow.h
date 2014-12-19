@@ -21,12 +21,10 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-public slots:
+private slots:
     void recursiveAddFolder(QStringList *out, QString path);
 
     void add_files_from_behind();
-
-    void saveConfiguration();
 
     void loadConfiguration();
 
@@ -104,10 +102,6 @@ public slots:
 
     void on_actionOpen_playlist_triggered();
 
-    void listWidgetMenu(QPoint point);
-
-    void watchCurrentTab();
-
     void saveToFile(int var, QString name);
 
     void saveToFile(QStringList var, QString name);
@@ -116,15 +110,19 @@ public slots:
 
     QString readFromFile(QString filename);
 
+    void on_action_triggered();
+
+    void on_actionEnglish_triggered();
+
+public slots:
+    void saveConfiguration();
+
 protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
     QList<QMediaContent> content;
     QIcon *iconEn, *iconRu, *iconLanguage, *iconInfo, *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
     QStringList files;
-private slots:
-    void on_action_triggered();
-    void on_actionEnglish_triggered();
 };
 
 #endif // MAINWINDOW_H

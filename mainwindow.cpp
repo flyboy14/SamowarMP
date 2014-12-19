@@ -93,7 +93,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
     connect(playlist,SIGNAL(mediaRemoved(int,int)),this,SLOT(watchPlaylistChanges()));
     connect(playlist,SIGNAL(mediaInserted(int,int)),this,SLOT(watchPlaylistChanges()));
-    connect(ui->A,SIGNAL(currentChanged(int)),this,SLOT(watchCurrentTab()));
             loadConfiguration();
     add_files_from_behind();
     //ui->A->currentWidget()->layout();
@@ -108,16 +107,17 @@ void MainWindow::on_button_play_clicked()
 {
     if(!playstate) {
         if(playlist->mediaCount() == 0) {
-            if (language == "EN") files = QFileDialog::getOpenFileNames(
-                        this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)"));
-            else files = QFileDialog::getOpenFileNames(
-                        this, tr("Открыть файл(ы) с музыкой"), dir, tr("Музыкальные файлы (*.ogg *.mp3 *.3ga *.wav *.flac)"));
-            for(int i = 0; i < files.count(); i++) {
-                content.push_back(QUrl::fromLocalFile(files[i]));
-                QFileInfo fi(files[i]);
-                ui->listWidget->addItem(fi.fileName());
-            }
-            playlist->addMedia(content);
+//            if (language == "EN") files = QFileDialog::getOpenFileNames(
+//                        this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)"));
+//            else files = QFileDialog::getOpenFileNames(
+//                        this, tr("Открыть файл(ы) с музыкой"), dir, tr("Музыкальные файлы (*.ogg *.mp3 *.3ga *.wav *.flac)"));
+//            for(int i = 0; i < files.count(); i++) {
+//                content.push_back(QUrl::fromLocalFile(files[i]));
+//                QFileInfo fi(files[i]);
+//                ui->listWidget->addItem(fi.fileName());
+//            }
+//            playlist->addMedia(content);
+            on_action_add_files_triggered();
             ui->listWidget->setCurrentRow(nextTrack);
             //nextTrack = playlist->currentIndex();
             //ui->listWidget->setCurrentRow(playlist->currentIndex() != -1? playlist->currentIndex():0);
@@ -339,7 +339,7 @@ void MainWindow::watchNextTrack() {
     }
     for(int row=0; row != playlist->mediaCount(); row++)
         if(ui->listWidget->item(row)->isSelected()) ui->listWidget->item(row)->setSelected(false);
-        ui->listWidget->item(nextTrack)->setSelected(true);
+        ui->listWidget->setCurrentRow(nextTrack);
         if(debug) {
             char *buffer = new char[3];
             sprintf(buffer,"%d",nextTrack);
@@ -742,14 +742,6 @@ void MainWindow::on_actionOpen_playlist_triggered()
 void MainWindow::watchPlaylistChanges() {
     if(!ui->A->tabText(currentTab).contains("*"))
         ui->A->setTabText(currentTab, ui->A->tabText(currentTab)+'*');
-}
-
-void MainWindow::listWidgetMenu(QPoint point) {
-   //context menu delete
-}
-
-void MainWindow::watchCurrentTab() {
-    currentTab = ui->A->currentIndex();
 }
 
 void MainWindow::saveConfiguration() {

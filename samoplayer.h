@@ -20,7 +20,6 @@ public:
     void stopMusic();
     void pauseMusic();
     void toggleMute();
-    void positionChanged(qint64 position);
 };
 
 #endif // SAMOPLAYER_H
