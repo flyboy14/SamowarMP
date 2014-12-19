@@ -14,13 +14,14 @@ QString dir = "", language, versionRu;
 samoplayer *plr= new samoplayer;
 int nextTrack = 0, nowSelected = 0, currentTab = 0, def_width, def_height;
 bool debug=false, repeat=false, randome=false, single=false, was_paused, playstate = false;
-//#ifdef OS_UNIX
+#ifdef Q_OS_LINUX
 QString iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
 plsDir = QDir::homePath()+"/.config/samowar/playlists";
-//#else
-//QString iconsDir = QApplication::applicationDirPath()+"/.icons", confDir = QApplication::applicationDirPath()+"/.config",
-//plsDir = QApplication::applicationDirPath()+"/playlists";
-//#endif
+#else
+QString iconsDir = QApplication::applicationDirPath()+"/.icons",
+confDir = QApplication::applicationDirPath()+"/.config",
+plsDir = QApplication::applicationDirPath()+"/playlists";
+#endif
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -35,8 +36,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QApplication::setApplicationName("Samowar Music Player");
     QApplication::setApplicationVersion("v2.3.19b");
     versionRu = "2.3.19б";
-    iconCredits = new QIcon(iconsDir+"/strange-creature.png");
-    ui->actionCredits->setIcon(*iconCredits);
+    iconRu = new QIcon(iconsDir+"/ru.png");
+    ui->action->setIcon(*iconRu);
+    iconEn = new QIcon(iconsDir+"/en.png");
+    ui->actionEnglish->setIcon(*iconEn);
+    iconLanguage = new QIcon(iconsDir+"/flags.png");
+    ui->menuLanguage->setIcon(*iconLanguage);
     iconSavePlaylist = new QIcon(iconsDir+"/submenu-save-playlist.png");
     ui->actionSave_playlist->setIcon(*iconSavePlaylist);
     iconOpenPlaylist = new QIcon(iconsDir+"/submenu-open-playlist.png");

@@ -821,8 +821,8 @@
      <addaction name="action"/>
      <addaction name="actionEnglish"/>
     </widget>
-    <addaction name="menuLanguage"/>
     <addaction name="actionAuto_pause_when_closed"/>
+    <addaction name="menuLanguage"/>
     <addaction name="actionToggle_debug_output"/>
     <addaction name="action_200"/>
     <addaction name="actionExit"/>
