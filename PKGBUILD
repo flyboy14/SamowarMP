@@ -5,7 +5,7 @@ pkgdesc="Extremely lightweight music player, written in Qt5 (icons from buuf Deu
 arch=('any')
 url="https://github.com/flyboy14/SamowarMP"
 license=('GPL')
-makedepends=('git' 'qt5-multimedia' 'sudo')
+makedepends=('git' 'qt5-multimedia' 'sudo' 'ttf-paratype')
 source=("$pkgname"::'git://github.com/flyboy14/SamowarMP#branch=buggy')
 md5sums=( 'SKIP' )
 
