@@ -15,7 +15,7 @@ samoplayer *plr= new samoplayer;
 int nextTrack = 0, nowSelected = 0, currentTab = 0, def_width, def_height;
 bool debug=false, repeat=false, randome=false, single=false, was_paused, playstate = false;
 //#ifdef OS_UNIX
-QString iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
+QString iconsDir = QDir::homePath()+"/.config/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
 plsDir = QDir::homePath()+"/.config/samowar/playlists";
 //#else
 //QString iconsDir = QApplication::applicationDirPath()+"/.icons", confDir = QApplication::applicationDirPath()+"/.config",
@@ -311,6 +311,7 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
 }
 
 void MainWindow::watchPlaying() {
+    if(files.count() != 0) {
     QFileInfo fi(files[nextTrack]);
     int pos_secs = (plr->position()%60000)/1000;
     int dur_secs = (plr->duration()%60000)/1000;
@@ -321,6 +322,7 @@ void MainWindow::watchPlaying() {
     if(plr->isMuted() && language == "EN") QMainWindow::setWindowTitle("[muted] Samowar - Playing... " + fi.fileName());
     if(plr->isMuted() && language == "RU") QMainWindow::setWindowTitle("[без звука] САМОВАРЪ - Сейчас играет... " + fi.fileName());
     else watchStatus();
+    }
 }
 
 void MainWindow::watchNextTrack() {
@@ -375,9 +377,11 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 }
 
 void MainWindow::atTrackEnd() {
-    if(playlist->playbackMode() != QMediaPlaylist::Sequential && nextTrack != playlist->mediaCount()-1)
+    if(files.count() != 0) {
+    if(playlist->playbackMode() == QMediaPlaylist::Sequential && nextTrack != files.count()-1)
         nextTrack = playlist->currentIndex();
     ui->currentTrack_progressBar->setValue(1);
+    }
     if(debug) {
         char *buffer = new char[3];
         sprintf(buffer,"%d",nextTrack);
@@ -590,7 +594,7 @@ void MainWindow::mySliderValueChanged(int newPos)
         int sliderPosUnderMouse = ui->horizontalSlider->minimum() + sliderRange * posRatio;
         if (sliderPosUnderMouse != newPos) {
             ui->horizontalSlider->setValue(sliderPosUnderMouse);
-            plr->setPosition(plr->duration()/100*sliderPosUnderMouse);
+            if(files.count() != 0) plr->setPosition(plr->duration()/100*sliderPosUnderMouse);
             return;
         }
     }
@@ -800,7 +804,7 @@ void MainWindow::loadConfiguration() {
         line = readFromFile(confDir+"/nexttrack.conf");
         nextTrack = line.toInt();
         nowSelected = nextTrack;
-        if(playlist->mediaCount() != 0) playlist->setCurrentIndex(nextTrack);
+        if(files.count() != 0) playlist->setCurrentIndex(line.toInt());
     }
     if(readFromFile(confDir+"/position.conf") != "err") {
         line = readFromFile(confDir+"/position.conf");
