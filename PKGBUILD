@@ -26,13 +26,13 @@ package() {
   cd $srcdir/$pkgname
   install -Dm755 ./kurs $pkgdir/usr/bin/samowar
 if [ ! -d ~/.config ]; then
-  mkdir ~/.config
+  mkdir -p ~/.config
 fi
 if [ ! -d ~/.config/samowar ]; then
-  mkdir ~/.config/samowar
+  mkdir -p ~/.config/samowar
 fi
 if [ ! -d /usr/share/samowar ]; then
-  mkdir /usr/share/samowar 
+  mkdir -p $pkgdir/usr/share/samowar 
 fi
         cp -av ./icons $pkgdir/usr/share/samowar/
 }
