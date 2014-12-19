@@ -15,7 +15,7 @@ samoplayer *plr= new samoplayer;
 int nextTrack = 0, nowSelected = 0, currentTab = 0, def_width, def_height;
 bool debug=false, repeat=false, randome=false, single=false, was_paused, playstate = false;
 //#ifdef OS_UNIX
-QString iconsDir = QDir::homePath()+"/.config/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
+QString iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
 plsDir = QDir::homePath()+"/.config/samowar/playlists";
 //#else
 //QString iconsDir = QApplication::applicationDirPath()+"/.icons", confDir = QApplication::applicationDirPath()+"/.config",
