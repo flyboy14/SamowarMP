@@ -203,7 +203,7 @@
          <number>90</number>
         </property>
        </widget>
-       <widget class="QLabel" name="labelVolume">
+       <widget class="QLabel" name="labelVolumeDef">
         <property name="geometry">
          <rect>
           <x>81</x>
@@ -221,7 +221,7 @@
          <string>90</string>
         </property>
        </widget>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="labelVolume">
         <property name="geometry">
          <rect>
           <x>9</x>
@@ -242,7 +242,7 @@
          <rect>
           <x>7</x>
           <y>120</y>
-          <width>91</width>
+          <width>121</width>
           <height>21</height>
          </rect>
         </property>
@@ -270,7 +270,7 @@
         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete selected item&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
        <property name="text">
-        <string> delete current</string>
+        <string> Delete current</string>
        </property>
        <property name="icon">
         <iconset>
@@ -587,7 +587,7 @@
     <zorder>button_play</zorder>
     <zorder>button_play_next</zorder>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="labelGreeting">
     <property name="geometry">
      <rect>
       <x>199</x>
@@ -637,9 +637,9 @@
       <item>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="1" column="1">
-         <widget class="QLabel" name="label_test">
+         <widget class="QLabel" name="labelDuration">
           <property name="text">
-           <string>duration be here</string>
+           <string>Duration be here</string>
           </property>
          </widget>
         </item>
@@ -782,7 +782,7 @@
    <zorder>A</zorder>
    <zorder>listDebug</zorder>
    <zorder>buttonDebugClear</zorder>
-   <zorder>label</zorder>
+   <zorder>labelGreeting</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -814,6 +814,14 @@
     <property name="title">
      <string>&amp;Options</string>
     </property>
+    <widget class="QMenu" name="menuLanguage">
+     <property name="title">
+      <string>&amp;Language</string>
+     </property>
+     <addaction name="action"/>
+     <addaction name="actionEnglish"/>
+    </widget>
+    <addaction name="menuLanguage"/>
     <addaction name="actionAuto_pause_when_closed"/>
     <addaction name="actionToggle_debug_output"/>
     <addaction name="action_200"/>
@@ -824,12 +832,12 @@
   </widget>
   <action name="actionExit">
    <property name="text">
-    <string>&amp;Exit</string>
+    <string>&amp;Quit</string>
    </property>
   </action>
   <action name="action_200">
    <property name="text">
-    <string>&amp;Now give me 200$ (for further development)</string>
+    <string>&amp;Contribute</string>
    </property>
   </action>
   <action name="action_add_files">
@@ -897,6 +905,16 @@
   <action name="actionFeatures">
    <property name="text">
     <string>&amp;Features</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>Русский</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="text">
+    <string>&amp;English</string>
    </property>
   </action>
  </widget>

@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "stdlib.h"
 //#include <sqlite3.h>
 #include "ui_mainwindow.h"
 #include <QCoreApplication>
@@ -11,15 +10,11 @@
 #include <fstream>
 #include "samoplayer.h"
 using namespace std;
-QString dir = "";
-QString iconsDir = "/usr/share/samowar/icons";
-QString confDir = QDir::homePath()+"/.config/samowar/conf";
-QString plsDir = QDir::homePath()+"/.config/samowar/playlists";
+QString dir = "", iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
+plsDir = QDir::homePath()+"/.config/samowar/playlists", language, versionRu;
 samoplayer *plr= new samoplayer;
-int currentVolume = 50;
-int nextTrack = 0, nowSelected = 0, currentTab = 0;
-int def_width, def_height;
-bool debug=false, repeat=false, randome=false, single=false, tmp_pause, playstate = false;
+int nextTrack = 0, nowSelected = 0, currentTab = 0, def_width, def_height;
+bool debug=false, repeat=false, randome=false, single=false, was_paused, playstate = false;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,10 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setGeometry(230,150,0,0);
     def_width = this->size().width();
     def_height = this->size().height();
-    dir = "/home/master-p/Music";
-    iconInfo = new QIcon(iconsDir+"/info.png");
+    dir = QDir::homePath();
+    //iconInfo = new QIcon(iconsDir+"/info.png");
     QApplication::setApplicationName("Samowar Music Player");
-    QApplication::setApplicationVersion("2.3.19b");
+    QApplication::setApplicationVersion("v2.3.19b");
+    versionRu = "2.3.19б";
     iconCredits = new QIcon(iconsDir+"/strange-creature.png");
     ui->actionCredits->setIcon(*iconCredits);
     iconSavePlaylist = new QIcon(iconsDir+"/submenu-save-playlist.png");
@@ -102,7 +98,10 @@ void MainWindow::on_button_play_clicked()
 {
     if(!playstate) {
         if(playlist->mediaCount() == 0) {
-            files = QFileDialog::getOpenFileNames( this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)"));
+            if (language == "EN") files = QFileDialog::getOpenFileNames(
+                        this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)"));
+            else files = QFileDialog::getOpenFileNames(
+                        this, tr("Открыть файл(ы) с музыкой"), dir, tr("Музыкальные файлы (*.ogg *.mp3 *.3ga *.wav *.flac)"));
             for(int i = 0; i < files.count(); i++) {
                 content.push_back(QUrl::fromLocalFile(files[i]));
                 QFileInfo fi(files[i]);
@@ -137,7 +136,8 @@ void MainWindow::on_button_stop_clicked()
 void MainWindow::on_action_200_triggered()
 {
     QMessageBox msg;
-    msg.setText("This function is not supported yet");
+    if(language == "EN") msg.setText("This function is not supported yet");
+    else msg.setText("К сожалению, эта функция еще не поддерживается");
     msg.setIcon(QMessageBox::Critical);
     msg.setStandardButtons(QMessageBox::Ok);
     msg.setDefaultButton(QMessageBox::Ok);
@@ -147,39 +147,46 @@ void MainWindow::on_action_200_triggered()
 void MainWindow::on_actionExit_triggered()
 {
     QMessageBox msg;
-    msg.setText("100% sure to exit Samowar session?");
+    if(language == "EN") msg.setText("Are you 100% sure to exit Samowar session?");
+    else msg.setText("Желаете покинуть САМОВАРЪ?");
     msg.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-    msg.QMessageBox::setButtonText(QMessageBox::Ok, "Yes");
-    msg.QMessageBox::setButtonText(QMessageBox::Cancel, "Nope");
+    if(language == "EN") {
+        msg.QMessageBox::setButtonText(QMessageBox::Ok, "Yes");
+        msg.QMessageBox::setButtonText(QMessageBox::Cancel, "No");
+    }
+    else {
+        msg.QMessageBox::setButtonText(QMessageBox::Ok, "Желаю");
+        msg.QMessageBox::setButtonText(QMessageBox::Cancel, "Отнюдь");
+    }
     msg.setDefaultButton(QMessageBox::Ok);
     int ret = msg.exec();
         switch (ret) {
-               case QMessageBox::Cancel: {
+            case QMessageBox::Cancel: {
+            break;
+            }
+            case QMessageBox::Ok: {
+                MainWindow::QMainWindow::close();
                 break;
-                }
-               case QMessageBox::Ok: {
-                    //saveConfiguration();
-                    MainWindow::QMainWindow::close();
-                    break;
-               }
-               default:
-                   // Сюда пишем обработку события по умолчанию
-                   break;
-             }
+            }
+            default: break;
+        }
 }
 
 void MainWindow::on_action_add_files_triggered()
 {
     QList<QMediaContent> new_content;
     int tmp = files.count();
-    files.append(QFileDialog::getOpenFileNames( this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)")));
+    if(language == "EN") files.append(QFileDialog::getOpenFileNames(
+                                          this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)")));
+    else files.append(QFileDialog::getOpenFileNames(
+                          this, tr("Открыть файл(ы) с музыкой"), dir, tr("Музыкальные файлы (*.ogg *.mp3 *.3ga *.wav *.flac)")));
     for(int i = tmp; i < files.count(); i++) {
         content.push_back(QUrl::fromLocalFile(files[i]));
         new_content.push_back(QUrl::fromLocalFile(files[i]));
         QFileInfo fi(files[i]);
         ui->listWidget->addItem(fi.fileName());
+        dir = fi.path();
     }
-    //dir = QDir::;
     playlist->addMedia(new_content);
 }
 
@@ -216,18 +223,18 @@ void MainWindow::on_button_play_prev_clicked()
 void MainWindow::on_button_play_next_clicked()
 {
     if(playlist->mediaCount() != 0) {
-        if(playlist->playbackMode() == QMediaPlaylist::Sequential)
-        {if(nextTrack != playlist->mediaCount()-1) {
-                ui->currentTrack_progressBar->setValue(1);
-                playlist->next();
-                ui->listWidget->item(playlist->currentIndex())->setSelected(true);
-                char *buffer = new char[100];
-                char *buffer1 = new char[100];
-                sprintf(buffer,"%d",nextTrack);
-                sprintf(buffer1,"%d",playlist->currentIndex());
-                const QString& str("play_next_clicked. nextTrack is now ");
-                const QString& str1(", current index is now ");
-             ui->listDebug->addItem(str+buffer+str1+buffer1);}
+        if(playlist->playbackMode() == QMediaPlaylist::Sequential &&
+                nextTrack != playlist->mediaCount()-1) {
+            ui->currentTrack_progressBar->setValue(1);
+            playlist->next();
+            ui->listWidget->item(playlist->currentIndex())->setSelected(true);
+            char *buffer = new char[4];
+            char *buffer1 = new char[4];
+            sprintf(buffer,"%d",nextTrack);
+            sprintf(buffer1,"%d",playlist->currentIndex());
+            const QString& str("play_next_clicked. nextTrack is now ");
+            const QString& str1(", current index is now ");
+             ui->listDebug->addItem(str+buffer+str1+buffer1);
         }
         else {
             ui->currentTrack_progressBar->setValue(1);
@@ -257,7 +264,11 @@ void MainWindow::on_deleteCurrentTrack_clicked()
     }
     if(playlist->mediaCount() != 0) {
         int tmp = playlist->currentIndex();
-        if(nowSelected < tmp) {disconnect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));disconnect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));plr->stopMusic();}
+        if(nowSelected < tmp) {
+            disconnect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
+            disconnect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
+            plr->stopMusic();
+        }
         char *buffer = new char[3];
         sprintf(buffer,"%d",playlist->currentIndex());
         const QString& str1("deleted track. current index is ");
@@ -298,11 +309,12 @@ void MainWindow::watchPlaying() {
     QFileInfo fi(files[nextTrack]);
     int pos_secs = (plr->position()%60000)/1000;
     int dur_secs = (plr->duration()%60000)/1000;
-    if(pos_secs < 10) ui -> label_test->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
-    if(dur_secs < 10) ui -> label_test->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
-    if(pos_secs < 10 && dur_secs < 10) ui -> label_test->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
-    if(dur_secs > 10 && pos_secs > 10) ui -> label_test->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
-    if(plr->isMuted())QMainWindow::setWindowTitle("[muted] Samowar - Playing... " + fi.fileName());
+    if(pos_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
+    if(dur_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
+    if(pos_secs < 10 && dur_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
+    if(dur_secs > 10 && pos_secs > 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
+    if(plr->isMuted() && language == "EN") QMainWindow::setWindowTitle("[muted] Samowar - Playing... " + fi.fileName());
+    if(plr->isMuted() && language == "RU") QMainWindow::setWindowTitle("[без звука] САМОВАРЪ - Сейчас играет... " + fi.fileName());
     else watchStatus();
 }
 
@@ -341,7 +353,7 @@ void MainWindow::setSliderPosition(){
 
 void MainWindow::on_horizontalSlider_sliderPressed()
 {
-    if(plr->state() == 2) tmp_pause = true;
+    if(plr->state() == 2) was_paused = true;
     ui->horizontalSlider->setCursor(Qt::ClosedHandCursor);
     plr->pauseMusic();
     plr->disconnect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
@@ -351,16 +363,15 @@ void MainWindow::on_horizontalSlider_sliderPressed()
 
 void MainWindow::on_horizontalSlider_sliderReleased()
 {
-    if(!tmp_pause) plr->playMusic();//0 - stopped 1 - playing 2 - paused
+    if(!was_paused) plr->playMusic();//0 - stopped 1 - playing 2 - paused
     ui->horizontalSlider->setCursor(Qt::PointingHandCursor);
     plr->connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
     plr->connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this, SLOT(mySliderValueChanged(int)));
 }
 
 void MainWindow::atTrackEnd() {
-    if(playlist->playbackMode() == QMediaPlaylist::Sequential && nextTrack == playlist->mediaCount()-1) {}
-    else
-    nextTrack = playlist->currentIndex();
+    if(playlist->playbackMode() != QMediaPlaylist::Sequential && nextTrack != playlist->mediaCount()-1)
+        nextTrack = playlist->currentIndex();
     ui->currentTrack_progressBar->setValue(1);
     if(debug) {
         char *buffer = new char[3];
@@ -378,27 +389,32 @@ void MainWindow::watchStatus() {
 //        ui->listDebug->addItem(str+buffer);
 //    }
     if(plr->state() == 0) {
-            ui->button_play->setIcon(*iconPlay);
-            ui->currentTrack_progressBar->setValue(1);
-            //ui->horizontalSlider->setValue(0);
+        ui->button_play->setIcon(*iconPlay);
+        ui->currentTrack_progressBar->setValue(1);
+        //ui->horizontalSlider->setValue(0);
         playstate = false;
-        QMainWindow::setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
+        if(language == "EN") QMainWindow::setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
+        else QMainWindow::setWindowTitle("МУЗЫКАЛЬНЫЙ ПРОИГРЫВАТЕЛЬ САМОВАРЪ "+ versionRu);
     }
     if(plr->state() == 2) {
         QFileInfo fi(files[nextTrack]);
-        QMainWindow::setWindowTitle("[paused] Samowar - " + fi.fileName());
+        if (language == "EN") QMainWindow::setWindowTitle("[paused] Samowar - " + fi.fileName());
+        else QMainWindow::setWindowTitle("[пауза] САМОВАРЪ - " + fi.fileName());
         if(playstate == true) {
             ui->button_play->setIcon(*iconPlay);
-            ui->button_play->setToolTip("Play music (F9)");
+            if (language == "EN") ui->button_play->setToolTip("Play music (F9)");
+            else ui->button_play->setToolTip("Играть (F9)");
         } // to prevent memory leaks
         playstate = false;
     }
     if(plr->state() == 1) {
         QFileInfo fi(files[nextTrack]);
-        QMainWindow::setWindowTitle("Samowar - Playing... " + fi.fileName() );
+        if (language == "EN") QMainWindow::setWindowTitle("Samowar - Playing... " + fi.fileName() );
+        else QMainWindow::setWindowTitle("САМОВАРЪ - Сейчас играет... " + fi.fileName() );
         if(playstate == false) {
             ui->button_play->setIcon(*iconPause);
-            ui->button_play->setToolTip("Pause music (F9)");
+            if(language == "EN") ui->button_play->setToolTip("Pause music (F9)");
+            else ui->button_play->setToolTip("Пауза (F9)");
         } // to prevent memory leaks
         playstate = true;
     }
@@ -487,7 +503,7 @@ void MainWindow::on_dialVolume_valueChanged(int value)
     plr -> setVolume(value);
     char *buffer = new char[3];
     sprintf(buffer,"%d",value);
-    ui->labelVolume -> setText(buffer);
+    ui->labelVolumeDef -> setText(buffer);
 }
 
 void MainWindow::on_dialVolume_sliderPressed()
@@ -502,7 +518,9 @@ void MainWindow::on_dialVolume_sliderReleased()
 
 void MainWindow::on_actionAdd_directory_s_triggered()
 {
-    QString directory = QFileDialog::getExistingDirectory(this,tr("Select dir to import files"));
+    QString directory;
+    if(language == "EN") directory = QFileDialog::getExistingDirectory(this,tr("Select dir to import files"));
+    else directory = QFileDialog::getExistingDirectory(this,tr("Открыть каталог с музыкой"));
     dir = directory;
     if(directory.isEmpty())
         return;
@@ -531,15 +549,11 @@ void MainWindow::on_actionSave_playlist_triggered()
 //    sqlite3_column_table_name()
 
     QString filename;
-    filename = QFileDialog::getSaveFileName(this, "Save playlisto", plsDir, tr("Samowar playlist files (*.smw)"));
-    if(!filename.contains(".smw"))filename+=".smw";
-    QFile f( filename );
-    QFileInfo fi(f);
-    f.open( QIODevice::WriteOnly );
-    QTextStream outstream(&f);
-    for(int i = 0; i < files.count(); i++)
-    outstream << files[i] << '\n';
-    f.close();
+    if(language=="EN") filename = QFileDialog::getSaveFileName(this, "Save playlisto", plsDir, tr("Samowar playlist files (*.smw)"));
+    else filename = QFileDialog::getSaveFileName(this, "Сохранить список воспроизведения", plsDir, tr("Файлы списков воспроизведения (*.smw)"));
+    if(!filename.contains(".smw")) filename+=".smw";
+        saveToFile(files, filename);
+    QFileInfo fi(filename);
     if(ui->A->tabText(currentTab).contains("*"))
         ui->A->setTabText(currentTab, fi.fileName());
 }
@@ -550,8 +564,8 @@ void MainWindow::changeCurrentTab() {
 
 void MainWindow::progress() {
     if(plr->duration() != 0) {
-    ui -> currentTrack_progressBar->setValue(plr->position()*100/plr->duration());
-    ui -> horizontalSlider->setValue(plr->position()*100/plr->duration());
+        ui -> currentTrack_progressBar->setValue(plr->position()*100/plr->duration());
+        ui -> horizontalSlider->setValue(plr->position()*100/plr->duration());
     }
 }
 
@@ -564,14 +578,12 @@ void MainWindow::mySliderValueChanged(int newPos)
                          (localMousePos.x() >= 0 && localMousePos.y() >= 0 &&
                           localMousePos.x() < ui->horizontalSlider->size().width() &&
                           localMousePos.y() < ui->horizontalSlider->size().height()+20);
-    if (clickOnSlider)
-    {
+    if (clickOnSlider) {
         // Attention! The following works only for Horizontal, Left-to-right sliders
         float posRatio = localMousePos.x() / (float )ui->horizontalSlider->size().width();
         int sliderRange = ui->horizontalSlider->maximum() - ui->horizontalSlider->minimum();
         int sliderPosUnderMouse = ui->horizontalSlider->minimum() + sliderRange * posRatio;
-        if (sliderPosUnderMouse != newPos)
-        {
+        if (sliderPosUnderMouse != newPos) {
             ui->horizontalSlider->setValue(sliderPosUnderMouse);
             plr->setPosition(plr->duration()/100*sliderPosUnderMouse);
             return;
@@ -604,74 +616,80 @@ void MainWindow::on_actionRemove_duplicates_triggered()
 void MainWindow::add_files_from_behind()
 {
     QStringList cmdline_args = QApplication::arguments();
-if(cmdline_args.count() > 1) {
-    cmdline_args.removeAt(0);
-    for(int i = 1;i < cmdline_args.count()+1;i++) {
+    if(cmdline_args.count() > 1) {
+        cmdline_args.removeAt(0);
+        for(int i = 1;i < cmdline_args.count()+1;i++) {
             i--;
-        QFileInfo fi(cmdline_args[i]);
-        QString suf = fi.suffix();
-        if (suf != "mp3" && suf != "flac" && suf != "wav" && suf != "ogg"  && suf != "3ga") {
-            QString wrongfile = "file "+fi.fileName()+" is not a music file!";
-            QMessageBox::critical(this, tr("Wrong filetype"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
-            cmdline_args.removeAt(i);
+            QFileInfo fi(cmdline_args[i]);
+            QString suf = fi.suffix();
+            if (suf != "mp3" && suf != "flac" && suf != "wav" && suf != "ogg"  && suf != "3ga") {
+                QString wrongfile = "file "+fi.fileName()+" is not a music file!";
+                QString wrongfileRu = "файл "+fi.fileName()+" не похож на музыкальный!";
+                if(language == "EN") QMessageBox::critical(this, tr("Wrong filetype"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
+                else QMessageBox::critical(this, tr("Неверный тип файлы"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
+                cmdline_args.removeAt(i);
+            }
+            else i++;
         }
-        else i++;
-    }
-    if(cmdline_args.count()==0) return;
-    if(ui->listWidget->count() != 0) {
-        on_actionClear_playlist_triggered();
-        ui->A->tabBar()->setTabText(currentTab, "♫*");
-    }
-    QDir dirs(QDir::currentPath());
-    QStringList entrys = dirs.entryList(QDir::AllEntries|QDir::NoDotAndDotDot);
-    for(int i = 0; i < cmdline_args.count(); i++) {
-        for(int j = 0; j < entrys.count();j++) {
-         QFileInfo fi(entrys[j]);
-         if(fi.fileName() == cmdline_args[i])
-            files.append(QDir::currentPath()+"/"+cmdline_args[i]);
+        if(cmdline_args.count()==0) return;
+        if(ui->listWidget->count() != 0) {
+            on_actionClear_playlist_triggered();
+            ui->A->tabBar()->setTabText(currentTab, "♫*");
         }
+        QDir dirs(QDir::currentPath());
+        QStringList entrys = dirs.entryList(QDir::AllEntries|QDir::NoDotAndDotDot);
+        for(int i = 0; i < cmdline_args.count(); i++)
+            for(int j = 0; j < entrys.count();j++) {
+            QFileInfo fi(entrys[j]);
+            if(fi.fileName() == cmdline_args[i])
+                files.append(QDir::currentPath()+"/"+cmdline_args[i]);
+            }
+        if(files.count() == 0) files = cmdline_args;
+        for(int i = 0; i < files.count(); i++) {
+            content.push_back(QUrl::fromLocalFile(files[i]));
+            QFileInfo fi(files[i]);
+            ui->listWidget->addItem(fi.fileName());
+        }
+        playlist->addMedia(content);
+        if(!playstate) plr->playMusic();
     }
-    if(files.count() == 0) files = cmdline_args;
-    for(int i = 0; i < files.count(); i++) {
-        content.push_back(QUrl::fromLocalFile(files[i]));
-        QFileInfo fi(files[i]);
-        ui->listWidget->addItem(fi.fileName());
-    }
-    playlist->addMedia(content);
-    if(!playstate) plr->playMusic();
-}
 }
 
 void MainWindow::on_actionOpen_playlist_triggered()
 {
     QList<QMediaContent> new_content;
-    QFile f(QFileDialog::getOpenFileName(this, tr("Open samowar playlist"), plsDir, tr("Samowar playlist files (*.smw)")));
+    QString file;
+    if(language == "EN") file = QFileDialog::getOpenFileName(
+                                     this, tr("Open samowar playlist"), plsDir, tr("Samowar playlist files (*.smw)"));
+    else file = QFileDialog::getOpenFileName(
+                     this, tr("Открыть список воспроизведения"), plsDir, tr("Списки файлов (*.smw)"));
+        QFile f(file);
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
-    on_actionClear_playlist_triggered();
-    QFileInfo fi(f);
-    QTextStream in(&f);
-    QString line, tmp;
+        on_actionClear_playlist_triggered();
+        QFileInfo fi(f);
+        QTextStream in(&f);
+        QString line, tmp;
 //if(ui->A->tabText(0) == "♫") {
-    while (!in.atEnd()) {
-        line = in.readAll();
-        for(int i = 0; i < line.count();i++) {
-            if(line.at(i) == '\n') {
-                files.append(tmp);
-                new_content.push_back(QUrl::fromLocalFile(files.last()));
-                QFileInfo fi(files.last());
-                ui->listWidget->addItem(fi.fileName());
-                ui->listDebug->addItem(tmp);
-                tmp = "";
+        while (!in.atEnd()) {
+            line = in.readAll();
+            for(int i = 0; i < line.count();i++) {
+                if(line.at(i) == '\n') {
+                    files.append(tmp);
+                    new_content.push_back(QUrl::fromLocalFile(files.last()));
+                    QFileInfo fi(files.last());
+                    ui->listWidget->addItem(fi.fileName());
+                    ui->listDebug->addItem(tmp);
+                    tmp = "";
+                }
+                else tmp.append(line.at(i));
             }
-            else tmp.append(line.at(i));
         }
-    }
-    f.close();
-playlist->addMedia(new_content);
-ui->A->setTabText(currentTab, fi.fileName());
-ui->A->setCurrentIndex(currentTab);
+        f.close();
+        playlist->addMedia(new_content);
+        ui->A->setTabText(currentTab, fi.fileName());
+        ui->A->setCurrentIndex(currentTab);
     }
 //    }
 //    else {
@@ -697,224 +715,105 @@ void MainWindow::watchCurrentTab() {
 }
 
 void MainWindow::saveConfiguration() {
-    QString filename;
-    //-- volume
-    filename = confDir+"/volume.conf";
-    QFile fVol( filename );
-    fVol.open( QIODevice::WriteOnly );
-    QTextStream outstream1(&fVol);
-    outstream1 << plr->volume();
-    fVol.close();
-    //--
-    //-- playlist
-    filename = confDir+"/playlist.conf";
-    QFile fPls( filename );
-    fPls.open( QIODevice::WriteOnly );
-        QTextStream outstream2(&fPls);
-    for(int i = 0; i < files.count(); i++)
-    outstream2 << files[i] << '\n';
-    fPls.close();
-    //--
-    //-- nextTrack
-    filename = confDir+"/nexttrack.conf";
-    QFile fNext( filename );
-    fNext.open( QIODevice::WriteOnly );
-        QTextStream outstream3(&fNext);
-    outstream3 << nextTrack;
-    fNext.close();
-    //--
-    //-- currentTabText
-    filename = confDir+"/currenttabtext.conf";
-    QFile fTabText( filename );
-    fTabText.open( QIODevice::WriteOnly );
-        QTextStream outstream4(&fTabText);
-    outstream4 << ui->A->tabText(currentTab);
-    fTabText.close();
-    //--
-    //-- plr->position()
-    filename = confDir+"/position.conf";
-    QFile fPos( filename );
-    fPos.open( QIODevice::WriteOnly );
-        QTextStream outstream5(&fPos);
-    outstream5 << plr->position();
-    fPos.close();
-    //--
-    //-- plr->state()
-    filename = confDir+"/state.conf";
-    QFile fState( filename );
-    fState.open( QIODevice::WriteOnly );
-        QTextStream outstream6(&fState);
-    outstream6 << plr->state();
-    fState.close();
-    //--
-    //-- flags()
-    filename = confDir+"/flags.conf";
-    QFile fFlags( filename );
-    fFlags.open( QIODevice::WriteOnly );
-        QTextStream outstream7(&fFlags);
-    outstream7 << repeat;
-    outstream7 << single;
-    outstream7 << randome;
-    fFlags.close();
-    //--
-    //-- mute
-    filename = confDir+"/mute.conf";
-    QFile fMute( filename );
-    fMute.open( QIODevice::WriteOnly );
-        QTextStream outstream8(&fMute);
-    outstream8 << plr->isMuted();
-    fMute.close();
-    //--
-    //-- continue
-    filename = confDir+"/continue_playing.conf";
-    QFile fCont( filename );
-    fCont.open( QIODevice::WriteOnly );
-        QTextStream outstream9(&fCont);
-    outstream9 << ui->actionAuto_pause_when_closed->isChecked();
-    fCont.close();
-    //--
+    saveToFile(language, confDir+"/lang.conf");
+    saveToFile(plr->volume(), confDir+"/volume.conf");
+    saveToFile(files, confDir+"/playlist.conf");
+    saveToFile(nextTrack, confDir+"/nexttrack.conf");
+    saveToFile(ui->A->tabText(currentTab), confDir+"/currenttabtext.conf");
+    saveToFile(plr->position(), confDir+"/position.conf");
+    saveToFile(plr->state(), confDir+"/state.conf");
+    saveToFile(plr->isMuted(), confDir+"/mute.conf");
+    saveToFile(ui->actionAuto_pause_when_closed->isChecked(), confDir+"/continue_playing.conf");
+    QString filename = confDir+"/flags.conf";
+    QFile f(filename);
+    f.open( QIODevice::WriteOnly );
+    QTextStream outstream(&f);
+    outstream << repeat;
+    outstream << single;
+    outstream << randome;
+    f.close();
 }
 
 void MainWindow::loadConfiguration() {
     QString line;
-    //-- playlist
     QFile fPls(confDir+"/playlist.conf");
     if (!fPls.open(QIODevice::ReadOnly | QIODevice::Text))
         ui->listDebug->addItem("fail");
     else {
-    QTextStream in1(&fPls);
-    QString line, tmp;
-    ui->listDebug->addItem("go");
-    while (!in1.atEnd()) {
-        line = in1.readAll();
-        for(int i = 0; i < line.count();i++) {
-            if(line.at(i) == '\n') {
-                files.append(tmp);
-                content.push_back(QUrl::fromLocalFile(files.last()));
-                QFileInfo fi(files.last());
-                ui->listWidget->addItem(fi.fileName());
-                ui->listDebug->addItem(tmp);
-                tmp = "";
+        QTextStream in1(&fPls);
+        QString line, tmp;
+        ui->listDebug->addItem("go");
+        while (!in1.atEnd()) {
+            line = in1.readAll();
+            for(int i = 0; i < line.count();i++) {
+                if(line.at(i) == '\n') {
+                    files.append(tmp);
+                    content.push_back(QUrl::fromLocalFile(files.last()));
+                    QFileInfo fi(files.last());
+                    ui->listWidget->addItem(fi.fileName());
+                    ui->listDebug->addItem(tmp);
+                    tmp = "";
+                }
+                else tmp.append(line.at(i));
             }
-            else tmp.append(line.at(i));
         }
+        ui->listDebug->addItem("end");
+        playlist->addMedia(content);
+        fPls.close();
     }
-    ui->listDebug->addItem("end");
-    playlist->addMedia(content);
-    fPls.close();
+    if(readFromFile(confDir+"/lang.conf") != "err")
+        language = readFromFile(confDir+"/lang.conf");
+    if(readFromFile(confDir+"/volume.conf") != "err") {
+        line = readFromFile(confDir+"/volume.conf");
+        ui->dialVolume->setValue(line.toInt());
     }
-    //--
-    //-- volume
-    QFile fVol(confDir+"/volume.conf");
-    if (!fVol.open(QIODevice::ReadOnly | QIODevice::Text))
-        ui->listDebug->addItem("fail");
-    else {
-    QTextStream in2(&fVol);
-    line = in2.readAll();
-    ui->dialVolume->setValue(line.toInt());
-    fVol.close();
+    if(readFromFile(confDir+"/nexttrack.conf") != "err") {
+        line = readFromFile(confDir+"/nexttrack.conf");
+        nextTrack = line.toInt();
+        nowSelected = nextTrack;
+        if(playlist->mediaCount() != 0) playlist->setCurrentIndex(nextTrack);
     }
-    //--
-    //-- nextTrack
-    QFile fNext(confDir+"/nexttrack.conf");
-    if (!fNext.open(QIODevice::ReadOnly | QIODevice::Text))
-    ui->listDebug->addItem("fail");
-    else {
-    QTextStream in3(&fNext);
-    line = in3.readAll();
-    nextTrack = line.toInt();
-    nowSelected = nextTrack;
-    //ui->listWidget->setCurrentRow(nowSelected);
-    if(playlist->mediaCount() != 0) playlist->setCurrentIndex(nextTrack);
-    fVol.close();
-    }
-    //--
-    //-- plr->position()
-    QFile fPos(confDir+"/position.conf");
-    if (!fPos.open(QIODevice::ReadOnly | QIODevice::Text))
-        ui->listDebug->addItem("fail");
-    else {
-    QTextStream in4(&fPos);
-    line = in4.readAll();
-    if(line.toInt()!=0) {
+    if(readFromFile(confDir+"/position.conf") != "err") {
+        line = readFromFile(confDir+"/position.conf");
         plr->setPosition(line.toInt());
     }
-    fPos.close();
+    if(readFromFile(confDir+"/continue_playing.conf") != "err") {
+        line = readFromFile(confDir+"/continue_playing.conf");
+        ui->actionAuto_pause_when_closed->setChecked(line.toInt());
     }
-    //--
-    //-- continue
-    QFile fCont(confDir+"/continue_playing.conf");
-    if (!fCont.open(QIODevice::ReadOnly | QIODevice::Text))
-        ui->listDebug->addItem("fail");
-    else {
-    QTextStream in9(&fCont);
-    line = in9.readAll();
-    ui->actionAuto_pause_when_closed->setChecked(line.toInt());
-    fCont.close();
-    }
-    //--
-    //-- plr->state()
-    QFile fState(confDir+"/state.conf");
-    if (!fState.open(QIODevice::ReadOnly | QIODevice::Text))
-        ui->listDebug->addItem("fail");
-    else {
-    QTextStream in5(&fState);
-    line = in5.readAll();
-    if(line.toInt() == 1) {
-        if(ui->actionAuto_pause_when_closed->isChecked()) {
-            plr->pauseMusic();
+    if(readFromFile(confDir+"/state.conf") != "err") {
+        line = readFromFile(confDir+"/state.conf");
+        if(line.toInt() == 1) {
+            if(ui->actionAuto_pause_when_closed->isChecked()) plr->pauseMusic();
+            else plr->playMusic();
         }
-    else plr->playMusic();
+        if(line.toInt() == 2) plr->pauseMusic();
     }
-    if(line.toInt() == 2) plr->pauseMusic();
-    fState.close();
+    if(readFromFile(confDir+"/currenttabtext.conf") != "err") {
+        ui->A->setTabText(currentTab, readFromFile(confDir+"/currenttabtext.conf"));
     }
-    //--
-    //-- Tab text
-    QFile fTabText(confDir+"/currenttabtext.conf");
-    if (!fTabText.open(QIODevice::ReadOnly | QIODevice::Text))
-        ui->listDebug->addItem("fail");
-    else {
-    QTextStream in6(&fTabText);
-    line = in6.readAll();
-    ui->A->setTabText(currentTab, line);
-    fTabText.close();
+    if(readFromFile(confDir+"/flags.conf") != "err") {
+        line = readFromFile(confDir+"/flags.conf");
+        if(line == "100") ui->checkBox_repeat->setChecked(true);
+        if(line == "010") ui->checkBox_single->setChecked(true);
+        if(line == "001") ui->checkBox_random->setChecked(true);
     }
-    //--
-    //-- Flags
-    QFile fFlags(confDir+"/flags.conf");
-    if (!fFlags.open(QIODevice::ReadOnly | QIODevice::Text))
-        ui->listDebug->addItem("fail");
-    else {
-    QTextStream in7(&fFlags);
-    line = in7.readAll();
-    if(line == "100") ui->checkBox_repeat->setChecked(true);
-    if(line == "010") ui->checkBox_single->setChecked(true);
-    if(line == "001") ui->checkBox_random->setChecked(true);
-    fFlags.close();
-    }
-    //--
-    //-- mute
-    QFile fMute(confDir+"/mute.conf");
-    if (!fMute.open(QIODevice::ReadOnly | QIODevice::Text))
-        ui->listDebug->addItem("fail");
-    else {
-    QTextStream in8(&fMute);
-    line = in8.readAll();
-    if(line.toInt() > 0) ui->radio_mute->setChecked(true);
-    fMute.close();
-    }
-    //--
+    if(readFromFile(confDir+"/mute.conf") != "err") {
+        line = readFromFile(confDir+"/mute.conf");
+        if(line.toInt() > 0) ui->radio_mute->setChecked(true);
+        }
+    if(language == "RU") on_action_triggered();
+    else on_actionEnglish_triggered();
 }
 
 void MainWindow::recursiveAddFolder(QStringList *out, QString path) {
     QFileInfo finfo(path);
     if (finfo.isDir()) {
-            QDir dirs(path);
-            QList<QString> entrys = dirs.entryList(QDir::AllEntries|QDir::NoDotAndDotDot);
-            while(!entrys.isEmpty()) {
-                recursiveAddFolder(out, path+"/"+entrys.takeFirst());
-            }
+        QDir dirs(path);
+        QList<QString> entrys = dirs.entryList(QDir::AllEntries|QDir::NoDotAndDotDot);
+        while(!entrys.isEmpty()) {
+            recursiveAddFolder(out, path+"/"+entrys.takeFirst());
+        }
     }
     else {
             QString suf = finfo.suffix();
@@ -922,4 +821,117 @@ void MainWindow::recursiveAddFolder(QStringList *out, QString path) {
                 out->append(path);
             }
     }
+}
+
+void MainWindow::saveToFile(int var, QString name) {
+    QString filename;
+    filename = confDir+"/"+name;
+    QFile f( filename );
+    f.open( QIODevice::WriteOnly );
+    QTextStream outstream(&f);
+    outstream << var;
+    f.close();
+}
+
+void MainWindow::saveToFile(QStringList var, QString name) {
+    QString filename;
+    filename = confDir+"/"+name;
+    QFile f( filename );
+    f.open( QIODevice::WriteOnly );
+    QTextStream outstream(&f);
+    for(int i = 0; i < var.count(); i++)
+    outstream << var[i] << '\n';
+    f.close();
+}
+
+void MainWindow::saveToFile(QString var, QString filename) {
+    QFile f( filename );
+    f.open( QIODevice::WriteOnly );
+    QTextStream outstream(&f);
+    outstream << var;
+    f.close();
+}
+
+QString MainWindow::readFromFile(QString filename) {
+    QFile f(filename);
+    QString line;
+    if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
+        return "err";
+    else {
+        QTextStream in(&f);
+        line = in.readAll();
+        f.close();
+    }
+    return line;
+}
+
+void MainWindow::on_action_triggered()
+{
+    language = "RU";
+    ui->labelDuration->setText("Длительность");
+    ui->labelGreeting->setText("ДОБРО ПОЖАЛОВАТЬ ВЪ САМОВАР, ТОВАРИЩ");
+    ui->labelGreeting->setToolTip("Слушайте музыку с наслаждением");
+    ui->labelVolume->setText("Громкость");
+    ui->radio_mute->setText("Без звука");
+    ui->checkBox_random->setText("Случайная");
+    ui->checkBox_random->setToolTip("Случайный выбор песни");
+    ui->checkBox_repeat->setText("Повтор");
+    ui->checkBox_repeat->setToolTip("Повтор всего списка");
+    ui->checkBox_single->setText("Одиночная");
+    ui->checkBox_single->setToolTip("Повтор одной песни");
+    ui->deleteCurrentTrack->setText(" Удалить песню");
+    ui->deleteCurrentTrack->setToolTip("Убрать выбранную дорожку из списка");
+    ui->button_stop->setToolTip("Остановить (F10)");
+    ui->button_play_prev->setToolTip("Предыдущая песня (F11)");
+    ui->button_play_next->setToolTip("Следующая песня (F12)");
+    ui->menuDonate->setTitle("Настройки");
+    ui->menuOptions->setTitle("Список");
+    ui->groupBox->setTitle("Управление");
+    ui->actionAdd_directory_s->setText("Добавить папку");
+    ui->action_add_files->setText("Добавить файл(ы)");
+    ui->actionSave_playlist->setText("Сохранить список");
+    ui->actionOpen_playlist->setText("Открыть список");
+    ui->actionClear_playlist->setText("Очистить список");
+    ui->actionRemove_duplicates->setText("Удалить повторы");
+    ui->actionExit->setText("Выйти");
+    ui->actionAdd_directory_s->setText("Добавить папку");
+    ui->action_200->setText("Помочь материально");
+    ui->actionToggle_debug_output->setText("Показать/скрыть окно отладки");
+    ui->menuLanguage->setTitle("Язык");
+    ui->actionAuto_pause_when_closed->setText("Остановить при выходе");
+}
+
+void MainWindow::on_actionEnglish_triggered()
+{
+    language = "EN";
+    ui->labelDuration->setText("Duration be here");
+    ui->labelGreeting->setText("Welcome to Samowar Music Player(beta)");
+    ui->labelGreeting->setToolTip("Listen to music with flavour");
+    ui->labelVolume->setText("Volume");
+    ui->radio_mute->setText("Mute");
+    ui->checkBox_random->setText("Random");
+    ui->checkBox_random->setToolTip("Toggle random playback");
+    ui->checkBox_repeat->setText("Repeat");
+    ui->checkBox_repeat->setToolTip("Toggle playlist repeat");
+    ui->checkBox_single->setText("Single");
+    ui->checkBox_single->setToolTip("Toggle repeat single song");
+    ui->deleteCurrentTrack->setText(" Delete current");
+    ui->deleteCurrentTrack->setToolTip("Remove selected track from playlist");
+    ui->button_stop->setToolTip("Stop playing (F10)");
+    ui->button_play_prev->setToolTip("Previous track (F11)");
+    ui->button_play_next->setToolTip("Next track (F12)");
+    ui->menuDonate->setTitle("Options");
+    ui->menuOptions->setTitle("Playlist");
+    ui->groupBox->setTitle("Controls");
+    ui->actionAdd_directory_s->setText("Add folder");
+    ui->action_add_files->setText("Add file(s)");
+    ui->actionSave_playlist->setText("Save playlist");
+    ui->actionOpen_playlist->setText("Open playlist");
+    ui->actionClear_playlist->setText("Clear playlist");
+    ui->actionRemove_duplicates->setText("Remove duplicates");
+    ui->actionExit->setText("Quit");
+    ui->action_200->setText("Contribute");
+    ui->actionToggle_debug_output->setText("Show/hide debug output");
+    ui->menuLanguage->setTitle("Language");
+    ui->actionAuto_pause_when_closed->setText("Auto pause when close");
 }

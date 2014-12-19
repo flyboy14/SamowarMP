@@ -106,12 +106,23 @@ public slots:
 
     void watchCurrentTab();
 
+    void saveToFile(int var, QString name);
+
+    void saveToFile(QStringList var, QString name);
+
+    void saveToFile(QString var, QString filename);
+
+    QString readFromFile(QString filename);
+
 protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
     QList<QMediaContent> content;
     QIcon *iconCredits, *iconInfo, *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
     QStringList files;
+private slots:
+    void on_action_triggered();
+    void on_actionEnglish_triggered();
 };
 
 #endif // MAINWINDOW_H
