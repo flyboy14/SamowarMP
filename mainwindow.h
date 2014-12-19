@@ -6,6 +6,8 @@
 #include <QMediaPlaylist>
 #include <QMediaPlayer>
 #include <QDir>
+#include <iostream>
+using namespace std;
 
 namespace Ui {
     class MainWindow;

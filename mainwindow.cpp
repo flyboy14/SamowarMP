@@ -10,12 +10,17 @@
 #include <fstream>
 #include "samoplayer.h"
 using namespace std;
-QString dir = "", iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
-plsDir = QDir::homePath()+"/.config/samowar/playlists", language, versionRu;
+QString dir = "", language, versionRu;
 samoplayer *plr= new samoplayer;
 int nextTrack = 0, nowSelected = 0, currentTab = 0, def_width, def_height;
 bool debug=false, repeat=false, randome=false, single=false, was_paused, playstate = false;
-
+//#ifdef OS_UNIX
+QString iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
+plsDir = QDir::homePath()+"/.config/samowar/playlists";
+//#else
+//QString iconsDir = QApplication::applicationDirPath()+"/.icons", confDir = QApplication::applicationDirPath()+"/.config",
+//plsDir = QApplication::applicationDirPath()+"/playlists";
+//#endif
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)

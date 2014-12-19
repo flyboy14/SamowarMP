@@ -5,7 +5,8 @@ pkgdesc="Extremely lightweight music player, written in Qt5 (icons from buuf Deu
 arch=('any')
 url="https://github.com/flyboy14/SamowarMP"
 license=('GPL')
-makedepends=('git' 'qt5-multimedia' 'sudo' 'ttf-paratype')
+makedepends=('git')
+depends=('qt5-multimedia' 'ttf-paratype')
 source=("$pkgname"::'git://github.com/flyboy14/SamowarMP#branch=buggy')
 md5sums=( 'SKIP' )
 
@@ -25,14 +26,5 @@ build() {
 package() {
   cd $srcdir/$pkgname
   install -Dm755 ./kurs $pkgdir/usr/bin/samowar
-if [ ! -d ~/.config ]; then
-  mkdir -p ~/.config
-fi
-if [ ! -d ~/.config/samowar ]; then
-  mkdir -p ~/.config/samowar
-fi
-if [ ! -d /usr/share/samowar ]; then
-  sudo mkdir -p /usr/share/samowar 
-fi
-        sudo cp -av ./icons /usr/share/samowar/
+  cp -av ./icons $pkgdir/usr/share/samowar/
 }
