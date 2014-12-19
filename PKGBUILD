@@ -24,9 +24,11 @@ build() {
 }
 
 package() {
-  cd $srcdir/$pkgname
-  install -Dm755 ./kurs $pkgdir/usr/bin/samowar
-  mkdir -p $pkgdir/usr/share/samowar
-  cp -av ./icons $pkgdir/usr/share/samowar/
-  chmod -R 666 $pkgdir/usr/share/samowar/
+        cd $srcdir/$pkgname
+        install -Dm755 ./kurs $pkgdir/usr/bin/samowar
+        mkdir -p $pkgdir/usr/share/samowar
+        cp -av ./icons $pkgdir/usr/share/samowar/
+        chmod -R 0644 $pkgdir/usr/share/samowar/
+	
 }
+
