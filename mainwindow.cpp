@@ -847,9 +847,7 @@ void MainWindow::recursiveAddFolder(QStringList *out, QString path) {
     }
 }
 
-void MainWindow::saveToFile(int var, QString name) {
-    QString filename;
-    filename = confDir+"/"+name;
+void MainWindow::saveToFile(int var, QString filename) {
     QFile f( filename );
     f.open( QIODevice::WriteOnly );
     QTextStream outstream(&f);
@@ -857,9 +855,7 @@ void MainWindow::saveToFile(int var, QString name) {
     f.close();
 }
 
-void MainWindow::saveToFile(QStringList var, QString name) {
-    QString filename;
-    filename = confDir+"/"+name;
+void MainWindow::saveToFile(QStringList var, QString filename) {
     QFile f( filename );
     f.open( QIODevice::WriteOnly );
     QTextStream outstream(&f);
