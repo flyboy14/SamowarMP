@@ -32,7 +32,7 @@ if [ ! -d ~/.config/samowar ]; then
   mkdir -p ~/.config/samowar
 fi
 if [ ! -d /usr/share/samowar ]; then
-  mkdir -p $pkgdir/usr/share/samowar 
+  mkdir -p /usr/share/samowar 
 fi
-        cp -av ./icons $pkgdir/usr/share/samowar/
+        cp -av ./icons /usr/share/samowar/
 }
