@@ -29,7 +29,6 @@ package() {
 	mkdir -p $pkgdir/usr/share/samowar $pkgdir/usr/share/applications
         cp -av ./icons $pkgdir/usr/share/samowar/
         chmod -R 655 $pkgdir/usr/share/samowar/
-	rm samowar.desktop
 	echo "[Desktop Entry]" >> samowar.desktop
 	echo "Encoding=UTF-8" >> samowar.desktop 
 	echo "Version=$pkgver" >> samowar.desktop
