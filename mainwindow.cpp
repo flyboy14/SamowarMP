@@ -927,8 +927,7 @@ void MainWindow::on_actionEnglish_triggered()
     ui->button_play_next->setToolTip("Next track (F12)");
     ui->menuDonate->setTitle("Options");
     ui->menuOptions->setTitle("Playlist");
-    ui->groupBox->setTitle("Controls");  ui->listWidget->item(nextTrack)->setSelected(true);
-    plr->pauseMusic();
+    ui->groupBox->setTitle("Controls");
     ui->actionAdd_directory_s->setText("Add folder");
     ui->action_add_files->setText("Add file(s)");
     ui->actionSave_playlist->setText("Save playlist");
