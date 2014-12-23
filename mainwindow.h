@@ -104,6 +104,8 @@ private slots:
 
     void saveToFile(QString var, QString filename);
 
+    void saveToFile(QRect var, QString filename);
+
     QString readFromFile(QString filename);
 
     void on_action_triggered();

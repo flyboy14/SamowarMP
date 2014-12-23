@@ -27,10 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->setFixedSize(this->size().width(), this->size().height());
-    this->setGeometry(230,150,0,0);
-    def_width = this->size().width();
-    def_height = this->size().height();
     dir = QDir::homePath();
     //iconInfo = new QIcon(iconsDir+"/info.png");
     QApplication::setApplicationName("Samowar Music Player");
@@ -656,6 +652,7 @@ void MainWindow::watchPlaylistChanges() {
 }
 
 void MainWindow::saveConfiguration() {
+    saveToFile(window()->geometry(), confDir+"/geometry.conf");
     saveToFile(language, confDir+"/lang.conf");
     saveToFile(plr->volume(), confDir+"/volume.conf");
     saveToFile(files, confDir+"/playlist.conf");
@@ -677,6 +674,25 @@ void MainWindow::saveConfiguration() {
 
 void MainWindow::loadConfiguration() {
     QString line;
+    QFile fGeo(confDir+"/geometry.conf");
+    if (!fGeo.open(QIODevice::ReadOnly | QIODevice::Text))
+        cout << "fail";
+    else {
+        QTextStream in2(&fGeo);
+        QString line, tmp;
+        QList<int> li;
+        while (!in2.atEnd()) {
+            line = in2.readAll();
+            for(int i = 0;i < line.count();i++) {
+                if(line.at(i) == '\n') {
+                    li.append(tmp.toInt());
+                    tmp = "";
+                }
+                else tmp.append(line.at(i));
+            }
+    }
+        window()->setGeometry(li[2],li[3],li[1],li[0]);
+    }
     QFile fPls(confDir+"/playlist.conf");
     if (!fPls.open(QIODevice::ReadOnly | QIODevice::Text))
         cout << "fail";
@@ -783,6 +799,14 @@ void MainWindow::saveToFile(QString var, QString filename) {
     f.open( QIODevice::WriteOnly );
     QTextStream outstream(&f);
     outstream << var;
+    f.close();
+}
+
+void MainWindow::saveToFile(QRect var, QString filename) {
+    QFile f( filename );
+    f.open( QIODevice::WriteOnly );
+    QTextStream outstream(&f);
+    outstream << var.height() << '\n' << var.width() << '\n' << var.x() << '\n' << var.y() << '\n';
     f.close();
 }
 
