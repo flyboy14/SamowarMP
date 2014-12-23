@@ -202,7 +202,7 @@ void MainWindow::on_button_play_prev_clicked()
             ui->currentTrack_progressBar->setValue(1);
             playlist->previous();
             if(nextTrack == playlist->mediaCount()-1) nextTrack--;
-            ui->listWidget->item(playlist->currentIndex())->setSelected(true);
+            ui->listWidget->setCurrentRow(playlist->currentIndex());
             char *buffer = new char[3];
             char *buffer1 = new char[3];
             sprintf(buffer,"%d",nextTrack);
@@ -362,8 +362,10 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 
 void MainWindow::atTrackEnd() {
     if(files.count() != 0) {
-    if(playlist->playbackMode() == QMediaPlaylist::Sequential && nextTrack != files.count()-1)
+    if(nextTrack != files.count()-1) {
         nextTrack = playlist->currentIndex();
+        ui->listWidget->setCurrentRow(nextTrack);
+    }
     ui->currentTrack_progressBar->setValue(1);
     }
     if(debug) {
