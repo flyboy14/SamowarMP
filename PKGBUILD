@@ -29,14 +29,15 @@ package() {
 	mkdir -p $pkgdir/usr/share/samowar $pkgdir/usr/share/applications
         cp -av ./icons $pkgdir/usr/share/samowar/
         chmod -R 655 $pkgdir/usr/share/samowar/
+	rm samowar.desktop
 	echo "[Desktop Entry]" >> samowar.desktop
-echo "Encoding=UTF-8" >> samowar.desktop 
-echo "Version=$pkgver" >> samowar.desktop
-echo "Type=Application" >> samowar.desktop
-echo "Terminal=false" >> samowar.desktop
-echo "Exec=/usr/bin/samowar" >> samowar.desktop
-echo "Name=samowar" >> samowar.desktop
-echo "Icon=/usr/share/samowar/icons/strange-creature.png" >> samowar.desktop
+	echo "Encoding=UTF-8" >> samowar.desktop 
+	echo "Version=$pkgver" >> samowar.desktop
+	echo "Type=Application" >> samowar.desktop
+	echo "Terminal=false" >> samowar.desktop
+	echo "Exec=/usr/bin/samowar" >> samowar.desktop
+	echo "Name=samowar" >> samowar.desktop
+	echo "Icon=/usr/share/samowar/icons/strange-creature.png" >> samowar.desktop
 	cp -v ./samowar.desktop $pkgdir/usr/share/applications/
 	chmod 655 $pkgdir/usr/share/applications/samowar.desktop
 }
