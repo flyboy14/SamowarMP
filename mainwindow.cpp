@@ -427,6 +427,9 @@ void MainWindow::on_button_play_released()
 void MainWindow::on_dialVolume_valueChanged(int value)
 {
     plr -> setVolume(value);
+    char *buffer = new char[3];
+    sprintf(buffer,"%d",value);
+    ui->labelVolumeDef -> setText(buffer);
 }
 
 void MainWindow::on_dialVolume_sliderPressed()

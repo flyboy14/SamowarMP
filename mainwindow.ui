@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>817</width>
-    <height>452</height>
+    <height>444</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -24,44 +24,6 @@
     <normaloff>media-information.png</normaloff>media-information.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QListWidget" name="listDebug">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>450</y>
-      <width>801</width>
-      <height>141</height>
-     </rect>
-    </property>
-    <property name="autoScrollMargin">
-     <number>1</number>
-    </property>
-    <property name="verticalScrollMode">
-     <enum>QAbstractItemView::ScrollPerItem</enum>
-    </property>
-    <property name="isWrapping" stdset="0">
-     <bool>false</bool>
-    </property>
-    <property name="resizeMode">
-     <enum>QListView::Fixed</enum>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="buttonDebugClear">
-    <property name="geometry">
-     <rect>
-      <x>727</x>
-      <y>428</y>
-      <width>80</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Clear</string>
-    </property>
-   </widget>
    <widget class="QProgressBar" name="currentTrack_progressBar">
     <property name="geometry">
      <rect>
@@ -780,8 +742,6 @@
    <zorder>layoutWidget</zorder>
    <zorder>widget</zorder>
    <zorder>A</zorder>
-   <zorder>listDebug</zorder>
-   <zorder>buttonDebugClear</zorder>
    <zorder>labelGreeting</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
