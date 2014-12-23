@@ -37,6 +37,7 @@ package() {
 	echo "Exec=/usr/bin/samowar" >> samowar.desktop
 	echo "Name=samowar" >> samowar.desktop
 	echo "Icon=/usr/share/samowar/icons/samowar.png" >> samowar.desktop
+	echo "Categories=AudioVideo;Player;Qt;" >> samowar.desktop
 	cp -v ./samowar.desktop $pkgdir/usr/share/applications/
 	chmod 655 $pkgdir/usr/share/applications/samowar.desktop
 }
