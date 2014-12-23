@@ -13,7 +13,7 @@ using namespace std;
 QString dir = "", language, versionRu;
 samoplayer *plr= new samoplayer;
 int nextTrack = 0, nowSelected = 0, currentTab = 0, def_width, def_height;
-bool debug=false, repeat=false, randome=false, single=false, was_paused, playstate = false;
+bool repeat=false, randome=false, single=false, was_paused, playstate = false;
 #ifdef Q_OS_LINUX
 QString iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
 plsDir = QDir::homePath()+"/.config/samowar/playlists";
@@ -50,8 +50,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionRemove_duplicates->setIcon(*iconRemoveDuplicates);
     iconExit = new QIcon(iconsDir+"/submenu-exit.png");
     ui->actionExit->setIcon(*iconExit);
-    iconDebugOutput = new QIcon(iconsDir+"/submenu-debug-output.png");
-    ui->actionToggle_debug_output->setIcon(*iconDebugOutput);
     icon200 = new QIcon(iconsDir+"/submenu-200.png");
     ui->action_200->setIcon(*icon200);
     iconAddTrack = new QIcon(iconsDir+"/submenu-add-track.png");
@@ -75,8 +73,6 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->actionClear_playlist->setIcon(*iconClearPls);
     iconDeleteCurrent = iconClearPls;
     ui->deleteCurrentTrack->setIcon(*iconDeleteCurrent);
-    ui->listDebug->setVisible(false);
-    ui->buttonDebugClear->setVisible(false);
     window()->setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
     playlist = new QMediaPlaylist(plr);
     plr->setPlaylist(playlist);
@@ -203,13 +199,6 @@ void MainWindow::on_button_play_prev_clicked()
             playlist->previous();
             if(nextTrack == playlist->mediaCount()-1) nextTrack--;
             ui->listWidget->setCurrentRow(playlist->currentIndex());
-            char *buffer = new char[3];
-            char *buffer1 = new char[3];
-            sprintf(buffer,"%d",nextTrack);
-            sprintf(buffer1,"%d",playlist->currentIndex());
-            const QString& str("play_prev_clicked. nextTrack is now ");
-            const QString& str1(", curent index is now ");
-            ui->listDebug->addItem(str+buffer+str1+buffer1);
         }
     }
     else if(playlist->mediaCount()!=0) {
@@ -226,13 +215,6 @@ void MainWindow::on_button_play_next_clicked()
             ui->currentTrack_progressBar->setValue(1);
             playlist->next();
             ui->listWidget->item(playlist->currentIndex())->setSelected(true);
-            char *buffer = new char[4];
-            char *buffer1 = new char[4];
-            sprintf(buffer,"%d",nextTrack);
-            sprintf(buffer1,"%d",playlist->currentIndex());
-            const QString& str("play_next_clicked. nextTrack is now ");
-            const QString& str1(", current index is now ");
-             ui->listDebug->addItem(str+buffer+str1+buffer1);
         }
         else {
             ui->currentTrack_progressBar->setValue(1);
@@ -309,33 +291,15 @@ void MainWindow::watchPlaying() {
 }
 
 void MainWindow::watchNextTrack() {
-//    if(debug) {
-//        char *buffer = new char[3];
-//        sprintf(buffer,"%d",nextTrack);
-//        const QString& str("watchNextTrack called. nextTrack was ");
-//        ui->listDebug->addItem(str+buffer);
-//    }
     for(int row=0; row != playlist->mediaCount(); row++)
         if(ui->listWidget->item(row)->isSelected()) ui->listWidget->item(row)->setSelected(false);
         if(nowSelected < nextTrack) ui->listWidget->setCurrentRow(nowSelected);
         else ui->listWidget->setCurrentRow(nextTrack);
-        if(debug) {
-            char *buffer = new char[3];
-            sprintf(buffer,"%d",nextTrack);
-            const QString& str("And now nexttrack is ");
-            ui->listDebug->addItem(str+buffer);
-        }
 }
 
 void MainWindow::watchSelectedTrack() {
     //nextTrack = ui -> listWidget->currentRow();
     nowSelected = ui -> listWidget->currentRow();
-    if(debug) {
-        char *buffer = new char[3];
-        sprintf(buffer,"%d",nowSelected);
-        const QString& str1("watchSelectedTrack called. nowSelected is ");
-        ui->listDebug->addItem(str1+buffer);
-    }
 }
 
 void MainWindow::setSliderPosition(){
@@ -368,21 +332,9 @@ void MainWindow::atTrackEnd() {
     }
     ui->currentTrack_progressBar->setValue(1);
     }
-    if(debug) {
-        char *buffer = new char[3];
-        sprintf(buffer,"%d",nextTrack);
-        const QString& str("atTrackEnd called. nexttrack is now ");
-        ui->listDebug->addItem(str+buffer);
-    }
 }
 
 void MainWindow::watchStatus() {
-//    if(debug) {
-//        char *buffer = new char[100];
-//        sprintf(buffer,"%d",nextTrack);
-//        const QString& str("watchStatus called. nextTrack is now ");
-//        ui->listDebug->addItem(str+buffer);
-//    }
     if(plr->state() == 0) {
         ui->button_play->setIcon(*iconPlay);
         ui->currentTrack_progressBar->setValue(1);
@@ -472,33 +424,9 @@ void MainWindow::on_button_play_released()
     ui->button_play->setStyleSheet("QPushButton::hover { border-image:url(:/media-information.png);}");
 }
 
-void MainWindow::on_actionToggle_debug_output_triggered()
-{
-    if(debug) {
-        ui->listDebug->setVisible(false);
-        ui->buttonDebugClear->setVisible(false);
-        debug = false;
-        window()->setFixedSize(def_width,def_height);
-    }
-    else {
-        ui->listDebug->setVisible(true);
-        ui->buttonDebugClear->setVisible(true);
-        debug = true;
-        window()->setFixedSize(this->size().width(), this->size().height()+190);
-    }
-}
-
-void MainWindow::on_buttonDebugClear_clicked()
-{
-    ui->listDebug->clear();
-}
-
 void MainWindow::on_dialVolume_valueChanged(int value)
 {
     plr -> setVolume(value);
-    char *buffer = new char[3];
-    sprintf(buffer,"%d",value);
-    ui->labelVolumeDef -> setText(buffer);
 }
 
 void MainWindow::on_dialVolume_sliderPressed()
@@ -684,7 +612,7 @@ void MainWindow::on_actionOpen_playlist_triggered()
                      this, tr("Открыть список воспроизведения"), plsDir, tr("Списки файлов (*.smw)"));
         QFile f(file);
     if (!f.open(QIODevice::ReadOnly | QIODevice::Text))
-        ui->listDebug->addItem("fail");
+        cout << "fail";
     else {
         on_actionClear_playlist_triggered();
         QFileInfo fi(f);
@@ -699,7 +627,6 @@ void MainWindow::on_actionOpen_playlist_triggered()
                     new_content.push_back(QUrl::fromLocalFile(files.last()));
                     QFileInfo fi(files.last());
                     ui->listWidget->addItem(fi.fileName());
-                    ui->listDebug->addItem(tmp);
                     tmp = "";
                 }
                 else tmp.append(line.at(i));
@@ -749,11 +676,10 @@ void MainWindow::loadConfiguration() {
     QString line;
     QFile fPls(confDir+"/playlist.conf");
     if (!fPls.open(QIODevice::ReadOnly | QIODevice::Text))
-        ui->listDebug->addItem("fail");
+        cout << "fail";
     else {
         QTextStream in1(&fPls);
         QString line, tmp;
-        ui->listDebug->addItem("go");
         while (!in1.atEnd()) {
             line = in1.readAll();
             for(int i = 0; i < line.count();i++) {
@@ -762,13 +688,11 @@ void MainWindow::loadConfiguration() {
                     content.push_back(QUrl::fromLocalFile(files.last()));
                     QFileInfo fi(files.last());
                     ui->listWidget->addItem(fi.fileName());
-                    ui->listDebug->addItem(tmp);
                     tmp = "";
                 }
                 else tmp.append(line.at(i));
             }
         }
-        ui->listDebug->addItem("end");
         playlist->addMedia(content);
         fPls.close();
     }
@@ -903,7 +827,6 @@ void MainWindow::on_action_triggered()
     ui->actionExit->setText("Выйти");
     ui->actionAdd_directory_s->setText("Добавить папку");
     ui->action_200->setText("Помочь материально");
-    ui->actionToggle_debug_output->setText("Показать/скрыть окно отладки");
     ui->menuLanguage->setTitle("Язык");
     ui->actionAuto_pause_when_closed->setText("Остановить при выходе");
 }
@@ -938,7 +861,6 @@ void MainWindow::on_actionEnglish_triggered()
     ui->actionRemove_duplicates->setText("Remove duplicates");
     ui->actionExit->setText("Quit");
     ui->action_200->setText("Contribute");
-    ui->actionToggle_debug_output->setText("Show/hide debug output");
     ui->menuLanguage->setTitle("Language");
     ui->actionAuto_pause_when_closed->setText("Auto pause when close");
 }

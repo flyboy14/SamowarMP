@@ -84,10 +84,6 @@ private slots:
 
     void on_button_play_released();
 
-    void on_actionToggle_debug_output_triggered();
-
-    void on_buttonDebugClear_clicked();
-
     void on_dialVolume_valueChanged(int value);
 
     void on_dialVolume_sliderPressed();
