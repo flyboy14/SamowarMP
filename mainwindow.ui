@@ -89,7 +89,13 @@
            </spacer>
           </item>
           <item>
-           <widget class="QCommandLinkButton" name="button_play_prev">
+           <widget class="QPushButton" name="button_play_prev">
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>100</width>
@@ -105,12 +111,12 @@
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Previous track (F11)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { border-image: url(/usr/share/samowar/icons/media-previous.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-previous-hover.png);}
+</string>
+            </property>
             <property name="text">
              <string/>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-previous.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-previous.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -124,7 +130,13 @@
            </widget>
           </item>
           <item>
-           <widget class="QCommandLinkButton" name="button_play">
+           <widget class="QPushButton" name="button_play">
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
               <width>100</width>
@@ -194,10 +206,6 @@
             <property name="text">
              <string/>
             </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-play.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-play.png</iconset>
-            </property>
             <property name="iconSize">
              <size>
               <width>64</width>
@@ -216,17 +224,23 @@
            </widget>
           </item>
           <item>
-           <widget class="QCommandLinkButton" name="button_stop">
+           <widget class="QPushButton" name="button_stop">
             <property name="sizePolicy">
              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>100</width>
-              <height>100</height>
+              <width>64</width>
+              <height>64</height>
              </size>
             </property>
             <property name="palette">
@@ -286,12 +300,12 @@
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Stop playing (F10)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { border-image: url(/usr/share/samowar/icons/media-stop.png); } 
+QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-stop-hover.png);}</string>
+            </property>
             <property name="text">
              <string/>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-stop.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-stop.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -305,11 +319,17 @@
            </widget>
           </item>
           <item>
-           <widget class="QCommandLinkButton" name="button_play_next">
+           <widget class="QPushButton" name="button_play_next">
+            <property name="minimumSize">
+             <size>
+              <width>64</width>
+              <height>64</height>
+             </size>
+            </property>
             <property name="maximumSize">
              <size>
-              <width>100</width>
-              <height>100</height>
+              <width>64</width>
+              <height>64</height>
              </size>
             </property>
             <property name="cursor">
@@ -321,12 +341,13 @@
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Next track (F12)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { border-image: url(/usr/share/samowar/icons/media-next.png); } 
+QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.png);}
+</string>
+            </property>
             <property name="text">
              <string/>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-next.png</normaloff>../build-kurs-Desktop_Qt_5_3_MSVC2010_OpenGL_32bit-Debug/debug/media-next.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -621,32 +642,6 @@
             </widget>
            </item>
            <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <spacer name="verticalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QCheckBox" name="checkBox_repeat">
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
@@ -684,6 +679,32 @@
               <string>Single</string>
              </property>
             </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
            </item>
            <item>
             <widget class="QPushButton" name="deleteCurrentTrack">

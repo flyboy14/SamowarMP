@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-//#include <sqlite3.h>
 #include "ui_mainwindow.h"
 #include <QCoreApplication>
 #include <QMessageBox>
@@ -27,49 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    dir = QDir::homePath();
-    //iconInfo = new QIcon(iconsDir+"/info.png");
-    QApplication::setApplicationName("Samowar Music Player");
-    QApplication::setApplicationVersion("v2.3.19b");
-    versionRu = "2.3.19б";
-    iconRu = new QIcon(iconsDir+"/ru.png");
-    ui->action->setIcon(*iconRu);
-    iconEn = new QIcon(iconsDir+"/en.png");
-    ui->actionEnglish->setIcon(*iconEn);
-    iconLanguage = new QIcon(iconsDir+"/flags.png");
-    ui->menuLanguage->setIcon(*iconLanguage);
-    iconSavePlaylist = new QIcon(iconsDir+"/submenu-save-playlist.png");
-    ui->actionSave_playlist->setIcon(*iconSavePlaylist);
-    iconOpenPlaylist = new QIcon(iconsDir+"/submenu-open-playlist.png");
-    ui->actionOpen_playlist->setIcon(*iconOpenPlaylist);
-    iconRemoveDuplicates = new QIcon(iconsDir+"/submenu-remove-duplicates.png");
-    ui->actionRemove_duplicates->setIcon(*iconRemoveDuplicates);
-    iconExit = new QIcon(iconsDir+"/submenu-exit.png");
-    ui->actionExit->setIcon(*iconExit);
-    icon200 = new QIcon(iconsDir+"/submenu-200.png");
-    ui->action_200->setIcon(*icon200);
-    iconAddTrack = new QIcon(iconsDir+"/submenu-add-track.png");
-    ui->action_add_files->setIcon(*iconAddTrack);
-    iconAddFolder = new QIcon(iconsDir+"/submenu-add-folder.png");
-    ui->actionAdd_directory_s->setIcon(*iconAddFolder);
-//    iconMenuPlaylist = new QIcon(QApplication::applicationDirPath()+"/.icons/menu-playlist.png");
-//    ui->menuOptions->setIcon(*iconMenuPlaylist);
-//    iconMenuOptions = new QIcon(QApplication::applicationDirPath()+"/.icons/menu-options.png");
-//    ui->menuDonate->setIcon(*iconMenuOptions);
-    iconPlay = new QIcon(iconsDir+"/media-play.png");
-    ui->button_play->setIcon(*iconPlay);
-    iconPause = new QIcon(iconsDir+"/media-pause.png");
-    iconStop = new QIcon(iconsDir+"/media-stop.png");
-    ui->button_stop->setIcon(*iconStop);
-    iconPlayPrev = new QIcon(iconsDir+"/media-previous.png");
-    ui->button_play_prev->setIcon(*iconPlayPrev);
-    iconPlayNext = new QIcon(iconsDir+"/media-next.png");
-    ui->button_play_next->setIcon(*iconPlayNext);
-        iconClearPls = new QIcon(iconsDir+"/brush-big.png");
-        ui->actionClear_playlist->setIcon(*iconClearPls);
-    iconDeleteCurrent = iconClearPls;
-    ui->deleteCurrentTrack->setIcon(*iconDeleteCurrent);
-    window()->setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
+    setVariables();
     playlist = new QMediaPlaylist(plr);
     plr->setPlaylist(playlist);
     connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this, SLOT(mySliderValueChanged(int)));
@@ -78,16 +35,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(plr,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
     connect(plr,SIGNAL(stateChanged(QMediaPlayer::State)),this,SLOT(watchStatus()));
     connect(ui->listWidget,SIGNAL(currentRowChanged(int)),this,SLOT(watchSelectedTrack()));
-    //connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(watchSelectedTrack()));
     connect(ui->horizontalSlider,SIGNAL(valueChanged(int)),ui->currentTrack_progressBar,SLOT(setValue(int)));
     connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
     connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(changeCurrentTab()));
     connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
     connect(playlist,SIGNAL(mediaRemoved(int,int)),this,SLOT(watchPlaylistChanges()));
     connect(playlist,SIGNAL(mediaInserted(int,int)),this,SLOT(watchPlaylistChanges()));
-            loadConfiguration();
+    loadConfiguration();
     add_files_from_behind();
-    //ui->A->currentWidget()->layout();
 }
 
 MainWindow::~MainWindow()
@@ -106,14 +61,12 @@ void MainWindow::on_button_play_clicked()
         }
                 else {
                     if(plr->state() != 2) playlist->setCurrentIndex(nowSelected); //0 - stopped 1 - playing 2 - paused
-                    else ui->listWidget->setCurrentRow(nextTrack);
-                    //ui->listWidget->item(nextTrack)->setSelected(true);
-                    //ui->currentTrack_progressBar->setValue(1);
+                    else ui->listWidget->setCurrentRow(playlist->currentIndex());
                     plr->playMusic();
                 }
     }
     else {
-            ui->listWidget->item(nextTrack)->setSelected(true);
+            ui->listWidget->setCurrentRow(playlist->currentIndex());
             plr->pauseMusic();
     }
 }
@@ -164,57 +117,52 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_action_add_files_triggered()
 {
-    QList<QMediaContent> new_content;
     int tmp = files.count();
     if(language == "EN") files.append(QFileDialog::getOpenFileNames(
                                           this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)")));
     else files.append(QFileDialog::getOpenFileNames(
                           this, tr("Открыть файл(ы) с музыкой"), dir, tr("Музыкальные файлы (*.ogg *.mp3 *.3ga *.wav *.flac)")));
-    for(int i = tmp; i < files.count(); i++) {
-        content.push_back(QUrl::fromLocalFile(files[i]));
-        new_content.push_back(QUrl::fromLocalFile(files[i]));
-        QFileInfo fi(files[i]);
-        ui->listWidget->addItem(fi.fileName());
-        dir = fi.path();
-    }
-    playlist->addMedia(new_content);
+    addToPlaylist(files);
 }
 
 void MainWindow::on_radio_mute_toggled(bool checked)
 {
-     if(checked) plr->setMuted(1);
-     else plr->setMuted(0);
+//     int ch = 0;
+     if(plr->isMuted()) plr->setMuted(0);
+     else plr->setMuted(1);
+//             if(plr->isMuted()) ch = 7;
+//             else ch = 8;
 }
 
 void MainWindow::on_button_play_prev_clicked()
 {
-    if(playlist->playbackMode() == QMediaPlaylist::Sequential)
-    {
-        if(nextTrack != 0) {
+    if(playlist->mediaCount()!=0) {
+    if(playlist->playbackMode() == QMediaPlaylist::Sequential) {
             ui->currentTrack_progressBar->setValue(1);
-            playlist->previous();
-            if(nextTrack == playlist->mediaCount()-1) nextTrack--;
+            if(playlist->currentIndex() != 0) playlist->previous();
+            //if(nextTrack == playlist->mediaCount()-1) nextTrack--;
             ui->listWidget->setCurrentRow(playlist->currentIndex());
         }
-    }
-    else if(playlist->mediaCount()!=0) {
+    else {
         ui->currentTrack_progressBar->setValue(1);
         playlist->previous();
+        ui->listWidget->setCurrentRow(playlist->currentIndex());
+    }
     }
 }
 
 void MainWindow::on_button_play_next_clicked()
 {
     if(playlist->mediaCount() != 0) {
-        if(playlist->playbackMode() == QMediaPlaylist::Sequential &&
-                nextTrack != playlist->mediaCount()-1) {
+        if(playlist->playbackMode() == QMediaPlaylist::Sequential ) {
             ui->currentTrack_progressBar->setValue(1);
-            playlist->next();
-            ui->listWidget->item(playlist->currentIndex())->setSelected(true);
+            if(playlist->currentIndex() != playlist->mediaCount()-1) playlist->next();
+            ui->listWidget->setCurrentRow(playlist->currentIndex());
         }
         else {
             ui->currentTrack_progressBar->setValue(1);
             playlist->next();
+            ui->listWidget->setCurrentRow(playlist->currentIndex());
         }
     }
 }
@@ -282,7 +230,7 @@ void MainWindow::watchPlaying() {
         if(dur_secs > 10 && pos_secs > 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
         if(plr->isMuted() && language == "EN") QMainWindow::setWindowTitle("[muted] Samowar - Playing... " + fi.fileName());
         if(plr->isMuted() && language == "RU") QMainWindow::setWindowTitle("[без звука] САМОВАРЪ - Сейчас играет... " + fi.fileName());
-        else watchStatus();
+        if(!plr->isMuted()) watchStatus();
     }
 }
 
@@ -322,17 +270,18 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 
 void MainWindow::atTrackEnd() {
     if(files.count() != 0) {
-    if(nextTrack != files.count()-1) {
-        nextTrack = playlist->currentIndex();
-        ui->listWidget->setCurrentRow(nextTrack);
-    }
+    //if(nextTrack != files.count()-1 && nextTrack != 0) {
+       // nextTrack = playlist->currentIndex();
+        ui->listWidget->setCurrentRow(playlist->currentIndex());
+    //}
     ui->currentTrack_progressBar->setValue(1);
     }
 }
 
 void MainWindow::watchStatus() {
     if(plr->state() == 0) {
-        ui->button_play->setIcon(*iconPlay);
+        //ui->button_play->setIcon(*iconPlay);
+        ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png);} QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); }");
         ui->currentTrack_progressBar->setValue(1);
         //ui->horizontalSlider->setValue(0);
         playstate = false;
@@ -344,7 +293,8 @@ void MainWindow::watchStatus() {
         if (language == "EN") QMainWindow::setWindowTitle("[paused] Samowar - " + fi.fileName());
         else QMainWindow::setWindowTitle("[пауза] САМОВАРЪ - " + fi.fileName());
         if(playstate == true) {
-            ui->button_play->setIcon(*iconPlay);
+            ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-pause.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } ");
+            //ui->button_play->setIcon(*iconPlay);
             if (language == "EN") ui->button_play->setToolTip("Play music (F9)");
             else ui->button_play->setToolTip("Играть (F9)");
         } // to prevent memory leaks
@@ -355,7 +305,8 @@ void MainWindow::watchStatus() {
         if (language == "EN") QMainWindow::setWindowTitle("Samowar - Playing... " + fi.fileName() );
         else QMainWindow::setWindowTitle("САМОВАРЪ - Сейчас играет... " + fi.fileName() );
         if(playstate == false) {
-            ui->button_play->setIcon(*iconPause);
+            //ui->button_play->setIcon(*iconPause);
+            ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-pause-hover.png); } ");
             if(language == "EN") ui->button_play->setToolTip("Pause music (F9)");
             else ui->button_play->setToolTip("Пауза (F9)");
         } // to prevent memory leaks
@@ -451,13 +402,7 @@ void MainWindow::on_actionAdd_directory_s_triggered()
     QStringList tmp_list;
     recursiveAddFolder(&tmp_list, directory);
     files.append(tmp_list);
-    for(int i = tmp; i < files.count(); i++) {
-        content.push_back(QUrl::fromLocalFile(files[i]));
-        new_content.push_back(QUrl::fromLocalFile(files[i]));
-        QFileInfo fi(files[i]);
-        ui->listWidget->addItem(fi.fileName());
-    }
-    playlist->addMedia(new_content);
+    addToPlaylist(tmp_list);
     ui->listWidget->setCurrentRow(nextTrack);
 }
 
@@ -758,6 +703,7 @@ void MainWindow::loadConfiguration() {
         }
     if(language == "RU") on_action_triggered();
     else on_actionEnglish_triggered();
+    //watchStatus();
 }
 
 void MainWindow::recursiveAddFolder(QStringList *out, QString path) {
@@ -821,6 +767,18 @@ QString MainWindow::readFromFile(QString filename) {
         f.close();
     }
     return line;
+}
+
+void MainWindow::addToPlaylist(QStringList files) {
+    QList<QMediaContent> new_content;
+    for(int i = 0; i < files.count(); i++) {
+        //content.push_back(QUrl::fromLocalFile(files[i]));
+        new_content.push_back(QUrl::fromLocalFile(files[i]));
+        QFileInfo fi(files[i]);
+        ui->listWidget->addItem(fi.fileName());
+        dir = fi.path();
+    }
+    playlist->addMedia(new_content);
 }
 
 void MainWindow::on_action_triggered()
@@ -890,4 +848,46 @@ void MainWindow::on_actionEnglish_triggered()
     ui->action_200->setText("Contribute");
     ui->menuLanguage->setTitle("Language");
     ui->actionAuto_pause_when_closed->setText("Auto pause when close");
+}
+
+void MainWindow::setVariables() {
+    dir = QDir::homePath();
+    QApplication::setApplicationName("Samowar Music Player");
+    QApplication::setApplicationVersion("v2.3.19b");
+    versionRu = "2.3.19б";
+    iconRu = new QIcon(iconsDir+"/ru.png");
+    ui->action->setIcon(*iconRu);
+    iconEn = new QIcon(iconsDir+"/en.png");
+    ui->actionEnglish->setIcon(*iconEn);
+    iconLanguage = new QIcon(iconsDir+"/flags.png");
+    ui->menuLanguage->setIcon(*iconLanguage);
+    iconSavePlaylist = new QIcon(iconsDir+"/submenu-save-playlist.png");
+    ui->actionSave_playlist->setIcon(*iconSavePlaylist);
+    iconOpenPlaylist = new QIcon(iconsDir+"/submenu-open-playlist.png");
+    ui->actionOpen_playlist->setIcon(*iconOpenPlaylist);
+    iconRemoveDuplicates = new QIcon(iconsDir+"/submenu-remove-duplicates.png");
+    ui->actionRemove_duplicates->setIcon(*iconRemoveDuplicates);
+    iconExit = new QIcon(iconsDir+"/submenu-exit.png");
+    ui->actionExit->setIcon(*iconExit);
+    icon200 = new QIcon(iconsDir+"/submenu-200.png");
+    ui->action_200->setIcon(*icon200);
+    iconAddTrack = new QIcon(iconsDir+"/submenu-add-track.png");
+    ui->action_add_files->setIcon(*iconAddTrack);
+    iconAddFolder = new QIcon(iconsDir+"/submenu-add-folder.png");
+    ui->actionAdd_directory_s->setIcon(*iconAddFolder);
+    iconPlay = new QIcon(iconsDir+"/media-play.png");
+    //ui->button_play->setIcon(*iconPlay);
+    iconPause = new QIcon(iconsDir+"/media-pause.png");
+    iconStop = new QIcon(iconsDir+"/media-stop.png");
+    //ui->button_stop->setIcon(*iconStop);
+    iconPlayPrev = new QIcon(iconsDir+"/media-previous.png");
+    //ui->button_play_prev->setIcon(*iconPlayPrev);
+    iconPlayNext = new QIcon(iconsDir+"/media-next.png");
+    //ui->button_play_next->setIcon(*iconPlayNext);
+    iconClearPls = new QIcon(iconsDir+"/brush-big.png");
+    ui->actionClear_playlist->setIcon(*iconClearPls);
+    iconDeleteCurrent = iconClearPls;
+    ui->deleteCurrentTrack->setIcon(*iconDeleteCurrent);
+    window()->setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
+    //ui->button_play->setStyleSheet("QPushButton::hover { border-image:url(:/icons/media-pause.png);} ");
 }

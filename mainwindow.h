@@ -22,6 +22,8 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 private slots:
+    void setVariables();
+
     void recursiveAddFolder(QStringList *out, QString path);
 
     void add_files_from_behind();
@@ -106,6 +108,8 @@ private slots:
 
     void saveToFile(QRect var, QString filename);
 
+    void addToPlaylist(QStringList files);
+
     QString readFromFile(QString filename);
 
     void on_action_triggered();
@@ -121,6 +125,7 @@ protected:
     QList<QMediaContent> content;
     QIcon *iconEn, *iconRu, *iconLanguage, *iconInfo, *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
     QStringList files;
+    //QMediaPlaylist playlist;
 };
 
 #endif // MAINWINDOW_H
