@@ -84,8 +84,6 @@ private slots:
 
     void on_actionClear_playlist_triggered();
 
-    void on_button_play_released();
-
     void on_dialVolume_valueChanged(int value);
 
     void on_dialVolume_sliderPressed();

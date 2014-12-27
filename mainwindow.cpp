@@ -117,7 +117,6 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_action_add_files_triggered()
 {
-    int tmp = files.count();
     if(language == "EN") files.append(QFileDialog::getOpenFileNames(
                                           this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)")));
     else files.append(QFileDialog::getOpenFileNames(
@@ -263,7 +262,7 @@ void MainWindow::on_horizontalSlider_sliderPressed()
 void MainWindow::on_horizontalSlider_sliderReleased()
 {
     if(!was_paused) plr->playMusic();//0 - stopped 1 - playing 2 - paused
-    ui->horizontalSlider->setCursor(Qt::PointingHandCursor);
+    ui->horizontalSlider->setCursor(Qt::ArrowCursor);
     plr->connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
     plr->connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this, SLOT(mySliderValueChanged(int)));
 }
@@ -281,7 +280,7 @@ void MainWindow::atTrackEnd() {
 void MainWindow::watchStatus() {
     if(plr->state() == 0) {
         //ui->button_play->setIcon(*iconPlay);
-        ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png);} QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); }");
+        ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png);} QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png);}");
         ui->currentTrack_progressBar->setValue(1);
         //ui->horizontalSlider->setValue(0);
         playstate = false;
@@ -293,7 +292,7 @@ void MainWindow::watchStatus() {
         if (language == "EN") QMainWindow::setWindowTitle("[paused] Samowar - " + fi.fileName());
         else QMainWindow::setWindowTitle("[пауза] САМОВАРЪ - " + fi.fileName());
         if(playstate == true) {
-            ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-pause.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } ");
+            ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-pause.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-pause.png); }");
             //ui->button_play->setIcon(*iconPlay);
             if (language == "EN") ui->button_play->setToolTip("Play music (F9)");
             else ui->button_play->setToolTip("Играть (F9)");
@@ -306,12 +305,16 @@ void MainWindow::watchStatus() {
         else QMainWindow::setWindowTitle("САМОВАРЪ - Сейчас играет... " + fi.fileName() );
         if(playstate == false) {
             //ui->button_play->setIcon(*iconPause);
-            ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-pause-hover.png); } ");
+            ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-pause-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png); }");
             if(language == "EN") ui->button_play->setToolTip("Pause music (F9)");
             else ui->button_play->setToolTip("Пауза (F9)");
         } // to prevent memory leaks
         playstate = true;
     }
+    if(playlist->playbackMode() == QMediaPlaylist::Sequential && playlist->currentIndex() == playlist->mediaCount()-1) ui->button_play_next->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-next.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-inactive.png);} QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png); }");
+    else ui->button_play_next->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-next.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.png);} QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png); }");
+    if(playlist->playbackMode() == QMediaPlaylist::Sequential && playlist->currentIndex() == 0) ui->button_play_prev->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-previous.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-previous-inactive.png);} QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-previous.png); }");
+    else ui->button_play_prev->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-previous.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-previous-hover.png);} QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-previous.png); }");
 }
 
 void MainWindow::on_checkBox_repeat_toggled(bool checked)
@@ -364,11 +367,6 @@ void MainWindow::on_actionClear_playlist_triggered()
     ui->listWidget->clear();
     nextTrack = 0;
     nowSelected = 0;
-}
-
-void MainWindow::on_button_play_released()
-{
-    ui->button_play->setStyleSheet("QPushButton::hover { border-image:url(:/media-information.png);}");
 }
 
 void MainWindow::on_dialVolume_valueChanged(int value)
@@ -875,19 +873,11 @@ void MainWindow::setVariables() {
     ui->action_add_files->setIcon(*iconAddTrack);
     iconAddFolder = new QIcon(iconsDir+"/submenu-add-folder.png");
     ui->actionAdd_directory_s->setIcon(*iconAddFolder);
-    iconPlay = new QIcon(iconsDir+"/media-play.png");
-    //ui->button_play->setIcon(*iconPlay);
-    iconPause = new QIcon(iconsDir+"/media-pause.png");
-    iconStop = new QIcon(iconsDir+"/media-stop.png");
-    //ui->button_stop->setIcon(*iconStop);
-    iconPlayPrev = new QIcon(iconsDir+"/media-previous.png");
-    //ui->button_play_prev->setIcon(*iconPlayPrev);
-    iconPlayNext = new QIcon(iconsDir+"/media-next.png");
-    //ui->button_play_next->setIcon(*iconPlayNext);
     iconClearPls = new QIcon(iconsDir+"/brush-big.png");
     ui->actionClear_playlist->setIcon(*iconClearPls);
     iconDeleteCurrent = iconClearPls;
     ui->deleteCurrentTrack->setIcon(*iconDeleteCurrent);
     window()->setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
-    //ui->button_play->setStyleSheet("QPushButton::hover { border-image:url(:/icons/media-pause.png);} ");
+    ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png); }");
+    ui->currentTrack_progressBar->setVisible(0);
 }

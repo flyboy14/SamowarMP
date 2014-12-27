@@ -25,22 +25,6 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_3">
-    <item row="0" column="0">
-     <widget class="QLabel" name="labelGreeting">
-      <property name="cursor">
-       <cursorShape>ArrowCursor</cursorShape>
-      </property>
-      <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Listen to music with Flavour&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-      <property name="text">
-       <string>You're using Samowar Music player (beta)</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="0">
      <widget class="QProgressBar" name="currentTrack_progressBar">
       <property name="minimumSize">
@@ -69,12 +53,28 @@
       </property>
      </widget>
     </item>
+    <item row="0" column="0">
+     <widget class="QLabel" name="labelGreeting">
+      <property name="cursor">
+       <cursorShape>ArrowCursor</cursorShape>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Listen to music with Flavour&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="text">
+       <string>You're using Samowar Music player (beta)</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="0">
-     <layout class="QHBoxLayout" name="horizontalLayout_8">
+     <layout class="QHBoxLayout" name="button_playlist_and_controls_layout">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <layout class="QVBoxLayout" name="buttons_and_playlist_layout">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <layout class="QHBoxLayout" name="buttons_layout">
           <item>
            <spacer name="horizontalSpacer">
             <property name="orientation">
@@ -98,12 +98,12 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>100</width>
-              <height>100</height>
+              <width>80</width>
+              <height>80</height>
              </size>
             </property>
             <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
+             <cursorShape>ArrowCursor</cursorShape>
             </property>
             <property name="mouseTracking">
              <bool>true</bool>
@@ -113,7 +113,7 @@
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton { border-image: url(/usr/share/samowar/icons/media-previous.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-previous-hover.png);}
-</string>
+QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-previous.png); }</string>
             </property>
             <property name="text">
              <string/>
@@ -139,8 +139,8 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>100</width>
-              <height>100</height>
+              <width>80</width>
+              <height>80</height>
              </size>
             </property>
             <property name="palette">
@@ -189,7 +189,7 @@
              </font>
             </property>
             <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
+             <cursorShape>ArrowCursor</cursorShape>
             </property>
             <property name="mouseTracking">
              <bool>true</bool>
@@ -202,6 +202,11 @@
             </property>
             <property name="layoutDirection">
              <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } 
+QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-play-hover.png);}
+QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png); } </string>
             </property>
             <property name="text">
              <string/>
@@ -225,12 +230,6 @@
           </item>
           <item>
            <widget class="QPushButton" name="button_stop">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
             <property name="minimumSize">
              <size>
               <width>64</width>
@@ -239,46 +238,9 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>64</width>
-              <height>64</height>
+              <width>80</width>
+              <height>80</height>
              </size>
-            </property>
-            <property name="palette">
-             <palette>
-              <active>
-               <colorrole role="ButtonText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>103</green>
-                  <blue>103</blue>
-                 </color>
-                </brush>
-               </colorrole>
-              </active>
-              <inactive>
-               <colorrole role="ButtonText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>255</red>
-                  <green>103</green>
-                  <blue>103</blue>
-                 </color>
-                </brush>
-               </colorrole>
-              </inactive>
-              <disabled>
-               <colorrole role="ButtonText">
-                <brush brushstyle="SolidPattern">
-                 <color alpha="255">
-                  <red>190</red>
-                  <green>190</green>
-                  <blue>190</blue>
-                 </color>
-                </brush>
-               </colorrole>
-              </disabled>
-             </palette>
             </property>
             <property name="font">
              <font>
@@ -289,7 +251,7 @@
              </font>
             </property>
             <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
+             <cursorShape>ArrowCursor</cursorShape>
             </property>
             <property name="mouseTracking">
              <bool>true</bool>
@@ -302,7 +264,8 @@
             </property>
             <property name="styleSheet">
              <string notr="true">QPushButton { border-image: url(/usr/share/samowar/icons/media-stop.png); } 
-QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-stop-hover.png);}</string>
+QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-stop-hover.png);}
+QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-stop.png); } </string>
             </property>
             <property name="text">
              <string/>
@@ -328,12 +291,12 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-stop-hover.
             </property>
             <property name="maximumSize">
              <size>
-              <width>64</width>
-              <height>64</height>
+              <width>80</width>
+              <height>80</height>
              </size>
             </property>
             <property name="cursor">
-             <cursorShape>PointingHandCursor</cursorShape>
+             <cursorShape>ArrowCursor</cursorShape>
             </property>
             <property name="mouseTracking">
              <bool>true</bool>
@@ -344,6 +307,7 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-stop-hover.
             <property name="styleSheet">
              <string notr="true">QPushButton { border-image: url(/usr/share/samowar/icons/media-next.png); } 
 QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.png);}
+QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png); } 
 </string>
             </property>
             <property name="text">
@@ -403,7 +367,7 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <layout class="QGridLayout" name="gridLayout_2">
+             <layout class="QGridLayout" name="playlist">
               <item row="1" column="1">
                <widget class="QLabel" name="labelDuration">
                 <property name="text">
@@ -414,7 +378,7 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
               <item row="1" column="0">
                <widget class="QSlider" name="horizontalSlider">
                 <property name="cursor">
-                 <cursorShape>PointingHandCursor</cursorShape>
+                 <cursorShape>ArrowCursor</cursorShape>
                 </property>
                 <property name="mouseTracking">
                  <bool>false</bool>
@@ -554,7 +518,7 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
         </property>
         <layout class="QGridLayout" name="gridLayout">
          <item row="0" column="0">
-          <layout class="QVBoxLayout" name="verticalLayout_3">
+          <layout class="QVBoxLayout" name="controls_layout">
            <item>
             <widget class="QLabel" name="labelVolume">
              <property name="text">
@@ -563,29 +527,31 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
             </widget>
            </item>
            <item>
-            <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <layout class="QHBoxLayout" name="volume_layout">
              <item>
-              <layout class="QVBoxLayout" name="verticalLayout">
-               <item>
-                <widget class="QDial" name="dialVolume">
-                 <property name="cursor">
-                  <cursorShape>OpenHandCursor</cursorShape>
-                 </property>
-                 <property name="focusPolicy">
-                  <enum>Qt::WheelFocus</enum>
-                 </property>
-                 <property name="maximum">
-                  <number>100</number>
-                 </property>
-                 <property name="value">
-                  <number>90</number>
-                 </property>
-                </widget>
-               </item>
-              </layout>
+              <widget class="QDial" name="dialVolume">
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>100</height>
+                </size>
+               </property>
+               <property name="cursor">
+                <cursorShape>OpenHandCursor</cursorShape>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::WheelFocus</enum>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="value">
+                <number>90</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <layout class="QVBoxLayout" name="verticalLayout_5">
+              <layout class="QVBoxLayout" name="volume_def_layout">
                <item>
                 <spacer name="verticalSpacer_2">
                  <property name="orientation">
@@ -621,7 +587,7 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
               <bool>true</bool>
              </property>
              <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
+              <cursorShape>ArrowCursor</cursorShape>
              </property>
              <property name="text">
               <string>&amp;Mute</string>
@@ -644,7 +610,7 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
            <item>
             <widget class="QCheckBox" name="checkBox_repeat">
              <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
+              <cursorShape>ArrowCursor</cursorShape>
              </property>
              <property name="toolTip">
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle playlist repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -657,7 +623,7 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
            <item>
             <widget class="QCheckBox" name="checkBox_random">
              <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
+              <cursorShape>ArrowCursor</cursorShape>
              </property>
              <property name="toolTip">
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle shuffle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -670,7 +636,7 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
            <item>
             <widget class="QCheckBox" name="checkBox_single">
              <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
+              <cursorShape>ArrowCursor</cursorShape>
              </property>
              <property name="toolTip">
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle single song repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -709,7 +675,7 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
            <item>
             <widget class="QPushButton" name="deleteCurrentTrack">
              <property name="cursor">
-              <cursorShape>PointingHandCursor</cursorShape>
+              <cursorShape>ArrowCursor</cursorShape>
              </property>
              <property name="toolTip">
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete selected item&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -743,8 +709,6 @@ QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.
      </layout>
     </item>
    </layout>
-   <zorder>currentTrack_progressBar</zorder>
-   <zorder>labelGreeting</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
