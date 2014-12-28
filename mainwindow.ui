@@ -367,7 +367,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
            </attribute>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <layout class="QGridLayout" name="playlist">
+             <layout class="QGridLayout" name="playlist_layout">
               <item row="1" column="1">
                <widget class="QLabel" name="labelDuration">
                 <property name="text">
