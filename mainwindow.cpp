@@ -26,9 +26,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    setVariables();
     playlist = new QMediaPlaylist(plr);
     plr->setPlaylist(playlist);
+        setVariables();
     connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this, SLOT(mySliderValueChanged(int)));
     connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
     connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(progress()));
@@ -41,9 +41,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
     connect(playlist,SIGNAL(mediaRemoved(int,int)),this,SLOT(watchPlaylistChanges()));
     connect(playlist,SIGNAL(mediaInserted(int,int)),this,SLOT(watchPlaylistChanges()));
-    loadConfiguration();
+            loadConfiguration();
     add_files_from_behind();
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -189,7 +190,7 @@ void MainWindow::on_deleteCurrentTrack_clicked()
             disconnect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
             plr->stopMusic();
         }
-        content.removeAt(nowSelected);
+        //content.removeAt(nowSelected);
         files.removeAt(nowSelected);
         playlist->removeMedia(nowSelected);
         int tmp_sel = nowSelected;
@@ -361,7 +362,7 @@ void MainWindow::on_checkBox_single_toggled(bool checked)
 void MainWindow::on_actionClear_playlist_triggered()
 {
     plr->stopMusic();
-    content.clear();
+    //content.clear();
     playlist->clear();
     files.clear();
     ui->listWidget->clear();
@@ -395,8 +396,6 @@ void MainWindow::on_actionAdd_directory_s_triggered()
     dir = directory;
     if(directory.isEmpty())
         return;
-    QList<QMediaContent> new_content;
-    int tmp = files.count();
     QStringList tmp_list;
     recursiveAddFolder(&tmp_list, directory);
     files.append(tmp_list);
@@ -464,7 +463,7 @@ void MainWindow::on_actionRemove_duplicates_triggered()
         for(int i = cur+1; i < files.count(); i++) {
             if(files[cur] == files[i]) {
                 files.removeAt(i);
-                content.removeAt(i);
+                //content.removeAt(i);
                 playlist->removeMedia(i);
             }
         }
@@ -534,12 +533,7 @@ void MainWindow::add_files_from_behind()
                 files.append(QDir::currentPath()+"/"+cmdline_args[i]);
             }
         if(files.count() == 0) files = cmdline_args;
-        for(int i = 0; i < files.count(); i++) {
-            content.push_back(QUrl::fromLocalFile(files[i]));
-            QFileInfo fi(files[i]);
-            ui->listWidget->addItem(fi.fileName());
-        }
-        playlist->addMedia(content);
+        addToPlaylist(files);
         if(!playstate) plr->playMusic();
     }
 }
@@ -647,15 +641,16 @@ void MainWindow::loadConfiguration() {
             for(int i = 0; i < line.count();i++) {
                 if(line.at(i) == '\n') {
                     files.append(tmp);
-                    content.push_back(QUrl::fromLocalFile(files.last()));
-                    QFileInfo fi(files.last());
-                    ui->listWidget->addItem(fi.fileName());
+                    //content.push_back(QUrl::fromLocalFile(files.last()));
+                    //QFileInfo fi(files.last());
+                    //ui->listWidget->addItem(fi.fileName());
                     tmp = "";
                 }
                 else tmp.append(line.at(i));
             }
         }
-        playlist->addMedia(content);
+        addToPlaylist(files);
+        //playlist->addMedia(content);
         fPls.close();
     }
     if(readFromFile(confDir+"/lang.conf") != "err")
@@ -770,7 +765,6 @@ QString MainWindow::readFromFile(QString filename) {
 void MainWindow::addToPlaylist(QStringList files) {
     QList<QMediaContent> new_content;
     for(int i = 0; i < files.count(); i++) {
-        //content.push_back(QUrl::fromLocalFile(files[i]));
         new_content.push_back(QUrl::fromLocalFile(files[i]));
         QFileInfo fi(files[i]);
         ui->listWidget->addItem(fi.fileName());

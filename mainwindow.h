@@ -22,7 +22,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 private slots:
-    void setVariables();
 
     void recursiveAddFolder(QStringList *out, QString path);
 
@@ -114,7 +113,8 @@ private slots:
 
 public slots:
     void saveConfiguration();
-    void loadConfiguration();
+    void setVariables();
+        void loadConfiguration();
 
 protected:
     Ui::MainWindow *ui;

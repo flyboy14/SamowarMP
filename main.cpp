@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
     if(!plstDir.exists())
     plstDir.mkpath(plstDir.path());
     MainWindow w;
+    //w.setVariables();
+    //w.loadConfiguration();
     //QSharedMemory shared;
     //shared.setKey("129836-128366-99882");
     w.show();
