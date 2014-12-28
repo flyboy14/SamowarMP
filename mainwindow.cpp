@@ -190,7 +190,6 @@ void MainWindow::on_deleteCurrentTrack_clicked()
             disconnect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
             plr->stopMusic();
         }
-        //content.removeAt(nowSelected);
         files.removeAt(nowSelected);
         playlist->removeMedia(nowSelected);
         int tmp_sel = nowSelected;
@@ -362,7 +361,6 @@ void MainWindow::on_checkBox_single_toggled(bool checked)
 void MainWindow::on_actionClear_playlist_triggered()
 {
     plr->stopMusic();
-    //content.clear();
     playlist->clear();
     files.clear();
     ui->listWidget->clear();
@@ -463,7 +461,6 @@ void MainWindow::on_actionRemove_duplicates_triggered()
         for(int i = cur+1; i < files.count(); i++) {
             if(files[cur] == files[i]) {
                 files.removeAt(i);
-                //content.removeAt(i);
                 playlist->removeMedia(i);
             }
         }
@@ -641,16 +638,12 @@ void MainWindow::loadConfiguration() {
             for(int i = 0; i < line.count();i++) {
                 if(line.at(i) == '\n') {
                     files.append(tmp);
-                    //content.push_back(QUrl::fromLocalFile(files.last()));
-                    //QFileInfo fi(files.last());
-                    //ui->listWidget->addItem(fi.fileName());
                     tmp = "";
                 }
                 else tmp.append(line.at(i));
             }
         }
         addToPlaylist(files);
-        //playlist->addMedia(content);
         fPls.close();
     }
     if(readFromFile(confDir+"/lang.conf") != "err")

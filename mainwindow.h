@@ -119,10 +119,8 @@ public slots:
 protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
-    QList<QMediaContent> content;
-    QIcon *iconEn, *iconRu, *iconLanguage, *iconInfo, *iconPlay, *iconPause, *iconStop, *iconPlayPrev, *iconPlayNext, *iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
+    QIcon *iconEn, *iconRu, *iconLanguage, *iconInfo,*iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
     QStringList files;
-    //QMediaPlaylist playlist;
 };
 
 #endif // MAINWINDOW_H
