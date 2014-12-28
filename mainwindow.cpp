@@ -127,11 +127,8 @@ void MainWindow::on_action_add_files_triggered()
 
 void MainWindow::on_radio_mute_toggled(bool checked)
 {
-//     int ch = 0;
      if(plr->isMuted()) plr->setMuted(0);
      else plr->setMuted(1);
-//             if(plr->isMuted()) ch = 7;
-//             else ch = 8;
 }
 
 void MainWindow::on_button_play_prev_clicked()
@@ -216,7 +213,7 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
 }
 
 void MainWindow::watchPlaying() {
-    if(files.count() != 0 && playlist->currentIndex() < files.count()) {
+    if(files.count() != 0 && playlist->currentIndex() < files.count() && playlist->currentIndex() != -1) {
         QFileInfo fi(files[playlist->currentIndex()]);
         int pos_secs = (plr->position()%60000)/1000;
         int dur_secs = (plr->duration()%60000)/1000;
@@ -272,7 +269,6 @@ void MainWindow::atTrackEnd() {
 
 void MainWindow::watchStatus() {
     if(plr->state() == 0) {
-        //ui->button_play->setIcon(*iconPlay);
         ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png);} QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png);}");
         ui->currentTrack_progressBar->setValue(1);
         //ui->horizontalSlider->setValue(0);
@@ -280,19 +276,18 @@ void MainWindow::watchStatus() {
         if(language == "EN") QMainWindow::setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
         else QMainWindow::setWindowTitle("МУЗЫКАЛЬНЫЙ ПРОИГРЫВАТЕЛЬ САМОВАРЪ "+ versionRu);
     }
-    if(plr->state() == 2) {
+    if(plr->state() == 2 && playlist->currentIndex() != -1) {
         QFileInfo fi(files[playlist->currentIndex()]);
         if (language == "EN") QMainWindow::setWindowTitle("[paused] Samowar - " + fi.fileName());
         else QMainWindow::setWindowTitle("[пауза] САМОВАРЪ - " + fi.fileName());
         if(playstate == true) {
             ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-pause.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-pause.png); }");
-            //ui->button_play->setIcon(*iconPlay);
             if (language == "EN") ui->button_play->setToolTip("Play music (F9)");
             else ui->button_play->setToolTip("Играть (F9)");
         } // to prevent memory leaks
         playstate = false;
     }
-    if(plr->state() == 1) {
+    if(plr->state() == 1 && playlist->currentIndex() != -1) {
         QFileInfo fi(files[playlist->currentIndex()]);
         if (language == "EN") QMainWindow::setWindowTitle("Samowar - Playing... " + fi.fileName() );
         else QMainWindow::setWindowTitle("САМОВАРЪ - Сейчас играет... " + fi.fileName() );
@@ -702,9 +697,8 @@ void MainWindow::recursiveAddFolder(QStringList *out, QString path) {
     }
     else {
             QString suf = finfo.suffix();
-            if (suf == "mp3" || suf == "flac" || suf == "wav" || suf == "ogg"  || suf == "3ga") {
+            if (suf == "mp3" || suf == "flac" || suf == "wav" || suf == "ogg"  || suf == "3ga")
                 out->append(path);
-            }
     }
 }
 
