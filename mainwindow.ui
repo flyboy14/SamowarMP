@@ -98,8 +98,8 @@
             </property>
             <property name="maximumSize">
              <size>
-              <width>80</width>
-              <height>80</height>
+              <width>64</width>
+              <height>64</height>
              </size>
             </property>
             <property name="cursor">
@@ -139,8 +139,8 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-previous
             </property>
             <property name="maximumSize">
              <size>
-              <width>80</width>
-              <height>80</height>
+              <width>64</width>
+              <height>64</height>
              </size>
             </property>
             <property name="palette">
@@ -238,8 +238,8 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png
             </property>
             <property name="maximumSize">
              <size>
-              <width>80</width>
-              <height>80</height>
+              <width>64</width>
+              <height>64</height>
              </size>
             </property>
             <property name="font">
@@ -291,8 +291,8 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-stop.png
             </property>
             <property name="maximumSize">
              <size>
-              <width>80</width>
-              <height>80</height>
+              <width>64</width>
+              <height>64</height>
              </size>
             </property>
             <property name="cursor">
