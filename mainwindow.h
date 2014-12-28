@@ -28,8 +28,6 @@ private slots:
 
     void add_files_from_behind();
 
-    void loadConfiguration();
-
     void watchPlaylistChanges();
 
     void mySliderValueChanged(int newPos);
@@ -116,6 +114,7 @@ private slots:
 
 public slots:
     void saveConfiguration();
+    void loadConfiguration();
 
 protected:
     Ui::MainWindow *ui;

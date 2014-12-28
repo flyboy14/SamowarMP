@@ -670,10 +670,6 @@ void MainWindow::loadConfiguration() {
         nowSelected = nextTrack;
         if(files.count() != 0) playlist->setCurrentIndex(line.toInt());
     }
-    if(readFromFile(confDir+"/position.conf") != "err") {
-        line = readFromFile(confDir+"/position.conf");
-        plr->setPosition(line.toInt());
-    }
     if(readFromFile(confDir+"/continue_playing.conf") != "err") {
         line = readFromFile(confDir+"/continue_playing.conf");
         ui->actionAuto_pause_when_closed->setChecked(line.toInt());
@@ -699,6 +695,10 @@ void MainWindow::loadConfiguration() {
         line = readFromFile(confDir+"/mute.conf");
         if(line.toInt() > 0) ui->radio_mute->setChecked(true);
         }
+    if(readFromFile(confDir+"/position.conf") != "err") {
+        line = readFromFile(confDir+"/position.conf");
+        plr->setPosition(line.toInt());
+    }
     if(language == "RU") on_action_triggered();
     else on_actionEnglish_triggered();
     //watchStatus();
@@ -851,8 +851,8 @@ void MainWindow::on_actionEnglish_triggered()
 void MainWindow::setVariables() {
     dir = QDir::homePath();
     QApplication::setApplicationName("Samowar Music Player");
-    QApplication::setApplicationVersion("v2.3.19b");
-    versionRu = "2.3.19б";
+    QApplication::setApplicationVersion("v2.4.61b");
+    versionRu = "2.4.61б";
     iconRu = new QIcon(iconsDir+"/ru.png");
     ui->action->setIcon(*iconRu);
     iconEn = new QIcon(iconsDir+"/en.png");
