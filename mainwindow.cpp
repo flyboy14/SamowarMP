@@ -41,8 +41,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
     connect(playlist,SIGNAL(mediaRemoved(int,int)),this,SLOT(watchPlaylistChanges()));
     connect(playlist,SIGNAL(mediaInserted(int,int)),this,SLOT(watchPlaylistChanges()));
-            loadConfiguration();
-    add_files_from_behind();
+        loadConfiguration();
+        add_files_from_behind();
 }
 
 
@@ -344,14 +344,14 @@ void MainWindow::on_checkBox_single_toggled(bool checked)
         single = false;
         if(!repeat && !randome && !single) playlist->setPlaybackMode(QMediaPlaylist::Sequential);
     }
-    QWidget *inst = new QWidget;
-    QGridLayout *gridL;
-    QListWidget *listw = new QListWidget;
-    gridL->addWidget(listw);
-    //gridL->addWidget(new QSlider);
-    //gridL->addWidget(new QLabel);
-    inst->setLayout(gridL);
-        ui->A->addTab(inst, "new");
+//    QWidget *inst = new QWidget;
+//    QGridLayout *gridL;
+//    QListWidget *listw = new QListWidget;
+//    gridL->addWidget(listw);
+//    //gridL->addWidget(new QSlider);
+//    //gridL->addWidget(new QLabel);
+//    inst->setLayout(gridL);
+//        ui->A->addTab(inst, "new");
 }
 
 void MainWindow::on_actionClear_playlist_triggered()
@@ -792,6 +792,7 @@ void MainWindow::on_action_triggered()
     ui->action_200->setText("Помочь материально");
     ui->menuLanguage->setTitle("Язык");
     ui->actionAuto_pause_when_closed->setText("Остановить при выходе");
+    window()->setLocale(QLocale::Russian);
 }
 
 void MainWindow::on_actionEnglish_triggered()
@@ -826,6 +827,7 @@ void MainWindow::on_actionEnglish_triggered()
     ui->action_200->setText("Contribute");
     ui->menuLanguage->setTitle("Language");
     ui->actionAuto_pause_when_closed->setText("Auto pause when close");
+    window()->setLocale(QLocale::English);
 }
 
 void MainWindow::setVariables() {

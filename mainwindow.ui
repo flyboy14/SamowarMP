@@ -459,6 +459,9 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
                 <property name="autoScroll">
                  <bool>true</bool>
                 </property>
+                <property name="autoScrollMargin">
+                 <number>2</number>
+                </property>
                 <property name="tabKeyNavigation">
                  <bool>true</bool>
                 </property>
