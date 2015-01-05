@@ -264,6 +264,7 @@ void MainWindow::atTrackEnd() {
     if(files.count() != 0) {
         ui->listWidget->setCurrentRow(playlist->currentIndex());      
     ui->currentTrack_progressBar->setValue(1);
+    ui->label_5->setText(QString::number(playlist->currentIndex()+1));
     }
 }
 
@@ -578,6 +579,21 @@ void MainWindow::on_actionOpen_playlist_triggered()
 void MainWindow::watchPlaylistChanges() {
     if(!ui->A->tabText(currentTab).contains("*"))
         ui->A->setTabText(currentTab, ui->A->tabText(currentTab)+'*');
+    if(files.count() != 0) {
+        if(language == "EN") {
+            if(playlist->mediaCount()%10 == 1) ui->label_2->setText("file");
+            else ui->label_2->setText("files");
+        }
+        else {
+            if(playlist->mediaCount()%10 == 1) ui->label_2->setText("файл");
+            else if(playlist->mediaCount()%10 == 2 || playlist->mediaCount()%10 == 3 ||
+                    playlist->mediaCount()%10 == 4)
+                ui->label_2->setText("файла");
+            else ui->label_2->setText("файлов");;
+        }
+        ui->label_3->setText(QString::number(playlist->mediaCount()));
+        ui->label_7->setText(QString::number(playlist->mediaCount()));
+    }
 }
 
 void MainWindow::saveConfiguration() {
@@ -684,6 +700,7 @@ void MainWindow::loadConfiguration() {
     if(language == "RU") on_action_triggered();
     else on_actionEnglish_triggered();
     //watchStatus();
+        //ui->label_3->setText(QString::number(files.count()));
 }
 
 void MainWindow::recursiveAddFolder(QStringList *out, QString path) {
@@ -792,6 +809,9 @@ void MainWindow::on_action_triggered()
     ui->action_200->setText("Помочь материально");
     ui->menuLanguage->setTitle("Язык");
     ui->actionAuto_pause_when_closed->setText("Остановить при выходе");
+    ui->label->setText("Загружено");
+    ui->label_4->setText("Текущая позиция");
+    ui->label_6->setText("из");
     window()->setLocale(QLocale::Russian);
 }
 
@@ -827,6 +847,9 @@ void MainWindow::on_actionEnglish_triggered()
     ui->action_200->setText("Contribute");
     ui->menuLanguage->setTitle("Language");
     ui->actionAuto_pause_when_closed->setText("Auto pause when close");
+    ui->label->setText("Loaded");
+    ui->label_4->setText("Track position is");
+    ui->label_6->setText("out of");
     window()->setLocale(QLocale::English);
 }
 
@@ -863,3 +886,28 @@ void MainWindow::setVariables() {
     ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png); }");
     ui->currentTrack_progressBar->setVisible(0);
 }
+
+//void MainWindow::on_actionStatusbar_triggered(bool checked)
+//{
+//    if(checked) {
+//        ui->status_layout->SetMaximumSize;
+//        ui->label_2->setVisible(true);
+//        ui->label->setVisible(true);
+//        ui->label_3->setVisible(true);
+//        ui->label_5->setVisible(true);
+//        ui->label_4->setVisible(true);
+//        ui->label_6->setVisible(true);
+//        ui->label_7->setVisible(true);
+//    }
+//    else {
+//        ui->status_layout->SetMinimumSize;
+//        ui->label_2->setVisible(false);
+//        ui->label->setVisible(false);
+//        ui->label_3->setVisible(false);
+//        ui->label_5->setVisible(false);
+//        ui->label_4->setVisible(false);
+//        ui->label_6->setVisible(false);
+//        ui->label_7->setVisible(false);
+//    }
+//}
+
