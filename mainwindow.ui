@@ -721,6 +721,11 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <height>15</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Track position is</string>
         </property>
@@ -733,6 +738,11 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <width>60</width>
           <height>15</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>0</string>
@@ -750,6 +760,11 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <height>15</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>out of</string>
         </property>
@@ -762,6 +777,11 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <width>60</width>
           <height>15</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>0</string>
@@ -783,6 +803,11 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
       </item>
       <item>
        <widget class="QLabel" name="label">
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>Loaded</string>
         </property>
@@ -795,6 +820,11 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <width>60</width>
           <height>15</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
         </property>
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
@@ -818,6 +848,11 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <height>15</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>8</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string>files</string>
         </property>
@@ -833,7 +868,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
      <x>0</x>
      <y>0</y>
      <width>863</width>
-     <height>19</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
