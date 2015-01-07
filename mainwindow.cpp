@@ -584,7 +584,7 @@ void MainWindow::watchPlaylistChanges() {
             if(playlist->mediaCount()%10 == 1) ui->label_2->setText("file");
             else ui->label_2->setText("files");
         }
-        else {
+        if(language == "RU") {
             if(playlist->mediaCount()%10 == 1) ui->label_2->setText("файл");
             else if(playlist->mediaCount()%10 == 2 || playlist->mediaCount()%10 == 3 ||
                     playlist->mediaCount()%10 == 4)
