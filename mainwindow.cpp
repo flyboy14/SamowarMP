@@ -579,6 +579,10 @@ void MainWindow::on_actionOpen_playlist_triggered()
 void MainWindow::watchPlaylistChanges() {
     if(!ui->A->tabText(currentTab).contains("*"))
         ui->A->setTabText(currentTab, ui->A->tabText(currentTab)+'*');
+   watchStatusBar();
+}
+
+void MainWindow::watchStatusBar() {
     if(files.count() != 0) {
         if(language == "EN") {
             if(playlist->mediaCount()%10 == 1) ui->label_2->setText("file");
@@ -699,7 +703,7 @@ void MainWindow::loadConfiguration() {
     }
     if(language == "RU") on_action_triggered();
     else on_actionEnglish_triggered();
-    //watchStatus();
+    watchStatusBar();
         //ui->label_3->setText(QString::number(files.count()));
 }
 
@@ -847,7 +851,7 @@ void MainWindow::on_actionEnglish_triggered()
     ui->action_200->setText("Contribute");
     ui->menuLanguage->setTitle("Language");
     ui->actionAuto_pause_when_closed->setText("Auto pause when close");
-    ui->label->setText("Loaded");
+    ui->label->setText("ed");
     ui->label_4->setText("Track position is");
     ui->label_6->setText("out of");
     window()->setLocale(QLocale::English);
