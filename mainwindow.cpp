@@ -285,8 +285,8 @@ void MainWindow::watchStatus() {
             ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-pause.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-pause.png); }");
             if (language == "EN") ui->button_play->setToolTip("Play music (F9)");
             else ui->button_play->setToolTip("Играть (F9)");
+            playstate = false;
         } // to prevent memory leaks
-        playstate = false;
     }
     if(plr->state() == 1 && playlist->currentIndex() != -1) {
         QFileInfo fi(files[playlist->currentIndex()]);
@@ -297,8 +297,12 @@ void MainWindow::watchStatus() {
             ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-pause-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png); }");
             if(language == "EN") ui->button_play->setToolTip("Pause music (F9)");
             else ui->button_play->setToolTip("Пауза (F9)");
+            playstate = true;
         } // to prevent memory leaks
-        playstate = true;
+    }
+    if(playstate == false) {
+        if (language == "EN") ui->button_play->setToolTip("Play music (F9)");
+        else ui->button_play->setToolTip("Играть (F9)");
     }
     if(playlist->playbackMode() == QMediaPlaylist::Sequential && playlist->currentIndex() == playlist->mediaCount()-1) ui->button_play_next->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-next.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-inactive.png);} QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png); }");
     else ui->button_play_next->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-next.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-next-hover.png);} QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png); }");
@@ -816,6 +820,8 @@ void MainWindow::on_action_triggered()
     ui->label->setText("Загружено");
     ui->label_4->setText("Текущая позиция");
     ui->label_6->setText("из");
+    watchStatusBar();
+    watchStatus();
     window()->setLocale(QLocale::Russian);
 }
 
@@ -851,9 +857,11 @@ void MainWindow::on_actionEnglish_triggered()
     ui->action_200->setText("Contribute");
     ui->menuLanguage->setTitle("Language");
     ui->actionAuto_pause_when_closed->setText("Auto pause when close");
-    ui->label->setText("ed");
+    ui->label->setText("Loaded");
     ui->label_4->setText("Track position is");
     ui->label_6->setText("out of");
+    watchStatusBar();
+    watchStatus();
     window()->setLocale(QLocale::English);
 }
 
