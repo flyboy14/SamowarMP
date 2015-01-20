@@ -589,15 +589,23 @@ void MainWindow::watchPlaylistChanges() {
 void MainWindow::watchStatusBar() {
     if(files.count() != 0) {
         if(language == "EN") {
-            if(playlist->mediaCount()%10 == 1) ui->label_2->setText("file");
+            if(playlist->mediaCount() == 1) ui->label_2->setText("file");
             else ui->label_2->setText("files");
         }
         if(language == "RU") {
-            if(playlist->mediaCount()%10 == 1) ui->label_2->setText("файл");
+            if(playlist->mediaCount()%10 == 1) {
+                ui->label_2->setText("файл");
+                ui->label->setText("Загружен");
+            }
             else if(playlist->mediaCount()%10 == 2 || playlist->mediaCount()%10 == 3 ||
-                    playlist->mediaCount()%10 == 4)
+                    playlist->mediaCount()%10 == 4) {
                 ui->label_2->setText("файла");
-            else ui->label_2->setText("файлов");;
+                ui->label->setText("Загружено");
+            }
+            else {
+                ui->label_2->setText("файлов");
+                ui->label->setText("Загружено");
+            }
         }
         ui->label_3->setText(QString::number(playlist->mediaCount()));
         ui->label_7->setText(QString::number(playlist->mediaCount()));
@@ -787,7 +795,7 @@ void MainWindow::addToPlaylist(QStringList files) {
 void MainWindow::on_action_triggered()
 {
     language = "RU";
-    ui->labelDuration->setText("Длительность");
+    //ui->labelDuration->setText("");
     ui->labelGreeting->setText("ДОБРО ПОЖАЛОВАТЬ ВЪ САМОВАР, ТОВАРИЩ");
     ui->labelGreeting->setToolTip("Слушайте музыку с наслаждением");
     ui->labelVolume->setText("Громкость");
@@ -828,7 +836,7 @@ void MainWindow::on_action_triggered()
 void MainWindow::on_actionEnglish_triggered()
 {
     language = "EN";
-    ui->labelDuration->setText("Duration be here");
+    //ui->labelDuration->setText("");
     ui->labelGreeting->setText("Welcome to Samowar Music Player(beta)");
     ui->labelGreeting->setToolTip("Listen to music with flavour");
     ui->labelVolume->setText("Volume");
@@ -838,7 +846,7 @@ void MainWindow::on_actionEnglish_triggered()
     ui->checkBox_repeat->setText("Repeat");
     ui->checkBox_repeat->setToolTip("Toggle playlist repeat");
     ui->checkBox_single->setText("Single");
-    ui->checkBox_single->setToolTip("Toggle repeat single song");
+    ui->checkBox_single->setToolTip("Toggle single song repeat");
     ui->deleteCurrentTrack->setText(" Delete current");
     ui->deleteCurrentTrack->setToolTip("Remove selected track from playlist");
     ui->button_stop->setToolTip("Stop playing (F10)");

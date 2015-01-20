@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>863</width>
-    <height>663</height>
+    <width>667</width>
+    <height>481</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -371,7 +371,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
               <item row="1" column="1">
                <widget class="QLabel" name="labelDuration">
                 <property name="text">
-                 <string>Duration be here</string>
+                 <string> </string>
                 </property>
                </widget>
               </item>
@@ -718,7 +718,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
         <property name="maximumSize">
          <size>
           <width>140</width>
-          <height>15</height>
+          <height>20</height>
          </size>
         </property>
         <property name="font">
@@ -726,8 +726,14 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <pointsize>8</pointsize>
          </font>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="text">
          <string>Track position is</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -736,7 +742,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
         <property name="maximumSize">
          <size>
           <width>60</width>
-          <height>15</height>
+          <height>20</height>
          </size>
         </property>
         <property name="font">
@@ -744,11 +750,14 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <pointsize>8</pointsize>
          </font>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="text">
          <string>0</string>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -757,7 +766,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
         <property name="maximumSize">
          <size>
           <width>60</width>
-          <height>15</height>
+          <height>20</height>
          </size>
         </property>
         <property name="font">
@@ -765,8 +774,14 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <pointsize>8</pointsize>
          </font>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="text">
          <string>out of</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -775,7 +790,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
         <property name="maximumSize">
          <size>
           <width>60</width>
-          <height>15</height>
+          <height>20</height>
          </size>
         </property>
         <property name="font">
@@ -783,8 +798,14 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <pointsize>8</pointsize>
          </font>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="text">
          <string>0</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -808,8 +829,14 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <pointsize>8</pointsize>
          </font>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="text">
          <string>Loaded</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -818,7 +845,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
         <property name="maximumSize">
          <size>
           <width>60</width>
-          <height>15</height>
+          <height>20</height>
          </size>
         </property>
         <property name="font">
@@ -829,6 +856,9 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
         <property name="layoutDirection">
          <enum>Qt::LeftToRight</enum>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="text">
          <string>0</string>
         </property>
@@ -836,7 +866,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
          <enum>Qt::AutoText</enum>
         </property>
         <property name="alignment">
-         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -845,7 +875,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
         <property name="maximumSize">
          <size>
           <width>90</width>
-          <height>15</height>
+          <height>20</height>
          </size>
         </property>
         <property name="font">
@@ -853,8 +883,14 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
           <pointsize>8</pointsize>
          </font>
         </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="text">
          <string>files</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
         </property>
        </widget>
       </item>
@@ -867,8 +903,8 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>863</width>
-     <height>27</height>
+     <width>667</width>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
