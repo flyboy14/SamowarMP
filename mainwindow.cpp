@@ -588,12 +588,19 @@ void MainWindow::watchPlaylistChanges() {
 
 void MainWindow::watchStatusBar() {
     if(files.count() != 0) {
+        ui->label_3->setText(QString::number(playlist->mediaCount()));
+        ui->label_7->setText(QString::number(playlist->mediaCount()));
         if(language == "EN") {
             if(playlist->mediaCount() == 1) ui->label_2->setText("file");
             else ui->label_2->setText("files");
         }
         if(language == "RU") {
-            if(playlist->mediaCount()%10 == 1) {
+            if(playlist->mediaCount()%100 == 11 || playlist->mediaCount()%100 == 12 || playlist->mediaCount()%100 == 13 ||
+                    playlist->mediaCount()%100 == 14) {
+                ui->label_2->setText("файлов");
+                ui->label->setText("Загружено");
+            }
+            else if(playlist->mediaCount()%10 == 1) {
                 ui->label_2->setText("файл");
                 ui->label->setText("Загружен");
             }
@@ -607,8 +614,22 @@ void MainWindow::watchStatusBar() {
                 ui->label->setText("Загружено");
             }
         }
+    }
+    else {
         ui->label_3->setText(QString::number(playlist->mediaCount()));
         ui->label_7->setText(QString::number(playlist->mediaCount()));
+            if(language == "RU") {
+                ui->label_5->setText(ui->label_7->text());
+                ui->label_2->setText("");
+                ui->label_3->setText("пуст");
+                ui->label->setText("Список");
+            }
+            if(language == "EN") {
+                ui->label_5->setText(ui->label_7->text());
+                ui->label_2->setText("Playlist");
+                ui->label_3->setText("is");
+                ui->label->setText("empty");
+            }
     }
 }
 
