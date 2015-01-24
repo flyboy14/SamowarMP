@@ -118,11 +118,13 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_action_add_files_triggered()
 {
-    if(language == "EN") files.append(QFileDialog::getOpenFileNames(
+    QStringList tmp;
+    if(language == "EN") tmp.append(QFileDialog::getOpenFileNames(
                                           this, tr("Open music file(s)"), dir, tr("Music files (*.ogg *.mp3 *.3ga *.wav *.flac)")));
-    else files.append(QFileDialog::getOpenFileNames(
+    else tmp.append(QFileDialog::getOpenFileNames(
                           this, tr("Открыть файл(ы) с музыкой"), dir, tr("Музыкальные файлы (*.ogg *.mp3 *.3ga *.wav *.flac)")));
-    addToPlaylist(files);
+    files.append(tmp);
+    addToPlaylist(tmp);
 }
 
 void MainWindow::on_radio_mute_toggled(bool checked)
