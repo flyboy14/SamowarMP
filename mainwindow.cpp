@@ -5,10 +5,8 @@
 #include <QFileDialog>
 #include <QTimer>
 #include <QSharedMemory>
-#include <iostream>
 #include <fstream>
 #include "samoplayer.h"
-using namespace std;
 QString dir = "", language, versionRu;
 samoplayer *plr= new samoplayer;
 int nowSelected = 0, currentTab = 0, def_width, def_height;
@@ -819,6 +817,7 @@ void MainWindow::on_action_triggered()
 {
     language = "RU";
     //ui->labelDuration->setText("");
+    ui->dialVolume->setToolTip("Вращать барабан");
     ui->labelGreeting->setText("ДОБРО ПОЖАЛОВАТЬ ВЪ САМОВАР, ТОВАРИЩ");
     ui->labelGreeting->setToolTip("Слушайте музыку с наслаждением");
     ui->labelVolume->setText("Громкость");
@@ -860,6 +859,7 @@ void MainWindow::on_actionEnglish_triggered()
 {
     language = "EN";
     //ui->labelDuration->setText("");
+    ui->dialVolume->setToolTip("Keep spinning the wheel!");
     ui->labelGreeting->setText("Welcome to Samowar Music Player(beta)");
     ui->labelGreeting->setToolTip("Listen to music with flavour");
     ui->labelVolume->setText("Volume");
@@ -899,8 +899,8 @@ void MainWindow::on_actionEnglish_triggered()
 void MainWindow::setVariables() {
     dir = QDir::homePath();
     QApplication::setApplicationName("Samowar Music Player");
-    QApplication::setApplicationVersion("v2.4.61b");
-    versionRu = "2.4.61б";
+    QApplication::setApplicationVersion("v2.7.61b");
+    versionRu = "2.7.61б";
     iconRu = new QIcon(iconsDir+"/ru.png");
     ui->action->setIcon(*iconRu);
     iconEn = new QIcon(iconsDir+"/en.png");
@@ -926,7 +926,7 @@ void MainWindow::setVariables() {
     iconDeleteCurrent = iconClearPls;
     ui->deleteCurrentTrack->setIcon(*iconDeleteCurrent);
     window()->setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
-    ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png); }");
+    //ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png); }");
     ui->currentTrack_progressBar->setVisible(0);
 }
 
