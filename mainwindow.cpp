@@ -930,27 +930,4 @@ void MainWindow::setVariables() {
     ui->currentTrack_progressBar->setVisible(0);
 }
 
-//void MainWindow::on_actionStatusbar_triggered(bool checked)
-//{
-//    if(checked) {
-//        ui->status_layout->SetMaximumSize;
-//        ui->label_2->setVisible(true);
-//        ui->label->setVisible(true);
-//        ui->label_3->setVisible(true);
-//        ui->label_5->setVisible(true);
-//        ui->label_4->setVisible(true);
-//        ui->label_6->setVisible(true);
-//        ui->label_7->setVisible(true);
-//    }
-//    else {
-//        ui->status_layout->SetMinimumSize;
-//        ui->label_2->setVisible(false);
-//        ui->label->setVisible(false);
-//        ui->label_3->setVisible(false);
-//        ui->label_5->setVisible(false);
-//        ui->label_4->setVisible(false);
-//        ui->label_6->setVisible(false);
-//        ui->label_7->setVisible(false);
-//    }
-//}
 
