@@ -484,12 +484,12 @@ void MainWindow::add_files_from_behind()
     QStringList cmdline_args = QApplication::arguments();
     if(cmdline_args.count() > 1) {
         cmdline_args.removeAt(0);
-        if(cmdline_args.contains(" --help ") || cmdline_args.contains(" -h ")) {
+        if(cmdline_args.contains("--help") || cmdline_args.contains("-h")) {
             if(language == "EN") cout << "Usage: samowar [options] [file(s)]\nOptions:\n--help or -h     Show help and exit\n--language or -l    set language(values ru, en)" << endl;
             else cout << "Использование: samowar [options] [file(s)]\nОпции:\n--help или -h     вывести на экран справку и выйти\n--language или -l    выставить язык(значения ru, en)" << endl;
             exit(0);
         }
-        if(cmdline_args.contains(" -l ") || cmdline_args.contains(" --language ")) {
+        if(cmdline_args.contains("-l") || cmdline_args.contains("--language")) {
             if(cmdline_args.at(1) == "en") {
                 on_actionEnglish_triggered();
                 cmdline_args.removeAt(0);
