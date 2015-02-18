@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
     connect(playlist,SIGNAL(mediaRemoved(int,int)),this,SLOT(watchPlaylistChanges()));
     connect(playlist,SIGNAL(mediaInserted(int,int)),this,SLOT(watchPlaylistChanges()));
+    //connect(ui->listWidget, SIGNAL(QEvent::ChildRemoved),this,SLOT(watchInternalDD()));
         loadConfiguration();
         add_files_from_behind();
 }
@@ -225,6 +226,9 @@ void MainWindow::watchPlaying() {
         if(plr->isMuted() && language == "RU") QMainWindow::setWindowTitle("[без звука] САМОВАРЪ - Сейчас играет... " + fi.fileName());
         if(!plr->isMuted()) watchStatus();
     }
+}
+
+void MainWindow::watchInternalDD() {
 }
 
 void MainWindow::watchNextTrack() {
@@ -480,7 +484,12 @@ void MainWindow::add_files_from_behind()
     QStringList cmdline_args = QApplication::arguments();
     if(cmdline_args.count() > 1) {
         cmdline_args.removeAt(0);
-        if(cmdline_args.at(0) == "-l" || cmdline_args.at(0) == "--language") {
+        if(cmdline_args.contains(" --help ") || cmdline_args.contains(" -h ")) {
+            if(language == "EN") cout << "Usage: samowar [options] [file(s)]\nOptions:\n--help or -h     Show help and exit\n--language or -l    set language(values ru, en)" << endl;
+            else cout << "Использование: samowar [options] [file(s)]\nОпции:\n--help или -h     вывести на экран справку и выйти\n--language или -l    выставить язык(значения ru, en)" << endl;
+            exit(0);
+        }
+        if(cmdline_args.contains(" -l ") || cmdline_args.contains(" --language ")) {
             if(cmdline_args.at(1) == "en") {
                 on_actionEnglish_triggered();
                 cmdline_args.removeAt(0);
@@ -494,10 +503,11 @@ void MainWindow::add_files_from_behind()
                 if(cmdline_args.count() == 0) return;
             }
         }
-        if(cmdline_args.at(0) == "--help" || cmdline_args.at(0) == "-h") {
-            if(language == "EN") cout << "Usage: samowar [options] [file(s)]\nOptions:\n--help or -h     Show help and exit\n--language or -l    set language(values ru, en)" << endl;
-            else cout << "Использование: samowar [options] [file(s)]\nОпции:\n--help или -h     вывести на экран справку и выйти\n--language или -l    выставить язык(значения ru, en)" << endl;
-            exit(0);
+        if(cmdline_args.contains(" -v ") || cmdline_args.contains(" --volume ")) {
+            //plr->setVolume(preg_match())
+        }
+        if(cmdline_args.contains(" -a ") || cmdline_args.contains(" --alarm ")) {
+            //sleep preg_match() secs
         }
         for(int i = 1;i < cmdline_args.count()+1;i++) {
             i--;
@@ -859,7 +869,7 @@ void MainWindow::on_actionEnglish_triggered()
 {
     language = "EN";
     //ui->labelDuration->setText("");
-    ui->dialVolume->setToolTip("Keep spinning the wheel!");
+    ui->dialVolume->setToolTip("Keep spinning the wheel");
     ui->labelGreeting->setText("Welcome to Samowar Music Player(beta)");
     ui->labelGreeting->setToolTip("Listen to music with flavour");
     ui->labelVolume->setText("Volume");
