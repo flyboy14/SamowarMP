@@ -375,9 +375,6 @@ void MainWindow::on_actionClear_playlist_triggered()
 void MainWindow::on_dialVolume_valueChanged(int value)
 {
     plr -> setVolume(value);
-    char *buffer = new char[3];
-    sprintf(buffer,"%d",value);
-    ui->labelVolumeDef -> setText(buffer);
 }
 
 void MainWindow::on_dialVolume_sliderPressed()
@@ -528,7 +525,7 @@ void MainWindow::add_files_from_behind()
                     }
                 }
                 if(cmdline_args.at(v) == "-v" || cmdline_args.at(v) == "--volume") {
-                    plr->setVolume(cmdline_args.at(v+1).toInt());
+                    ui->dialVolume->setValue(cmdline_args.at(v+1).toInt());
                     cmdline_args.removeAt(v);
                     cmdline_args.removeAt(v);
                     if(cmdline_args.count() == 0) return;
