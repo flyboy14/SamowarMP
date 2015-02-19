@@ -494,14 +494,14 @@ void MainWindow::add_files_from_behind()
                 if(cmdline_args.at(l) == "-l" || cmdline_args.at(l) == "--language") {
                     if(cmdline_args.at(l+1) == "en") {
                         on_actionEnglish_triggered();
-                        cmdline_args.removeAt(0);
-                        cmdline_args.removeAt(0);
+                        cmdline_args.removeAt(l);
+                        cmdline_args.removeAt(l);
                         if(cmdline_args.count() == 0) return;
                     }
                     if(cmdline_args.at(l+1) == "ru") {
                         on_action_triggered();
-                        cmdline_args.removeAt(0);
-                        cmdline_args.removeAt(0);
+                        cmdline_args.removeAt(l);
+                        cmdline_args.removeAt(l);
                         if(cmdline_args.count() == 0) return;
                     }
                 }
