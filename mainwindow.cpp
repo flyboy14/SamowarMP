@@ -489,26 +489,30 @@ void MainWindow::add_files_from_behind()
             else cout << "Использование: samowar [options] [file(s)]\nОпции:\n--help или -h     вывести на экран справку и выйти\n--language или -l    выставить язык(значения ru, en)" << endl;
             exit(0);
         }
-        if(cmdline_args.contains("-l") || cmdline_args.contains("--language")) {
-            if(cmdline_args.at(1) == "en") {
-                on_actionEnglish_triggered();
-                cmdline_args.removeAt(0);
-                cmdline_args.removeAt(0);
-                if(cmdline_args.count() == 0) return;
+       // if(cmdline_args.contains("-l") || cmdline_args.contains("--language")) {
+            for(int l,v,t = 0; l < cmdline_args.count(); l++, v++, t++) {
+                if(cmdline_args.at(l) == "-l" || cmdline_args.at(l) == "--language") {
+                    if(cmdline_args.at(l+1) == "en") {
+                        on_actionEnglish_triggered();
+                        cmdline_args.removeAt(0);
+                        cmdline_args.removeAt(0);
+                        if(cmdline_args.count() == 0) return;
+                    }
+                    if(cmdline_args.at(l+1) == "ru") {
+                        on_action_triggered();
+                        cmdline_args.removeAt(0);
+                        cmdline_args.removeAt(0);
+                        if(cmdline_args.count() == 0) return;
+                    }
+                }
+                if(cmdline_args.at(v) == "-v" || cmdline_args.at(v) == "--volume") {
+                    plr->setVolume(cmdline_args.at(v+1).toInt());
+                }
+                //if(cmdline_args(t) == "-t" || cmdline_args(t) == "--timer") {
+                //    plr->setVolume(cmdline_args.at(t+1).toInt());
+                //}
             }
-            if(cmdline_args.at(1) == "ru") {
-                on_action_triggered();
-                cmdline_args.removeAt(0);
-                cmdline_args.removeAt(0);
-                if(cmdline_args.count() == 0) return;
-            }
-        }
-        if(cmdline_args.contains(" -v ") || cmdline_args.contains(" --volume ")) {
-            //plr->setVolume(preg_match())
-        }
-        if(cmdline_args.contains(" -a ") || cmdline_args.contains(" --alarm ")) {
-            //sleep preg_match() secs
-        }
+        //}
         for(int i = 1;i < cmdline_args.count()+1;i++) {
             i--;
             QFileInfo fi(cmdline_args[i]);
@@ -520,13 +524,13 @@ void MainWindow::add_files_from_behind()
                 }
                 else {
                     wrongfile = "файл "+fi.fileName()+" не похож на музыкальный!";
-                QMessageBox::critical(this, tr("Неверный тип файлы"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
+                QMessageBox::critical(this, tr("Неверный тип файла"), wrongfile, QMessageBox::Ok, QMessageBox::Ok);
                 }
                 cmdline_args.removeAt(i);
             }
             else i++;
         }
-        if(cmdline_args.count()==0) return;
+        if(cmdline_args.count() == 0) return;
         if(ui->listWidget->count() != 0) {
             on_actionClear_playlist_triggered();
             ui->A->tabBar()->setTabText(currentTab, "♫*");
