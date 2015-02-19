@@ -485,8 +485,28 @@ void MainWindow::add_files_from_behind()
     if(cmdline_args.count() > 1) {
         cmdline_args.removeAt(0);
         if(cmdline_args.contains("--help") || cmdline_args.contains("-h")) {
-            if(language == "EN") cout << "Usage: samowar [options] [file(s)]\nOptions:\n--help or -h     Show help and exit\n--language or -l    set language(values ru, en)" << endl;
-            else cout << "Использование: samowar [options] [file(s)]\nОпции:\n--help или -h     вывести на экран справку и выйти\n--language или -l    выставить язык(значения ru, en)" << endl;
+            if(language == "RU") {
+                cout << "Использование: " << endl;
+                cout << "samowar [опции] <файл(ы)>" << endl;
+                cout << "Опции: " << endl;
+                //cout.width(60);
+                cout << "--help или -h          вывести на экран справку и выйти" << endl;
+                //cout.width(60);
+                cout << "--language или -l      выставить язык(значения ru, en)" << endl;
+                //cout.width(60);
+                cout << "--volume или -v        выставить громкость(значения 0..100)" << endl;
+            }
+            else {
+                cout << "Usage: " << endl;
+                cout << "samowar [options] <file(s)>" << endl;
+                cout << "Options: " << endl;
+                //cout.width(60);
+                cout << "--help or -h           show help and exit" << endl;
+                //cout.width(60);
+                cout << "--language or -l       set language(values ru, en)" << endl;
+                //cout.width(60);
+                cout << "--volume или -v        set initial volume(values 0..100)" << endl;
+            }
             exit(0);
         }
        // if(cmdline_args.contains("-l") || cmdline_args.contains("--language")) {
@@ -507,6 +527,8 @@ void MainWindow::add_files_from_behind()
                 }
                 if(cmdline_args.at(v) == "-v" || cmdline_args.at(v) == "--volume") {
                     plr->setVolume(cmdline_args.at(v+1).toInt());
+                    cmdline_args.removeAt(v);
+                    cmdline_args.removeAt(v);
                 }
                 //if(cmdline_args(t) == "-t" || cmdline_args(t) == "--timer") {
                 //    plr->setVolume(cmdline_args.at(t+1).toInt());
