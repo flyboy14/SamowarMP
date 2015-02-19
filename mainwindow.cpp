@@ -511,7 +511,7 @@ void MainWindow::add_files_from_behind()
         }
        // if(cmdline_args.contains("-l") || cmdline_args.contains("--language")) {
         int init_args_count = cmdline_args.count();
-            for(int l,v,t = 0; l < init_args_count; l++, v++, t++) {
+            for(int l = 0,v = 0,t = 0; l < init_args_count; l++, v++, t++) {
                 if(cmdline_args.count() == 0) return;
                 if(cmdline_args.at(l) == "-l" || cmdline_args.at(l) == "--language") {
                     if(cmdline_args.at(l+1) == "en") {
