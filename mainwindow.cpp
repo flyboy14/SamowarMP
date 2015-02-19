@@ -510,7 +510,8 @@ void MainWindow::add_files_from_behind()
             exit(0);
         }
        // if(cmdline_args.contains("-l") || cmdline_args.contains("--language")) {
-            for(int l,v,t = 0; l < cmdline_args.count(); l++, v++, t++) {
+        int init_args_count = cmdline_args.count();
+            for(int l,v,t = 0; l < init_args_count; l++, v++, t++) {
                 if(cmdline_args.at(l) == "-l" || cmdline_args.at(l) == "--language") {
                     if(cmdline_args.at(l+1) == "en") {
                         on_actionEnglish_triggered();
