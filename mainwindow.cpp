@@ -483,7 +483,7 @@ void MainWindow::add_files_from_behind()
     QString wrongfile;
     QStringList cmdline_args = QApplication::arguments();
     if(cmdline_args.count() > 1) {
-        cmdline_args.removeAt(0);
+        cmdline_args.removeAt(0);       // *king magic
         if(cmdline_args.contains("--help") || cmdline_args.contains("-h")) {
             if(language == "RU") {
                 cout << "Использование: " << endl;
@@ -510,7 +510,7 @@ void MainWindow::add_files_from_behind()
             exit(0);
         }
        // if(cmdline_args.contains("-l") || cmdline_args.contains("--language")) {
-        int init_args_count = cmdline_args.count();
+        int init_args_count = cmdline_args.count()+1;
             for(int l,v,t = 0; l < init_args_count; l++, v++, t++) {
                 if(cmdline_args.at(l) == "-l" || cmdline_args.at(l) == "--language") {
                     if(cmdline_args.at(l+1) == "en") {
