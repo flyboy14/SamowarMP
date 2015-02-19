@@ -483,7 +483,7 @@ void MainWindow::add_files_from_behind()
     QString wrongfile;
     QStringList cmdline_args = QApplication::arguments();
     if(cmdline_args.count() > 1) {
-        cmdline_args.removeAt(0);       // *king magic
+        cmdline_args.removeAt(0);       // *uking magic
         if(cmdline_args.contains("--help") || cmdline_args.contains("-h")) {
             if(language == "RU") {
                 cout << "Использование: " << endl;
@@ -505,12 +505,12 @@ void MainWindow::add_files_from_behind()
                 //cout.width(60);
                 cout << "--language or -l       set language(values ru, en)" << endl;
                 //cout.width(60);
-                cout << "--volume или -v        set initial volume(values 0..100)" << endl;
+                cout << "--volume or -v        set initial volume(values 0..100)" << endl;
             }
             exit(0);
         }
        // if(cmdline_args.contains("-l") || cmdline_args.contains("--language")) {
-        int init_args_count = cmdline_args.count()+1;
+        int init_args_count = cmdline_args.count();
             for(int l,v,t = 0; l < init_args_count; l++, v++, t++) {
                 if(cmdline_args.at(l) == "-l" || cmdline_args.at(l) == "--language") {
                     if(cmdline_args.at(l+1) == "en") {
@@ -530,6 +530,7 @@ void MainWindow::add_files_from_behind()
                     plr->setVolume(cmdline_args.at(v+1).toInt());
                     cmdline_args.removeAt(v);
                     cmdline_args.removeAt(v);
+                    if(cmdline_args.count() == 0) return;
                 }
                 //if(cmdline_args(t) == "-t" || cmdline_args(t) == "--timer") {
                 //    plr->setVolume(cmdline_args.at(t+1).toInt());
