@@ -518,12 +518,16 @@ void MainWindow::add_files_from_behind()
                         on_actionEnglish_triggered();
                         cmdline_args.removeAt(l);
                         cmdline_args.removeAt(l);
+                        l--;
+                        v--;
                         if(cmdline_args.count() == 0) return;
                     }
                     if(cmdline_args.at(l+1) == "ru") {
                         on_action_triggered();
                         cmdline_args.removeAt(l);
                         cmdline_args.removeAt(l);
+                        l--;
+                        v--;
                         if(cmdline_args.count() == 0) return;
                     }
                 }
@@ -531,6 +535,8 @@ void MainWindow::add_files_from_behind()
                     ui->dialVolume->setValue(cmdline_args.at(v+1).toInt());
                     cmdline_args.removeAt(v);
                     cmdline_args.removeAt(v);
+                    l--;
+                    v--;
                     if(cmdline_args.count() == 0) return;
                 }
                 //if(cmdline_args(t) == "-t" || cmdline_args(t) == "--timer") {
