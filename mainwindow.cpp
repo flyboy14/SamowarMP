@@ -489,23 +489,23 @@ void MainWindow::add_files_from_behind()
                 cout << "Использование: " << endl;
                 cout << "samowar [опции] <файл(ы)>" << endl;
                 cout << "Опции: " << endl;
-                //cout.width(60);
+                cout.width(60);
                 cout << "--help или -h          вывести на экран справку и выйти" << endl;
-                //cout.width(60);
+                cout.width(60);
                 cout << "--language или -l      выставить язык(значения ru, en)" << endl;
-                //cout.width(60);
+                cout.width(60);
                 cout << "--volume или -v        выставить громкость(значения 0..100)" << endl;
             }
             else {
                 cout << "Usage: " << endl;
                 cout << "samowar [options] <file(s)>" << endl;
                 cout << "Options: " << endl;
-                //cout.width(60);
+                cout.width(60);
                 cout << "--help or -h           show help and exit" << endl;
-                //cout.width(60);
+                cout.width(60);
                 cout << "--language or -l       set language(values ru, en)" << endl;
-                //cout.width(60);
-                cout << "--volume or -v        set initial volume(values 0..100)" << endl;
+                cout.width(60);
+                cout << "--volume or -v         set initial volume(values 0..100)" << endl;
             }
             exit(0);
         }
