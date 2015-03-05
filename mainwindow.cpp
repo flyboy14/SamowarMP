@@ -489,22 +489,22 @@ void MainWindow::add_files_from_behind()
                 cout << "Использование: " << endl;
                 cout << "samowar [опции] <файл(ы)>" << endl;
                 cout << "Опции: " << endl;
-                cout.width(60);
+                //cout.width(60);
                 cout << "--help или -h          вывести на экран справку и выйти" << endl;
-                cout.width(60);
+                //cout.width(60);
                 cout << "--language или -l      выставить язык(значения ru, en)" << endl;
-                cout.width(60);
+                //cout.width(60);
                 cout << "--volume или -v        выставить громкость(значения 0..100)" << endl;
             }
             else {
                 cout << "Usage: " << endl;
                 cout << "samowar [options] <file(s)>" << endl;
                 cout << "Options: " << endl;
-                cout.width(60);
+                //cout.width(60);
                 cout << "--help or -h           show help and exit" << endl;
-                cout.width(60);
+                //cout.width(60);
                 cout << "--language or -l       set language(values ru, en)" << endl;
-                cout.width(60);
+                //cout.width(60);
                 cout << "--volume or -v         set initial volume(values 0..100)" << endl;
             }
             exit(0);
@@ -636,8 +636,14 @@ void MainWindow::watchStatusBar() {
         ui->label_3->setText(QString::number(playlist->mediaCount()));
         ui->label_7->setText(QString::number(playlist->mediaCount()));
         if(language == "EN") {
-            if(playlist->mediaCount() == 1) ui->label_2->setText("file");
-            else ui->label_2->setText("files");
+            if(playlist->mediaCount() == 1) {
+                ui->label_2->setText("file");
+                ui->label->setText("Loaded");
+            }
+            else {
+                ui->label_2->setText("files");
+                ui->label->setText("Loaded");
+            }
         }
         if(language == "RU") {
             if(playlist->mediaCount()%100 == 11 || playlist->mediaCount()%100 == 12 || playlist->mediaCount()%100 == 13 ||
@@ -671,9 +677,9 @@ void MainWindow::watchStatusBar() {
             }
             if(language == "EN") {
                 ui->label_5->setText(ui->label_7->text());
-                ui->label_2->setText("Playlist");
+                ui->label_2->setText("empty");
                 ui->label_3->setText("is");
-                ui->label->setText("empty");
+                ui->label->setText("Playlist");
             }
     }
 }
@@ -782,7 +788,17 @@ void MainWindow::loadConfiguration() {
     if(language == "RU") on_action_triggered();
     else on_actionEnglish_triggered();
     watchStatusBar();
-        //ui->label_3->setText(QString::number(files.count()));
+    ui->label_lbr->setHidden(true);
+    ui->label_rbr->setHidden(true);
+    ui->label_count->setHidden(true);
+//    int temp_pos = playlist->currentIndex();
+//    double sum_duration = 0;
+//    for(int i = 0; i <= playlist->mediaCount();i++) {
+//        playlist->setCurrentIndex(i);
+//        sum_duration += plr->duration();
+//    }
+//    ui->label_count->setText(QString::number(sum_duration));
+//    playlist->setCurrentIndex(temp_pos);
 }
 
 void MainWindow::recursiveAddFolder(QStringList *out, QString path) {

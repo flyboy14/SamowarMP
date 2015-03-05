@@ -890,6 +890,33 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QLabel" name="label_lbr">
+        <property name="text">
+         <string>(</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_count">
+        <property name="text">
+         <string>count</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_rbr">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="cursor">
+         <cursorShape>ArrowCursor</cursorShape>
+        </property>
+        <property name="text">
+         <string>)</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
    </layout>
@@ -900,7 +927,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
      <x>0</x>
      <y>0</y>
      <width>667</width>
-     <height>19</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuOptions">
