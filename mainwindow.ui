@@ -370,6 +370,12 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
              <layout class="QGridLayout" name="playlist_layout">
               <item row="1" column="1">
                <widget class="QLabel" name="labelDuration">
+                <property name="font">
+                 <font>
+                  <family>Fixed [Misc]</family>
+                  <pointsize>8</pointsize>
+                 </font>
+                </property>
                 <property name="text">
                  <string/>
                 </property>
@@ -516,10 +522,31 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
       </item>
       <item>
        <widget class="QGroupBox" name="groupBox">
+        <property name="font">
+         <font>
+          <family>Fixed [Misc]</family>
+          <pointsize>9</pointsize>
+         </font>
+        </property>
         <property name="title">
          <string>Controls</string>
         </property>
         <layout class="QGridLayout" name="gridLayout">
+         <property name="leftMargin">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>9</number>
+         </property>
+         <property name="rightMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <property name="horizontalSpacing">
+          <number>6</number>
+         </property>
          <item row="0" column="0">
           <layout class="QVBoxLayout" name="controls_layout">
            <item>
@@ -890,33 +917,6 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QLabel" name="label_lbr">
-        <property name="text">
-         <string>(</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_count">
-        <property name="text">
-         <string>count</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_rbr">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="cursor">
-         <cursorShape>ArrowCursor</cursorShape>
-        </property>
-        <property name="text">
-         <string>)</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>
@@ -927,8 +927,14 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
      <x>0</x>
      <y>0</y>
      <width>667</width>
-     <height>18</height>
+     <height>23</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+    </font>
    </property>
    <widget class="QMenu" name="menuOptions">
     <property name="minimumSize">
@@ -936,6 +942,12 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
       <width>0</width>
       <height>0</height>
      </size>
+    </property>
+    <property name="font">
+     <font>
+      <family>Fixed [Misc]</family>
+      <pointsize>8</pointsize>
+     </font>
     </property>
     <property name="title">
      <string>&amp;Playlist</string>
@@ -948,10 +960,22 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
     <addaction name="actionClear_playlist"/>
    </widget>
    <widget class="QMenu" name="menuDonate">
+    <property name="font">
+     <font>
+      <family>Fixed [Misc]</family>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>&amp;Options</string>
     </property>
     <widget class="QMenu" name="menuLanguage">
+     <property name="font">
+      <font>
+       <family>Fixed [Misc]</family>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
      <property name="title">
       <string>&amp;Language</string>
      </property>
@@ -970,20 +994,52 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
    <property name="text">
     <string>&amp;Quit</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
   </action>
   <action name="action_200">
    <property name="text">
     <string>&amp;Contribute</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
   </action>
   <action name="action_add_files">
    <property name="text">
     <string>&amp;Add file(s)</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
   </action>
   <action name="actionClear_playlist">
    <property name="text">
     <string>&amp;Clear playlist</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
   </action>
   <action name="actionToggle_debug_output">
@@ -1009,20 +1065,52 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
    <property name="text">
     <string>Add &amp;folder(s)</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
   </action>
   <action name="actionSave_playlist">
    <property name="text">
     <string>&amp;Save playlist</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
   </action>
   <action name="actionOpen_playlist">
    <property name="text">
     <string>&amp;Open playlist</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
   </action>
   <action name="actionRemove_duplicates">
    <property name="text">
     <string>&amp;Remove duplicates</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
   </action>
   <action name="actionAuto_pause_when_closed">
@@ -1031,6 +1119,14 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
    </property>
    <property name="text">
     <string>&amp;Auto pause when close</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
   </action>
   <action name="actionCredits">
@@ -1047,10 +1143,26 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
    <property name="text">
     <string>Русский</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
+   </property>
   </action>
   <action name="actionEnglish">
    <property name="text">
     <string>&amp;English</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Fixed [Misc]</family>
+     <pointsize>8</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+    </font>
    </property>
   </action>
   <action name="actionStatusbar">

@@ -788,17 +788,6 @@ void MainWindow::loadConfiguration() {
     if(language == "RU") on_action_triggered();
     else on_actionEnglish_triggered();
     watchStatusBar();
-    ui->label_lbr->setHidden(true);
-    ui->label_rbr->setHidden(true);
-    ui->label_count->setHidden(true);
-//    int temp_pos = playlist->currentIndex();
-//    double sum_duration = 0;
-//    for(int i = 0; i <= playlist->mediaCount();i++) {
-//        playlist->setCurrentIndex(i);
-//        sum_duration += plr->duration();
-//    }
-//    ui->label_count->setText(QString::number(sum_duration));
-//    playlist->setCurrentIndex(temp_pos);
 }
 
 void MainWindow::recursiveAddFolder(QStringList *out, QString path) {
@@ -879,7 +868,7 @@ void MainWindow::on_action_triggered()
     language = "RU";
     //ui->labelDuration->setText("");
     ui->dialVolume->setToolTip("Вращать барабан");
-    ui->labelGreeting->setText("ДОБРО ПОЖАЛОВАТЬ ВЪ САМОВАР, ТОВАРИЩ");
+    ui->labelGreeting->setText("Добро пожаловать въ самовар, товарищ!");
     ui->labelGreeting->setToolTip("Слушайте музыку с наслаждением");
     ui->labelVolume->setText("Громкость");
     ui->radio_mute->setText("Без звука");
@@ -987,7 +976,6 @@ void MainWindow::setVariables() {
     iconDeleteCurrent = iconClearPls;
     ui->deleteCurrentTrack->setIcon(*iconDeleteCurrent);
     window()->setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
-    //ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png); } QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png); }");
     ui->currentTrack_progressBar->setVisible(0);
 }
 
