@@ -9,7 +9,7 @@
 #include "samoplayer.h"
 QString dir = "", language, versionRu;
 samoplayer *plr= new samoplayer;
-int nowSelected = 0, currentTab = 0, def_width, def_height;
+int nowSelected = 0, currentTab = 0, def_width, def_height, toRemove = -1;
 bool repeat=false, randome=false, single=false, was_paused, playstate = false;
 #ifdef Q_OS_LINUX
 QString iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
@@ -79,8 +79,8 @@ void MainWindow::on_button_stop_clicked()
 void MainWindow::on_action_200_triggered()
 {
     QMessageBox msg;
-    if(language == "EN") msg.setText("This function is not supported yet");
-    else msg.setText("К сожалению, эта функция еще не поддерживается");
+    if(language == "EN") msg.setText("You are the only person to ever get this message.");
+    else msg.setText("Вы единственный человек, когда-либо получивший это сообщение.");
     msg.setIcon(QMessageBox::Critical);
     msg.setStandardButtons(QMessageBox::Ok);
     msg.setDefaultButton(QMessageBox::Ok);
@@ -181,11 +181,21 @@ void MainWindow::on_deleteCurrentTrack_clicked()
     if(playlist->mediaCount() != 0) {
         int tmp = playlist->currentIndex();
         if(nowSelected < tmp) {
-            disconnect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
-            disconnect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
-            disconnect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
-            plr->stopMusic();
+//            disconnect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
+//            disconnect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
+//            disconnect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
+//            plr->stopMusic();
+//            playlist->setCurrentIndex(tmp);
+            toRemove = nowSelected;
+            files.removeAt(nowSelected);
+            ui->listWidget->clear();
+            for(int i = 0; i < files.count(); i++) {
+                QFileInfo fi(files[i]);
+                ui->listWidget->addItem(fi.fileName());
+            }
+            ui->listWidget->setCurrentRow(playlist->currentIndex()-1);
         }
+        else {
         files.removeAt(nowSelected);
         playlist->removeMedia(nowSelected);
         int tmp_sel = nowSelected;
@@ -197,6 +207,7 @@ void MainWindow::on_deleteCurrentTrack_clicked()
             }
             nowSelected = tmp_sel;
             ui->listWidget->setCurrentRow(nowSelected);
+    }
     }
     else {
         plr->stopMusic();
@@ -234,8 +245,14 @@ void MainWindow::watchInternalDD() {
 void MainWindow::watchNextTrack() {
     for(int row=0; row != playlist->mediaCount(); row++)
         if(ui->listWidget->item(row)->isSelected()) ui->listWidget->item(row)->setSelected(false);
-        if(nowSelected < playlist->currentIndex()) ui->listWidget->setCurrentRow(nowSelected);
+   // if(toRemove != -1) {
+     //   if(nowSelected < playlist->currentIndex()) ui->listWidget->setCurrentRow(nowSelected+1);
+       //     else ui->listWidget->setCurrentRow(playlist->currentIndex());
+    //}
+    //else {
+    if(nowSelected < playlist->currentIndex()) ui->listWidget->setCurrentRow(nowSelected);
         else ui->listWidget->setCurrentRow(playlist->currentIndex());
+    //}
 }
 
 void MainWindow::watchSelectedTrack() {
@@ -266,9 +283,18 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 
 void MainWindow::atTrackEnd() {
     if(files.count() != 0) {
+        if(toRemove != -1) {
+            playlist->removeMedia(toRemove);
+            toRemove = -1;
+            ui->listWidget->clear();
+            for(int i = 0; i < files.count(); i++) {
+                QFileInfo fi(files[i]);
+                ui->listWidget->addItem(fi.fileName());
+            }
+}
         ui->listWidget->setCurrentRow(playlist->currentIndex());      
-    ui->currentTrack_progressBar->setValue(1);
-    ui->label_5->setText(QString::number(playlist->currentIndex()+1));
+        ui->currentTrack_progressBar->setValue(1);
+        ui->label_5->setText(QString::number(playlist->currentIndex()+1)); //show track position in statusbar
     }
 }
 
