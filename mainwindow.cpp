@@ -9,7 +9,8 @@
 #include "samoplayer.h"
 QString dir = "", language, versionRu;
 samoplayer *plr= new samoplayer;
-int nowSelected = 0, currentTab = 0, def_width, def_height, toRemove = -1;
+int nowSelected = 0, currentTab = 0, def_width, def_height, toRemove = false;
+QList<int> removeList;
 bool repeat=false, randome=false, single=false, was_paused, playstate = false;
 #ifdef Q_OS_LINUX
 QString iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
@@ -181,19 +182,15 @@ void MainWindow::on_deleteCurrentTrack_clicked()
     if(playlist->mediaCount() != 0) {
         int tmp = playlist->currentIndex();
         if(nowSelected < tmp) {
-//            disconnect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
-//            disconnect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
-//            disconnect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
-//            plr->stopMusic();
-//            playlist->setCurrentIndex(tmp);
-            toRemove = nowSelected;
+            toRemove = true;
+            removeList.append(nowSelected);
             files.removeAt(nowSelected);
             ui->listWidget->clear();
             for(int i = 0; i < files.count(); i++) {
                 QFileInfo fi(files[i]);
                 ui->listWidget->addItem(fi.fileName());
             }
-            ui->listWidget->setCurrentRow(playlist->currentIndex()-1);
+            ui->listWidget->setCurrentRow(removeList.at(0));
         }
         else {
         files.removeAt(nowSelected);
@@ -213,10 +210,6 @@ void MainWindow::on_deleteCurrentTrack_clicked()
         plr->stopMusic();
         nowSelected = 0;
     }
-    connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
-    connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
-    connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
-
 }
 
 void MainWindow::on_horizontalSlider_sliderMoved(int position)
@@ -226,16 +219,30 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
 
 void MainWindow::watchPlaying() {
     if(files.count() != 0 && playlist->currentIndex() < files.count() && playlist->currentIndex() != -1) {
-        QFileInfo fi(files[playlist->currentIndex()]);
-        int pos_secs = (plr->position()%60000)/1000;
-        int dur_secs = (plr->duration()%60000)/1000;
-        if(pos_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
-        if(dur_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
-        if(pos_secs < 10 && dur_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
-        if(dur_secs > 10 && pos_secs > 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
-        if(plr->isMuted() && language == "EN") QMainWindow::setWindowTitle("[muted] Samowar - Playing... " + fi.fileName());
-        if(plr->isMuted() && language == "RU") QMainWindow::setWindowTitle("[без звука] САМОВАРЪ - Сейчас играет... " + fi.fileName());
-        if(!plr->isMuted()) watchStatus();
+        if(!toRemove) {
+            QFileInfo fi(files[playlist->currentIndex()]);
+            int pos_secs = (plr->position()%60000)/1000;
+            int dur_secs = (plr->duration()%60000)/1000;
+            if(pos_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
+            if(dur_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
+            if(pos_secs < 10 && dur_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
+            if(dur_secs > 10 && pos_secs > 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
+            if(plr->isMuted() && language == "EN") QMainWindow::setWindowTitle("[muted] Samowar - Playing... " + fi.fileName());
+            if(plr->isMuted() && language == "RU") QMainWindow::setWindowTitle("[без звука] САМОВАРЪ - Сейчас играет... " + fi.fileName());
+            if(!plr->isMuted()) watchStatus();
+        }
+        else {
+            QFileInfo fi(files[playlist->currentIndex()-removeList.count()]);
+            int pos_secs = (plr->position()%60000)/1000;
+            int dur_secs = (plr->duration()%60000)/1000;
+            if(pos_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
+            if(dur_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
+            if(pos_secs < 10 && dur_secs < 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":0"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":0"+ QString::number(dur_secs));
+            if(dur_secs > 10 && pos_secs > 10) ui -> labelDuration->setText(QString::number(plr->position()/60000) +":"+ QString::number(pos_secs) + " / " + QString::number(plr->duration()/60000) +":"+ QString::number(dur_secs));
+            if(plr->isMuted() && language == "EN") QMainWindow::setWindowTitle("[muted] Samowar - Playing... " + fi.fileName());
+            if(plr->isMuted() && language == "RU") QMainWindow::setWindowTitle("[без звука] САМОВАРЪ - Сейчас играет... " + fi.fileName());
+            if(!plr->isMuted()) watchStatus();
+        }
     }
 }
 
@@ -245,14 +252,8 @@ void MainWindow::watchInternalDD() {
 void MainWindow::watchNextTrack() {
     for(int row=0; row != playlist->mediaCount(); row++)
         if(ui->listWidget->item(row)->isSelected()) ui->listWidget->item(row)->setSelected(false);
-   // if(toRemove != -1) {
-     //   if(nowSelected < playlist->currentIndex()) ui->listWidget->setCurrentRow(nowSelected+1);
-       //     else ui->listWidget->setCurrentRow(playlist->currentIndex());
-    //}
-    //else {
     if(nowSelected < playlist->currentIndex()) ui->listWidget->setCurrentRow(nowSelected);
         else ui->listWidget->setCurrentRow(playlist->currentIndex());
-    //}
 }
 
 void MainWindow::watchSelectedTrack() {
@@ -283,12 +284,14 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 
 void MainWindow::atTrackEnd() {
     if(files.count() != 0) {
-        if(toRemove != -1) {
+        if(toRemove) {
             disconnect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
             disconnect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
-            disconnect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
-            playlist->removeMedia(toRemove);
-            toRemove = -1;
+            disconnect(plr,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
+            for(int i = 0; i < removeList.count(); i++)
+                playlist->removeMedia(removeList.at(i));
+            toRemove = false;
+            removeList.clear();
             ui->listWidget->clear();
             for(int i = 0; i < files.count(); i++) {
                 QFileInfo fi(files[i]);
@@ -296,11 +299,11 @@ void MainWindow::atTrackEnd() {
             }
             connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
             connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
-            connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
+            connect(plr,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
     }
         ui->listWidget->setCurrentRow(playlist->currentIndex());      
         ui->currentTrack_progressBar->setValue(1);
-        ui->label_5->setText(QString::number(playlist->currentIndex()+1)); //show track position in statusbar
+        ui->label_5->setText(QString::number(playlist->currentIndex()+1)); //show track number in statusbar
     }
 }
 
@@ -308,7 +311,6 @@ void MainWindow::watchStatus() {
     if(plr->state() == 0) {
         ui->button_play->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-play.png);} QPushButton::hover { border-image: url(/usr/share/samowar/icons/media-play-hover.png); } QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-play.png);}");
         ui->currentTrack_progressBar->setValue(1);
-        //ui->horizontalSlider->setValue(0);
         playstate = false;
         if(language == "EN") QMainWindow::setWindowTitle(QApplication::applicationName()+" "+QApplication::applicationVersion());
         else QMainWindow::setWindowTitle("МУЗЫКАЛЬНЫЙ ПРОИГРЫВАТЕЛЬ САМОВАРЪ "+ versionRu);
