@@ -284,6 +284,9 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 void MainWindow::atTrackEnd() {
     if(files.count() != 0) {
         if(toRemove != -1) {
+            disconnect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
+            disconnect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
+            disconnect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
             playlist->removeMedia(toRemove);
             toRemove = -1;
             ui->listWidget->clear();
@@ -291,7 +294,10 @@ void MainWindow::atTrackEnd() {
                 QFileInfo fi(files[i]);
                 ui->listWidget->addItem(fi.fileName());
             }
-}
+            connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
+            connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
+            connect(plr,SIGNAL(positionChanged(qint64)),this,SLOT(watchPlaying()));
+    }
         ui->listWidget->setCurrentRow(playlist->currentIndex());      
         ui->currentTrack_progressBar->setValue(1);
         ui->label_5->setText(QString::number(playlist->currentIndex()+1)); //show track position in statusbar
