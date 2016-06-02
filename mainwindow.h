@@ -22,6 +22,10 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 private slots:
+    void fill_listwidget_from_files();
+
+    QStringList playlist_to_qstringlist(QMediaPlaylist *pls);
+
     void watchInternalDD();
 
     void watchStatusBar();
@@ -98,6 +102,10 @@ private slots:
 
     void on_actionOpen_playlist_triggered();
 
+    void on_actionShuffle_entire_playlist_triggered();
+
+    void on_actionJump_to_random_song_triggered();
+
     void saveToFile(int var, QString name);
 
     void saveToFile(QStringList var, QString name);
@@ -114,16 +122,17 @@ private slots:
 
     void on_actionEnglish_triggered();
 
+    void on_shuffleButton_clicked();
+
 public slots:
     void saveConfiguration();
     void setVariables();
-        void loadConfiguration();
+    void loadConfiguration();
 
 protected:
     Ui::MainWindow *ui;
     QMediaPlaylist *playlist;
     QIcon *iconEn, *iconRu, *iconLanguage, *iconInfo,*iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
-    QStringList files;
 };
 
 #endif // MAINWINDOW_H

@@ -41,7 +41,7 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0">
+    <item row="2" column="0">
      <widget class="QProgressBar" name="currentTrack_progressBar">
       <property name="minimumSize">
        <size>
@@ -69,7 +69,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <layout class="QHBoxLayout" name="button_playlist_and_controls_layout">
       <item>
        <layout class="QVBoxLayout" name="buttons_and_playlist_layout">
@@ -660,6 +660,19 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
             </widget>
            </item>
            <item>
+            <widget class="QCheckBox" name="checkBox_single">
+             <property name="cursor">
+              <cursorShape>ArrowCursor</cursorShape>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle single song repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>Single</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QCheckBox" name="checkBox_random">
              <property name="cursor">
               <cursorShape>ArrowCursor</cursorShape>
@@ -673,15 +686,9 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
             </widget>
            </item>
            <item>
-            <widget class="QCheckBox" name="checkBox_single">
-             <property name="cursor">
-              <cursorShape>ArrowCursor</cursorShape>
-             </property>
-             <property name="toolTip">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Toggle single song repeat&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
+            <widget class="QPushButton" name="shuffleButton">
              <property name="text">
-              <string>Single</string>
+              <string>Shuffle</string>
              </property>
             </widget>
            </item>
@@ -734,7 +741,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
       </item>
      </layout>
     </item>
-    <item row="3" column="0">
+    <item row="4" column="0">
      <layout class="QHBoxLayout" name="status_layout">
       <item>
        <widget class="QLabel" name="label_4">
@@ -927,7 +934,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
      <x>0</x>
      <y>0</y>
      <width>667</width>
-     <height>23</height>
+     <height>18</height>
     </rect>
    </property>
    <property name="font">
@@ -982,8 +989,22 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
      <addaction name="action"/>
      <addaction name="actionEnglish"/>
     </widget>
+    <widget class="QMenu" name="menuUI">
+     <property name="title">
+      <string>UI</string>
+     </property>
+     <widget class="QMenu" name="menuRandom_playlist_behaviour">
+      <property name="title">
+       <string>Random playlist behaviour</string>
+      </property>
+      <addaction name="actionJump_to_random_song"/>
+      <addaction name="actionShuffle_entire_playlist"/>
+     </widget>
+     <addaction name="menuRandom_playlist_behaviour"/>
+    </widget>
     <addaction name="actionAuto_pause_when_closed"/>
     <addaction name="menuLanguage"/>
+    <addaction name="menuUI"/>
     <addaction name="action_200"/>
     <addaction name="actionExit"/>
    </widget>
@@ -1171,6 +1192,16 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
    </property>
    <property name="text">
     <string>Show / hide statusbar</string>
+   </property>
+  </action>
+  <action name="actionJump_to_random_song">
+   <property name="text">
+    <string>Jump to random song</string>
+   </property>
+  </action>
+  <action name="actionShuffle_entire_playlist">
+   <property name="text">
+    <string>Shuffle entire playlist</string>
    </property>
   </action>
  </widget>
