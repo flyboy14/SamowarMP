@@ -64,7 +64,7 @@ private slots:
 
     void on_action_add_files_triggered();
 
-    void on_radio_mute_toggled(bool checked);
+    void on_radio_mute_toggled();
 
     void on_button_play_prev_clicked();
 
@@ -80,11 +80,11 @@ private slots:
 
     void on_horizontalSlider_sliderReleased();
 
-    void on_checkBox_repeat_toggled(bool checked);
+    void on_checkBox_repeat_toggled();
 
-    void on_checkBox_random_toggled(bool checked);
+    void on_checkBox_random_toggled();
 
-    void on_checkBox_single_toggled(bool checked);
+    void on_checkBox_single_toggled();
 
     void on_actionClear_playlist_triggered();
 

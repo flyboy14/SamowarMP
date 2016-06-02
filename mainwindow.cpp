@@ -14,7 +14,7 @@ QString dir = "", language, versionRu;
 samoplayer *plr= new samoplayer;
 int nowSelected = 0, currentTab = 0, def_width, def_height, toRemove = false;
 QList<int> removeList;
-bool repeat=false, randome=false, single=false, was_paused, playstate = false;
+bool was_paused, playstate = false;
 #ifdef Q_OS_LINUX
 QString iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
 plsDir = QDir::homePath()+"/.config/samowar/playlists";
@@ -136,7 +136,7 @@ void MainWindow::on_action_add_files_triggered()
     addToPlaylist(tmp);
 }
 
-void MainWindow::on_radio_mute_toggled(bool checked)
+void MainWindow::on_radio_mute_toggled()
 {
      if(plr->isMuted()) plr->setMuted(0);
      else plr->setMuted(1);
@@ -177,6 +177,7 @@ void MainWindow::on_button_play_next_clicked()
 void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     plr->stopMusic();
+    item->setSelected(true);
     nowSelected = ui->listWidget->currentRow();
     playlist->setCurrentIndex(nowSelected);
     plr->playMusic();
@@ -343,45 +344,29 @@ void MainWindow::watchStatus() {
     else ui->button_play_prev->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-previous.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-previous-hover.png);} QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-previous.png); }");
 }
 
-void MainWindow::on_checkBox_repeat_toggled(bool checked)
+void MainWindow::on_checkBox_repeat_toggled()
 {
-    if(checked) {
-        repeat = true;
-        playlist->setPlaybackMode(QMediaPlaylist::Loop);
-        ui->checkBox_single->setChecked(0);
-        ui->checkBox_random->setChecked(0);
-    }
-    else repeat = false;
-    if(!repeat && !randome && !single) playlist->setPlaybackMode(QMediaPlaylist::Sequential);
+    playlist->setPlaybackMode(QMediaPlaylist::Loop);
+    ui->checkBox_single->setChecked(0);
+    ui->checkBox_random->setChecked(0);
+    if(!ui->checkBox_random->isChecked() && !ui->checkBox_single->isChecked() && !ui->checkBox_repeat->isChecked()) playlist->setPlaybackMode(QMediaPlaylist::Sequential);
 }
 
-void MainWindow::on_checkBox_random_toggled(bool checked)
+void MainWindow::on_checkBox_random_toggled()
 {
-    if(checked) {
-        randome = true;
-        playlist->setPlaybackMode(QMediaPlaylist::Random);
-        ui->checkBox_repeat->setChecked(0);
-        ui->checkBox_single->setChecked(0);
-    }
-    else {
-        randome = false;
-        if(!repeat && !randome && !single) playlist->setPlaybackMode(QMediaPlaylist::Sequential);
-    }
+    playlist->setPlaybackMode(QMediaPlaylist::Random);
+    ui->checkBox_repeat->setChecked(0);
+    ui->checkBox_single->setChecked(0);
+    if(!ui->checkBox_random->isChecked() && !ui->checkBox_single->isChecked() && !ui->checkBox_repeat->isChecked()) playlist->setPlaybackMode(QMediaPlaylist::Sequential);
 }
 
 
-void MainWindow::on_checkBox_single_toggled(bool checked)
+void MainWindow::on_checkBox_single_toggled()
 {
-    if(checked) {
-        single = true;
-        playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
-        ui->checkBox_repeat->setChecked(0);
-        ui->checkBox_random->setChecked(0);
-    }
-    else {
-        single = false;
-        if(!repeat && !randome && !single) playlist->setPlaybackMode(QMediaPlaylist::Sequential);
-    }
+    playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+    ui->checkBox_repeat->setChecked(0);
+    ui->checkBox_random->setChecked(0);
+    if(!ui->checkBox_random->isChecked() && !ui->checkBox_single->isChecked() && !ui->checkBox_repeat->isChecked()) playlist->setPlaybackMode(QMediaPlaylist::Sequential);
 //    QWidget *inst = new QWidget;
 //    QGridLayout *gridL;
 //    QListWidget *listw = new QListWidget;
@@ -488,18 +473,15 @@ void MainWindow::mySliderValueChanged(int newPos)
 void MainWindow::on_actionRemove_duplicates_triggered()
 {
     if(playlist->mediaCount() != 0) {
-    for(int cur = 0;cur < playlist->mediaCount(); cur++) {
-        for(int i = cur+1; i < playlist->mediaCount(); i++) {
-            if(playlist->media(i).canonicalUrl().path()[cur] == playlist->media(i).canonicalUrl().path()[i]) {
-                playlist->removeMedia(i);
+        int count = playlist->mediaCount();
+        for(int cur = 0;cur < count; cur++) {
+            for(int i = cur+1; i < count; i++) {
+                if(playlist->media(cur).canonicalUrl().path() == playlist->media(i).canonicalUrl().path()) {
+                    playlist->removeMedia(i);
+                }
             }
         }
-    }
-    ui->listWidget->clear();
-    for(int j = 0; j < playlist->mediaCount(); j++) {
-        QFileInfo fi(playlist->media(j).canonicalUrl().path());
-        ui->listWidget->addItem(fi.fileName());
-    }
+    fill_listwidget_from_files();
     ui->listWidget->item(playlist->currentIndex())->setSelected(true);
     }
 }
@@ -728,9 +710,9 @@ void MainWindow::saveConfiguration() {
     QFile f(filename);
     f.open( QIODevice::WriteOnly );
     QTextStream outstream(&f);
-    outstream << repeat;
-    outstream << single;
-    outstream << randome;
+    outstream << ui->checkBox_repeat->isChecked();
+    outstream << ui->checkBox_single->isChecked();
+    outstream << ui->checkBox_random->isChecked();
     f.close();
 }
 
