@@ -80,11 +80,11 @@ private slots:
 
     void on_horizontalSlider_sliderReleased();
 
-    void on_checkBox_repeat_toggled();
+    void on_checkBox_repeat_clicked();
 
-    void on_checkBox_random_toggled();
+    void on_checkBox_random_clicked();
 
-    void on_checkBox_single_toggled();
+    void on_checkBox_single_clicked();
 
     void on_actionClear_playlist_triggered();
 
@@ -131,7 +131,7 @@ public slots:
 
 protected:
     Ui::MainWindow *ui;
-    QMediaPlaylist *playlist;
+    QMediaPlaylist *playlist, *tmp_playlist;
     QIcon *iconEn, *iconRu, *iconLanguage, *iconInfo,*iconClearPls, *iconDeleteCurrent, *iconSamowar, *iconSavePlaylist, *iconOpenPlaylist, *iconRemoveDuplicates, *iconExit, *iconDebugOutput, *icon200, *iconAddTrack, *iconAddFolder, *iconMenuPlaylist, *iconMenuOptions;
 };
 

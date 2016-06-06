@@ -12,7 +12,7 @@
 
 QString dir = "", language, versionRu;
 samoplayer *plr= new samoplayer;
-int nowSelected = 0, currentTab = 0, def_width, def_height, toRemove = false;
+int currentTab = 0, def_width, def_height, toRemove = false;
 QList<int> removeList;
 bool was_paused, playstate = false;
 #ifdef Q_OS_LINUX
@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     playlist = new QMediaPlaylist(plr);
+    tmp_playlist = new QMediaPlaylist(plr);
     plr->setPlaylist(playlist);
         setVariables();
     connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),this, SLOT(mySliderValueChanged(int)));
@@ -70,11 +71,10 @@ void MainWindow::on_button_play_clicked()
             ui->currentTrack_progressBar->setValue(1);
             plr->playMusic();
         }
-                else {
-                    if(plr->state() != 2) playlist->setCurrentIndex(nowSelected); //0 - stopped 1 - playing 2 - paused
-                    else ui->listWidget->setCurrentRow(playlist->currentIndex());
-                    plr->playMusic();
-                }
+        else {
+            ui->listWidget->setCurrentRow(playlist->currentIndex());
+            plr->playMusic();
+        }
     }
     else {
             ui->listWidget->setCurrentRow(playlist->currentIndex());
@@ -161,15 +161,15 @@ void MainWindow::on_button_play_prev_clicked()
 void MainWindow::on_button_play_next_clicked()
 {
     if(playlist->mediaCount() != 0) {
+        ui->currentTrack_progressBar->setValue(1);
         if(playlist->playbackMode() == QMediaPlaylist::Sequential ) {
-            ui->currentTrack_progressBar->setValue(1);
-            if(playlist->currentIndex() != playlist->mediaCount()-1) playlist->next();
             ui->listWidget->setCurrentRow(playlist->currentIndex());
+            if(playlist->currentIndex() != playlist->mediaCount()-1)
+                playlist->next();
         }
         else {
-            ui->currentTrack_progressBar->setValue(1);
-            playlist->next();
             ui->listWidget->setCurrentRow(playlist->currentIndex());
+            playlist->next();
         }
     }
 }
@@ -178,8 +178,9 @@ void MainWindow::on_listWidget_itemDoubleClicked(QListWidgetItem *item)
 {
     plr->stopMusic();
     item->setSelected(true);
-    nowSelected = ui->listWidget->currentRow();
-    playlist->setCurrentIndex(nowSelected);
+    playlist->setCurrentIndex(ui->listWidget->currentRow());
+    //nowSelected = ui->listWidget->currentRow();
+    //playlist->setCurrentIndex(nowSelected);
     plr->playMusic();
 }
 
@@ -190,25 +191,25 @@ void MainWindow::on_deleteCurrentTrack_clicked()
         on_actionClear_playlist_triggered();
     }
     if(playlist->mediaCount() != 0) {
-        int tmp = playlist->currentIndex();
-        if(nowSelected < tmp) {
+        if(ui->listWidget->currentRow() < playlist->currentIndex()) { // if removing item with index less than now playing one
             toRemove = true;
-            removeList.append(nowSelected);
-            fill_listwidget_from_files();
-            ui->listWidget->setCurrentRow(removeList.first()); // at(0)
+            removeList.append(ui->listWidget->currentRow());
+            ui->listWidget->takeItem(ui->listWidget->currentRow());
+            ui->listWidget->setCurrentRow(removeList.last());
+            ui->label_5->setText(QString::number(playlist->currentIndex()));
+            ui->label_7->setText(QString::number(ui->listWidget->count()));
         }
         else {
-        playlist->removeMedia(nowSelected);
-        int tmp_sel = nowSelected;
-        if(tmp_sel == playlist->mediaCount()) tmp_sel--; //if last track is about to vanish, go select previous one
+            playlist->removeMedia(ui->listWidget->currentRow());
+            int tmp_sel = ui->listWidget->currentRow();
+            if(tmp_sel == playlist->mediaCount())
+                tmp_sel--; //if last track is about to vanish, go select previous one
             fill_listwidget_from_files();
-            nowSelected = tmp_sel;
-            ui->listWidget->setCurrentRow(nowSelected);
-    }
+            ui->listWidget->setCurrentRow(tmp_sel);
+        }
     }
     else {
         plr->stopMusic();
-        nowSelected = 0;
     }
 }
 
@@ -250,14 +251,15 @@ void MainWindow::watchInternalDD() {
 }
 
 void MainWindow::watchNextTrack() {
-    for(int row=0; row != playlist->mediaCount(); row++)
-        if(ui->listWidget->item(row)->isSelected()) ui->listWidget->item(row)->setSelected(false);
-    if(nowSelected < playlist->currentIndex()) ui->listWidget->setCurrentRow(nowSelected);
-        else ui->listWidget->setCurrentRow(playlist->currentIndex());
+    ui->listWidget->setCurrentRow(playlist->currentIndex());
+//    for(int row=0; row != playlist->mediaCount(); row++)
+//        if(ui->listWidget->item(row)->isSelected()) ui->listWidget->item(row)->setSelected(false);
+//    if(nowSelected < playlist->currentIndex()) ui->listWidget->setCurrentRow(nowSelected);
+//        else ui->listWidget->setCurrentRow(playlist->currentIndex());
 }
 
 void MainWindow::watchSelectedTrack() {
-    nowSelected = ui -> listWidget->currentRow();
+//    nowSelected = ui -> listWidget->currentRow();
 }
 
 void MainWindow::setSliderPosition(){
@@ -283,16 +285,19 @@ void MainWindow::on_horizontalSlider_sliderReleased()
 }
 
 void MainWindow::atTrackEnd() {
+    int tmp_index;
     if(playlist->mediaCount() != 0) {
         if(toRemove) {
             disconnect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
             disconnect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
             disconnect(plr,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
+            tmp_index = playlist->currentIndex()-removeList.count();
             for(int i = 0; i < removeList.count(); i++)
                 playlist->removeMedia(removeList.at(i));
             toRemove = false;
             removeList.clear();
             fill_listwidget_from_files();
+            playlist->setCurrentIndex(tmp_index);
             connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
             connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
             connect(plr,SIGNAL(currentMediaChanged(QMediaContent)),this,SLOT(watchNextTrack()));
@@ -344,15 +349,16 @@ void MainWindow::watchStatus() {
     else ui->button_play_prev->setStyleSheet("QPushButton { border-image: url(/usr/share/samowar/icons/media-previous.png); } QPushButton::hover { border-image:url(/usr/share/samowar/icons/media-previous-hover.png);} QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-previous.png); }");
 }
 
-void MainWindow::on_checkBox_repeat_toggled()
+void MainWindow::on_checkBox_repeat_clicked()
 {
     playlist->setPlaybackMode(QMediaPlaylist::Loop);
     ui->checkBox_single->setChecked(0);
     ui->checkBox_random->setChecked(0);
-    if(!ui->checkBox_random->isChecked() && !ui->checkBox_single->isChecked() && !ui->checkBox_repeat->isChecked()) playlist->setPlaybackMode(QMediaPlaylist::Sequential);
+    if(!ui->checkBox_random->isChecked() && !ui->checkBox_single->isChecked() && !ui->checkBox_repeat->isChecked())
+        playlist->setPlaybackMode(QMediaPlaylist::Sequential);
 }
 
-void MainWindow::on_checkBox_random_toggled()
+void MainWindow::on_checkBox_random_clicked()
 {
     playlist->setPlaybackMode(QMediaPlaylist::Random);
     ui->checkBox_repeat->setChecked(0);
@@ -361,7 +367,7 @@ void MainWindow::on_checkBox_random_toggled()
 }
 
 
-void MainWindow::on_checkBox_single_toggled()
+void MainWindow::on_checkBox_single_clicked()
 {
     playlist->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
     ui->checkBox_repeat->setChecked(0);
@@ -381,7 +387,6 @@ void MainWindow::on_actionClear_playlist_triggered()
 {
     plr->stopMusic();
     playlist->clear();
-    nowSelected = 0;
     ui->listWidget->clear();
 }
 
@@ -765,7 +770,6 @@ void MainWindow::loadConfiguration() {
     }
     if(readFromFile(confDir+"/nexttrack.conf") != "err") {
         line = readFromFile(confDir+"/nexttrack.conf");
-        nowSelected = line.toInt();
         if(playlist->mediaCount() != 0) playlist->setCurrentIndex(line.toInt());
     }
     if(readFromFile(confDir+"/continue_playing.conf") != "err") {
@@ -1011,6 +1015,14 @@ void MainWindow::setVariables() {
 
 void MainWindow::on_shuffleButton_clicked()
 {
-    playlist->shuffle();
+    tmp_playlist = playlist;
+    tmp_playlist->removeMedia(playlist->currentIndex());
+    tmp_playlist->shuffle();
+    for (int i = 0; i < playlist->mediaCount(); i++) {
+        if(playlist->currentIndex() != i) playlist->removeMedia(i);
+    }
+    for (int i = 0; i < tmp_playlist->mediaCount(); i++) {
+        playlist->addMedia(tmp_playlist->media(i));
+    }
     fill_listwidget_from_files();
 }

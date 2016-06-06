@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>667</width>
+    <width>671</width>
     <height>481</height>
    </rect>
   </property>
@@ -25,54 +25,54 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="0" column="0">
-     <widget class="QLabel" name="labelGreeting">
-      <property name="cursor">
-       <cursorShape>ArrowCursor</cursorShape>
-      </property>
-      <property name="toolTip">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Listen to music with Flavour&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-      </property>
-      <property name="text">
-       <string>You're using Samowar Music player (beta)</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QProgressBar" name="currentTrack_progressBar">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>0</height>
-       </size>
-      </property>
-      <property name="cursor">
-       <cursorShape>ArrowCursor</cursorShape>
-      </property>
-      <property name="autoFillBackground">
-       <bool>false</bool>
-      </property>
-      <property name="minimum">
-       <number>1</number>
-      </property>
-      <property name="maximum">
-       <number>100</number>
-      </property>
-      <property name="value">
-       <number>0</number>
-      </property>
-      <property name="textVisible">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
     <item row="3" column="0">
      <layout class="QHBoxLayout" name="button_playlist_and_controls_layout">
       <item>
        <layout class="QVBoxLayout" name="buttons_and_playlist_layout">
+        <item>
+         <widget class="QLabel" name="labelGreeting">
+          <property name="cursor">
+           <cursorShape>ArrowCursor</cursorShape>
+          </property>
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Listen to music with Flavour&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>You're using Samowar Music player (beta)</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QProgressBar" name="currentTrack_progressBar">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="cursor">
+           <cursorShape>ArrowCursor</cursorShape>
+          </property>
+          <property name="autoFillBackground">
+           <bool>false</bool>
+          </property>
+          <property name="minimum">
+           <number>1</number>
+          </property>
+          <property name="maximum">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
         <item>
          <layout class="QHBoxLayout" name="buttons_layout">
           <item>
@@ -547,7 +547,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
          <property name="horizontalSpacing">
           <number>6</number>
          </property>
-         <item row="0" column="0">
+         <item row="1" column="0">
           <layout class="QVBoxLayout" name="controls_layout">
            <item>
             <widget class="QLabel" name="labelVolume">
@@ -933,7 +933,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>667</width>
+     <width>671</width>
      <height>18</height>
     </rect>
    </property>
@@ -991,11 +991,11 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
     </widget>
     <widget class="QMenu" name="menuUI">
      <property name="title">
-      <string>UI</string>
+      <string>&amp;UI</string>
      </property>
      <widget class="QMenu" name="menuRandom_playlist_behaviour">
       <property name="title">
-       <string>Random playlist behaviour</string>
+       <string>&amp;Random playlist behaviour</string>
       </property>
       <addaction name="actionJump_to_random_song"/>
       <addaction name="actionShuffle_entire_playlist"/>
@@ -1196,12 +1196,12 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
   </action>
   <action name="actionJump_to_random_song">
    <property name="text">
-    <string>Jump to random song</string>
+    <string>&amp;Jump to random song</string>
    </property>
   </action>
   <action name="actionShuffle_entire_playlist">
    <property name="text">
-    <string>Shuffle entire playlist</string>
+    <string>&amp;Shuffle entire playlist</string>
    </property>
   </action>
  </widget>
