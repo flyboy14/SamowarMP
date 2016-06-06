@@ -49,12 +49,13 @@ MainWindow::MainWindow(QWidget *parent) :
         add_files_from_behind();
 }
 
-void MainWindow::fill_listwidget_from_files() {
+void MainWindow::fill_listwidget_from_playlist() {
     ui->listWidget->clear();
     for(int i = 0; i < playlist->mediaCount(); i++) {
         QFileInfo fi(playlist_to_qstringlist(playlist)[i]);
         ui->listWidget->addItem(fi.fileName());
     }
+    ui->listWidget->setCurrentRow(playlist->currentIndex());
 }
 
 MainWindow::~MainWindow()
@@ -196,15 +197,15 @@ void MainWindow::on_deleteCurrentTrack_clicked()
             removeList.append(ui->listWidget->currentRow());
             ui->listWidget->takeItem(ui->listWidget->currentRow());
             ui->listWidget->setCurrentRow(removeList.last());
-            ui->label_5->setText(QString::number(playlist->currentIndex()));
-            ui->label_7->setText(QString::number(ui->listWidget->count()));
+            ui->label_current_track_index->setText(QString::number(playlist->currentIndex()));
+            ui->label_tracks_in_listwidget->setText(QString::number(ui->listWidget->count()));
         }
         else {
             playlist->removeMedia(ui->listWidget->currentRow());
             int tmp_sel = ui->listWidget->currentRow();
             if(tmp_sel == playlist->mediaCount())
                 tmp_sel--; //if last track is about to vanish, go select previous one
-            fill_listwidget_from_files();
+            fill_listwidget_from_playlist();
             ui->listWidget->setCurrentRow(tmp_sel);
         }
     }
@@ -296,7 +297,7 @@ void MainWindow::atTrackEnd() {
                 playlist->removeMedia(removeList.at(i));
             toRemove = false;
             removeList.clear();
-            fill_listwidget_from_files();
+            fill_listwidget_from_playlist();
             playlist->setCurrentIndex(tmp_index);
             connect(playlist,SIGNAL(currentIndexChanged(int)),this,SLOT(atTrackEnd()));
             connect(plr,SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)),this,SLOT(atTrackEnd()));
@@ -304,7 +305,7 @@ void MainWindow::atTrackEnd() {
     }
         ui->listWidget->setCurrentRow(playlist->currentIndex());      
         ui->currentTrack_progressBar->setValue(1);
-        ui->label_5->setText(QString::number(playlist->currentIndex()+1)); //show track number in statusbar
+        ui->label_current_track_index->setText(QString::number(playlist->currentIndex()+1)); //show track number in statusbar
     }
 }
 
@@ -486,7 +487,7 @@ void MainWindow::on_actionRemove_duplicates_triggered()
                 }
             }
         }
-    fill_listwidget_from_files();
+    fill_listwidget_from_playlist();
     ui->listWidget->item(playlist->currentIndex())->setSelected(true);
     }
 }
@@ -649,8 +650,8 @@ void MainWindow::watchPlaylistChanges() {
 
 void MainWindow::watchStatusBar() {
     if(playlist->mediaCount() != 0) {
-        ui->label_3->setText(QString::number(playlist->mediaCount()));
-        ui->label_7->setText(QString::number(playlist->mediaCount()));
+        ui->label_tracks_loaded->setText(QString::number(playlist->mediaCount()));
+        ui->label_tracks_in_listwidget->setText(QString::number(playlist->mediaCount()));
         if(language == "EN") {
             if(playlist->mediaCount() == 1) {
                 ui->label_2->setText("file");
@@ -683,18 +684,18 @@ void MainWindow::watchStatusBar() {
         }
     }
     else {
-        ui->label_3->setText(QString::number(playlist->mediaCount()));
-        ui->label_7->setText(QString::number(playlist->mediaCount()));
+        ui->label_tracks_loaded->setText(QString::number(playlist->mediaCount()));
+        ui->label_tracks_in_listwidget->setText(QString::number(playlist->mediaCount()));
             if(language == "RU") {
-                ui->label_5->setText(ui->label_7->text());
+                ui->label_current_track_index->setText(ui->label_tracks_in_listwidget->text());
                 ui->label_2->setText("");
-                ui->label_3->setText("пуст");
+                ui->label_tracks_loaded->setText("пуст");
                 ui->label->setText("Список");
             }
             if(language == "EN") {
-                ui->label_5->setText(ui->label_7->text());
+                ui->label_current_track_index->setText(ui->label_tracks_in_listwidget->text());
                 ui->label_2->setText("empty");
-                ui->label_3->setText("is");
+                ui->label_tracks_loaded->setText("is");
                 ui->label->setText("Playlist");
             }
     }
@@ -892,7 +893,7 @@ void MainWindow::on_action_triggered()
     language = "RU";
     //ui->labelDuration->setText("");
     ui->dialVolume->setToolTip("Вращать барабан");
-    ui->labelGreeting->setText("Добро пожаловать въ самовар, товарищ!");
+    ui->labelGreeting->setText("Вы используете музыкальный плеер Самоваръ (бета)!");
     ui->labelGreeting->setToolTip("Слушайте музыку с наслаждением");
     ui->labelVolume->setText("Громкость");
     ui->radio_mute->setText("Без звука");
@@ -920,10 +921,15 @@ void MainWindow::on_action_triggered()
     ui->actionAdd_directory_s->setText("Добавить папку");
     ui->action_200->setText("Помочь материально");
     ui->menuLanguage->setTitle("Язык");
+    ui->menuUI->setTitle("Прочее");
+    ui->menuRandom_playlist_behaviour->setTitle("Кнопка \"случайная дорожка\"");
+    ui->actionJump_to_random_song->setText("Перепрыгивать к случайной дорожке");
+    ui->actionShuffle_entire_playlist->setText("Перемешивать весь плейлист");
     ui->actionAuto_pause_when_closed->setText("Остановить при выходе");
     ui->label->setText("Загружено");
     ui->label_4->setText("Текущая позиция");
     ui->label_6->setText("из");
+    ui->shuffleButton->setText("Перемешать");
     watchStatusBar();
     watchStatus();
     window()->setLocale(QLocale::Russian);
@@ -933,7 +939,7 @@ void MainWindow::on_actionEnglish_triggered() {
     language = "EN";
     //ui->labelDuration->setText("");
     ui->dialVolume->setToolTip("Keep spinning the wheel");
-    ui->labelGreeting->setText("Welcome to Samowar Music Player(beta)");
+    ui->labelGreeting->setText("You're using Samowar Music Player(beta)");
     ui->labelGreeting->setToolTip("Listen to music with flavour");
     ui->labelVolume->setText("Volume");
     ui->radio_mute->setText("Mute");
@@ -960,10 +966,15 @@ void MainWindow::on_actionEnglish_triggered() {
     ui->actionExit->setText("Quit");
     ui->action_200->setText("Contribute");
     ui->menuLanguage->setTitle("Language");
+    ui->menuUI->setTitle("Other");
+    ui->menuRandom_playlist_behaviour->setTitle("Random track behavior");
+    ui->actionJump_to_random_song->setText("Jump to random track in playlist");
+    ui->actionShuffle_entire_playlist->setText("Shuffle entire playlist");
     ui->actionAuto_pause_when_closed->setText("Auto pause when close");
     ui->label->setText("Loaded");
     ui->label_4->setText("Track position is");
     ui->label_6->setText("out of");
+    ui->shuffleButton->setText("Shuffle");
     watchStatusBar();
     watchStatus();
     window()->setLocale(QLocale::English);
@@ -1015,14 +1026,41 @@ void MainWindow::setVariables() {
 
 void MainWindow::on_shuffleButton_clicked()
 {
-    tmp_playlist = playlist;
-    tmp_playlist->removeMedia(playlist->currentIndex());
-    tmp_playlist->shuffle();
-    for (int i = 0; i < playlist->mediaCount(); i++) {
-        if(playlist->currentIndex() != i) playlist->removeMedia(i);
+    QStringList tmp;
+    int count = playlist->mediaCount(), tmp_position = plr->position();
+    bool hard_case = false;
+    for (int i = 0; i < count; i++) {
+        tmp.append(playlist->media(i).canonicalUrl().path());
     }
-    for (int i = 0; i < tmp_playlist->mediaCount(); i++) {
-        playlist->addMedia(tmp_playlist->media(i));
-    }
-    fill_listwidget_from_files();
+    tmp.removeAt(playlist->currentIndex());
+    if (playlist->currentIndex() == 0) // easy case, remove media from playlist immidiately
+        playlist->removeMedia(1, playlist->mediaCount()-1);
+    else  //harder, using toRemove
+        hard_case = true;
+//        toRemove = true;
+        if (playlist->currentIndex() == playlist->mediaCount()) {
+//            for (int i = 0; i < playlist->mediaCount()-1; i++) {
+//                removeList.append(i);
+//                ui->listWidget->takeItem(i);
+//            }
+            playlist->removeMedia(0, playlist->mediaCount());
+        }
+        else {
+//            for (int i = 0; i < playlist->mediaCount(); i++) {
+//                if (i != playlist->currentIndex()) {
+//                    removeList.append(i);
+//                    ui->listWidget->takeItem(i);
+//                }
+//            }
+          playlist->removeMedia(0, playlist->currentIndex()-1);
+          playlist->removeMedia(1, playlist->mediaCount()-1);
+        }
+        ui->label_current_track_index->setText("1");
+        ui->label_tracks_in_listwidget->setText(QString::number(ui->listWidget->count()));
+    std::random_shuffle(tmp.begin(), tmp.end());
+    addToPlaylist(tmp);
+    fill_listwidget_from_playlist();
+    ui->listWidget->setCurrentRow(0);
+    if (hard_case)
+        plr->setPosition(tmp_position);
 }

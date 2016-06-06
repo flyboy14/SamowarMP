@@ -768,7 +768,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="label_current_track_index">
         <property name="maximumSize">
          <size>
           <width>60</width>
@@ -816,7 +816,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="label_tracks_in_listwidget">
         <property name="maximumSize">
          <size>
           <width>60</width>
@@ -871,7 +871,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label_tracks_loaded">
         <property name="maximumSize">
          <size>
           <width>60</width>
@@ -991,7 +991,7 @@ QPushButton::pressed { border-image: url(/usr/share/samowar/icons/media-next.png
     </widget>
     <widget class="QMenu" name="menuUI">
      <property name="title">
-      <string>&amp;UI</string>
+      <string>&amp;Other</string>
      </property>
      <widget class="QMenu" name="menuRandom_playlist_behaviour">
       <property name="title">

@@ -22,7 +22,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 private slots:
-    void fill_listwidget_from_files();
+    void fill_listwidget_from_playlist();
 
     QStringList playlist_to_qstringlist(QMediaPlaylist *pls);
 
