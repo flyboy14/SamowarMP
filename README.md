@@ -25,4 +25,4 @@ This is pure C++ written music player, which uses qt5 framework
 * Add native notifications for linux (via libnotify)
 * Maybe create refactor player into client-server app
 
-# If you want to provide translation or give me an advice, please, feel free to create pull request or contact me at https://vk.com/iq137724845
+# If you want to provide translation or give me an advice, please, feel free to create a pull request or contact me at https://vk.com/iq137724845
