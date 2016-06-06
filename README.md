@@ -18,7 +18,7 @@ This is pure C++ written music player, which uses qt5 framework
 
 # TODO LIST
 
-* Increase code reachability
+* Increase code readability
 * Get rid of ugly crutches
 * Add API for vk.com
 * Add music caching (for online sources)
