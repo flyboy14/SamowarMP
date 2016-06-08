@@ -13,7 +13,7 @@
 QString dir = "", language, versionRu;
 samoplayer *plr= new samoplayer;
 int currentTab = 0, def_width, def_height, toRemove = false;
-QList<int> removeList;
+QList<int> removeList; // list of integer indexes to remove, when current track ends
 bool was_paused, playstate = false;
 #ifdef Q_OS_LINUX
 QString iconsDir = "/usr/share/samowar/icons", confDir = QDir::homePath()+"/.config/samowar/conf",
@@ -203,8 +203,8 @@ void MainWindow::on_deleteCurrentTrack_clicked()
         else {
             playlist->removeMedia(ui->listWidget->currentRow());
             int tmp_sel = ui->listWidget->currentRow();
-            if(tmp_sel == playlist->mediaCount())
-                tmp_sel--; //if last track is about to vanish, go select previous one
+            if(tmp_sel == playlist->mediaCount()) //if last track is about to vanish, go select previous one
+                tmp_sel--;
             fill_listwidget_from_playlist();
             ui->listWidget->setCurrentRow(tmp_sel);
         }
@@ -930,6 +930,7 @@ void MainWindow::on_action_triggered()
     ui->label_4->setText("Текущая позиция");
     ui->label_6->setText("из");
     ui->shuffleButton->setText("Перемешать");
+    ui->shuffleButton->setToolTip("Перемешать текущий плейлист");
     watchStatusBar();
     watchStatus();
     window()->setLocale(QLocale::Russian);
@@ -975,6 +976,7 @@ void MainWindow::on_actionEnglish_triggered() {
     ui->label_4->setText("Track position is");
     ui->label_6->setText("out of");
     ui->shuffleButton->setText("Shuffle");
+    ui->shuffleButton->setToolTip("Shuffle entire playlist");
     watchStatusBar();
     watchStatus();
     window()->setLocale(QLocale::English);
@@ -1025,6 +1027,8 @@ void MainWindow::setVariables() {
 }
 
 void MainWindow::on_shuffleButton_clicked()
+// TODO
+// HERE SHUFFLING USING toRemove COULD BE IMPLEMENTED
 {
     QStringList tmp;
     int count = playlist->mediaCount(), tmp_position = plr->position();
@@ -1033,7 +1037,7 @@ void MainWindow::on_shuffleButton_clicked()
         tmp.append(playlist->media(i).canonicalUrl().path());
     }
     tmp.removeAt(playlist->currentIndex());
-    if (playlist->currentIndex() == 0) // easy case, remove media from playlist immidiately
+    if (playlist->currentIndex() == 0) // easy case
         playlist->removeMedia(1, playlist->mediaCount()-1);
     else  //harder, using toRemove
         hard_case = true;
