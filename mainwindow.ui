@@ -89,6 +89,13 @@
            </spacer>
           </item>
           <item>
+           <widget class="QPushButton" name="pushButton">
+            <property name="text">
+             <string>MAGIC</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="button_play_prev">
             <property name="minimumSize">
              <size>

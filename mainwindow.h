@@ -24,6 +24,8 @@ public:
 private slots:
     void fill_listwidget_from_playlist();
 
+    void fill_listwidget_from_stringlist(QStringList l);
+
     QStringList playlist_to_qstringlist(QMediaPlaylist *pls);
 
     void watchInternalDD();
@@ -45,8 +47,6 @@ private slots:
     void atTrackEnd();
 
     void setSliderPosition();
-
-    void watchSelectedTrack();
 
     void watchNextTrack();
 
@@ -123,6 +123,8 @@ private slots:
     void on_actionEnglish_triggered();
 
     void on_shuffleButton_clicked();
+
+    void on_pushButton_clicked();
 
 public slots:
     void saveConfiguration();
